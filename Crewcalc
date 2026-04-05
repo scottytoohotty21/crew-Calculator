@@ -150,11 +150,11 @@ button,input,select{font:inherit;}
                     <div class="grid-2">
                         <div>
                             <label class="mini-label">Transit Hours</label>
-                            <input id="transitHours" type="number" min="0" class="field" value="0" oninput="renderAll()" />
+                            <input id="transitHours" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
                         </div>
                         <div>
                             <label class="mini-label">Transit Minutes</label>
-                            <input id="transitMinutes" type="number" min="0" max="59" class="field" value="30" oninput="renderAll()" />
+                            <input id="transitMinutes" type="number" min="0" max="59" class="field" value="30" oninput="renderScheduleCalculator()" />
                         </div>
                     </div>
                 </div>
@@ -168,15 +168,15 @@ button,input,select{font:inherit;}
         </div>
         <div>
             <label class="mini-label">Loft Effects Volume (CUFT)</label>
-            <input id="loftVol" type="number" min="0" class="field" value="0" oninput="renderAll()" />
+            <input id="loftVol" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
         </div>
         <div>
             <label class="mini-label">Loading Rate (CUFT / Man-Hour)</label>
-            <input id="loadRate" type="number" min="1" class="field" value="125" oninput="renderAll()" />
+            <input id="loadRate" type="number" min="1" class="field" value="125" oninput="renderScheduleCalculator()" />
         </div>
         <div>
             <label class="mini-label">Unloading Rate (CUFT / Man-Hour)</label>
-            <input id="unloadRate" type="number" min="1" class="field" value="132" oninput="renderAll()" />
+            <input id="unloadRate" type="number" min="1" class="field" value="132" oninput="renderScheduleCalculator()" />
         </div>
     </div>
 </div>
@@ -214,43 +214,43 @@ button,input,select{font:inherit;}
                     <div class="grid-2">
                         <div>
                             <label class="mini-label">Frame Beds</label>
-                            <input id="svc_frame" type="number" min="0" class="field" value="0" oninput="renderAll()" />
+                            <input id="svc_frame" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
                         </div>
                         <div>
                             <label class="mini-label">Bunk Beds</label>
-                            <input id="svc_bunk" type="number" min="0" class="field" value="0" oninput="renderAll()" />
+                            <input id="svc_bunk" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
                         </div>
                         <div>
                             <label class="mini-label">Custom Item Minutes (each side)</label>
-                            <input id="svc_custom_minutes" type="number" min="0" class="field" value="0" oninput="renderAll()" />
+                            <input id="svc_custom_minutes" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
                         </div>
                         <div>
                             <label class="mini-label">Custom Item Note</label>
-                            <input id="svc_custom_note" type="text" maxlength="40" class="field" value="" oninput="renderAll()" />
+                            <input id="svc_custom_note" type="text" maxlength="40" class="field" value="" oninput="renderScheduleCalculator()" />
                         </div>
                         <div>
                             <label class="mini-label">Upright Pianos</label>
-                            <input id="svc_upright" type="number" min="0" class="field" value="0" oninput="renderAll()" />
+                            <input id="svc_upright" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
                         </div>
                         <div>
                             <label class="mini-label">Baby / Grand Pianos</label>
-                            <input id="svc_grand" type="number" min="0" class="field" value="0" oninput="renderAll()" />
+                            <input id="svc_grand" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
                         </div>
                         <div>
                             <label class="mini-label">Grandfather Clocks</label>
-                            <input id="svc_clock" type="number" min="0" class="field" value="0" oninput="renderAll()" />
+                            <input id="svc_clock" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
                         </div>
                         <div>
                             <label class="mini-label">Washing Machines / Dishwashers</label>
-                            <input id="svc_appliance" type="number" min="0" class="field" value="0" oninput="renderAll()" />
+                            <input id="svc_appliance" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
                         </div>
                         <div>
                             <label class="mini-label">Crating</label>
-                            <input id="svc_crate" type="number" min="0" class="field" value="0" oninput="renderAll()" />
+                            <input id="svc_crate" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
                         </div>
                         <div>
                             <label class="mini-label">Export Wrap Volume (CUFT)</label>
-                            <input id="exportWrapVol" type="number" min="0" class="field" value="0" oninput="renderAll()" />
+                            <input id="exportWrapVol" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
                         </div>
                     </div>
                 </div>
@@ -636,7 +636,7 @@ function optionHtml(options, selected){
 function addScheduleDay(){
     const groupId = createId();
     manualSchedule.push({ id: createId(), groupId, dayPart: "Full Day", task: "Load", men: 2, hours: 8 });
-    renderAll();
+    renderScheduleCalculator();
 }
 
 function removeScheduleDay(id){
@@ -647,7 +647,7 @@ function removeScheduleDay(id){
     if (manualSchedule.length === 0){
         manualSchedule = [{ id: createId(), groupId: createId(), dayPart: "Full Day", task: "Pack", men: 2, hours: 8 }];
     }
-    renderAll();
+    renderScheduleCalculator();
 }
 
 function ensurePmPair(row){
@@ -720,7 +720,7 @@ function updateScheduleDay(id, field, value){
         normalizeGroup(row.groupId);
     }
 
-    renderAll();
+    renderScheduleCalculator();
 }
 
 function renderSchedulePlanner(){
@@ -993,7 +993,7 @@ function renderScheduleCalculator(){
     renderValidation(packing, loading, unloading, special, state);
 }
 
-renderAll();
+renderScheduleCalculator();
 </script>
 </body>
 </html>
