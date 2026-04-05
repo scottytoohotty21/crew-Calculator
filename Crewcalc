@@ -135,29 +135,8 @@ button,input,select{font:inherit;}
                 <div class="panel-subtitle">Manual for now, ready to be fed from the previous app tab later</div>
             </div>
             <div class="panel-body">
-                <div class="section-block">
-                    <div class="section-title">Sequence</div>
-                    <div>
-                        <label class="mini-label">Sequence</label>
-                        <select id="sequenceSelect" class="field" onchange="renderAll()">
-                            <option value="seq1">Sequence 1</option>
-                            <option value="seq2">Sequence 2</option>
-                            <option value="seq3">Sequence 3</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="section-block">
-                    <div class="section-title">Packing Mode</div>
-                    <div>
-                        <label class="mini-label">Pack Option</label>
-                        <select id="packOption" class="field" onchange="renderAll()">
-                            <option value="none">No Packing</option>
-                            <option value="cg">CG Packing</option>
-                            <option value="full">Full Packing</option>
-                        </select>
-                    </div>
-                </div>
+                
+                
 
                 <div class="section-block">
                     <div class="section-title">Transit Time</div>
@@ -174,78 +153,54 @@ button,input,select{font:inherit;}
                 </div>
 
                 <div class="section-block">
-                    <div class="section-title">Furniture / Volume Inputs</div>
-                    <div class="grid-2">
-                        <div>
-                            <label class="mini-label">Furniture Volume (CUFT)</label>
-                            <input id="furnitureVol" type="number" min="0" class="field" value="0" oninput="renderAll()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Loft Effects Volume (CUFT)</label>
-                            <input id="loftVol" type="number" min="0" class="field" value="0" oninput="renderAll()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Loading Rate (CUFT / Man-Hour)</label>
-                            <input id="loadRate" type="number" min="1" class="field" value="125" oninput="renderAll()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Unloading Rate (CUFT / Man-Hour)</label>
-                            <input id="unloadRate" type="number" min="1" class="field" value="132" oninput="renderAll()" />
-                        </div>
-                    </div>
-                </div>
+    <div class="section-title">Volume Inputs</div>
+    <div class="grid-2">
+        <div>
+            <label class="mini-label">Furniture Volume (CUFT)</label>
+            <div id="furnitureVolDisplay" class="field" style="background:#f8fafc;">0</div>
+        </div>
+        <div>
+            <label class="mini-label">Loft Effects Volume (CUFT)</label>
+            <input id="loftVol" type="number" min="0" class="field" value="0" oninput="renderAll()" />
+        </div>
+        <div>
+            <label class="mini-label">Loading Rate (CUFT / Man-Hour)</label>
+            <input id="loadRate" type="number" min="1" class="field" value="125" oninput="renderAll()" />
+        </div>
+        <div>
+            <label class="mini-label">Unloading Rate (CUFT / Man-Hour)</label>
+            <input id="unloadRate" type="number" min="1" class="field" value="132" oninput="renderAll()" />
+        </div>
+    </div>
+</div>
 
                 <div class="section-block">
-                    <div class="section-title">Box Quantities</div>
-                    <div class="grid-2">
-                        <div>
-                            <label class="mini-label">AP (All Purpose)</label>
-                            <input id="qty_ap" type="number" min="0" class="field" value="0" oninput="renderAll()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">CG (China & Glassware)</label>
-                            <input id="qty_cg" type="number" min="0" class="field" value="0" oninput="renderAll()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Book Cartons</label>
-                            <input id="qty_books" type="number" min="0" class="field" value="0" oninput="renderAll()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Linen Cartons</label>
-                            <input id="qty_linen" type="number" min="0" class="field" value="0" oninput="renderAll()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">WR (Wardrobe)</label>
-                            <input id="qty_wr" type="number" min="0" class="field" value="0" oninput="renderAll()" />
-                        </div>
-                    </div>
-                </div>
+    <div class="section-title">Box Totals</div>
+    <div class="grid-2">
+        <div>
+            <label class="mini-label">AP (All Purpose)</label>
+            <div id="qty_ap_display" class="field" style="background:#f8fafc;">0</div>
+        </div>
+        <div>
+            <label class="mini-label">CG (China & Glassware)</label>
+            <div id="qty_cg_display" class="field" style="background:#f8fafc;">0</div>
+        </div>
+        <div>
+            <label class="mini-label">Book Cartons</label>
+            <div id="qty_books_display" class="field" style="background:#f8fafc;">0</div>
+        </div>
+        <div>
+            <label class="mini-label">Linen Cartons</label>
+            <div id="qty_linen_display" class="field" style="background:#f8fafc;">0</div>
+        </div>
+        <div>
+            <label class="mini-label">WR (Wardrobe)</label>
+            <div id="qty_wr_display" class="field" style="background:#f8fafc;">0</div>
+        </div>
+    </div>
+</div>
 
-                <div class="section-block">
-                    <div class="section-title">Carton Volume Assumptions</div>
-                    <div class="grid-2">
-                        <div>
-                            <label class="mini-label">AP Volume (CUFT)</label>
-                            <input id="vol_ap" type="number" min="0" step="0.1" class="field" value="4" oninput="renderAll()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">CG Volume (CUFT)</label>
-                            <input id="vol_cg" type="number" min="0" step="0.1" class="field" value="4" oninput="renderAll()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Books Volume (CUFT)</label>
-                            <input id="vol_books" type="number" min="0" step="0.1" class="field" value="2" oninput="renderAll()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Linen Volume (CUFT)</label>
-                            <input id="vol_linen" type="number" min="0" step="0.1" class="field" value="5" oninput="renderAll()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">WR Volume (CUFT)</label>
-                            <input id="vol_wr" type="number" min="0" step="0.1" class="field" value="10" oninput="renderAll()" />
-                        </div>
-                    </div>
-                </div>
+                
 
                 <div class="section-block">
                     <div class="section-title">Special Labour Inputs</div>
@@ -294,8 +249,8 @@ button,input,select{font:inherit;}
                 </div>
 
                 <div class="note-card">
-                    Boxes and furniture volume remain manually editable here, but this layout is ready for the values to be fed from a previous app tab later.
-                </div>
+    Sequence, packing and inventory totals are now intended to be fed from Photon. Transit, labour assumptions and planner rows remain editable here.
+</div>
             </div>
         </div>
 
@@ -333,8 +288,7 @@ button,input,select{font:inherit;}
                         <div class="summary-sub">Beds, pianos, clocks, loft and wrap</div>
                     </div>
                     
-                        <div class="summary-sub">Based on 8 hours per day</div>
-                    </div>
+                      
                     <div class="summary-card">
                         <div class="summary-label">Loading Man Hrs</div>
                         <div class="summary-value" id="summaryLoadHours">0.00</div>
@@ -416,7 +370,13 @@ const BOX_RATES = {
     linen: 10,
     wr: 8
 };
-
+const BOX_VOLUMES = {
+    ap: 4,
+    cg: 4,
+    books: 2,
+    linen: 5,
+    wr: 10
+};
 const SPECIAL_MINUTES = {
     frame: 30,
     bunk: 60,
@@ -479,28 +439,21 @@ function getIncludedKeys(packOption){
 
 function getState(){
     return {
-        sequence: document.getElementById("sequenceSelect").value,
-        packOption: document.getElementById("packOption").value,
-        furnitureVol: num("furnitureVol"),
+                packOption: "full",
+        furnitureVol: 0,
         loftVol: num("loftVol"),
         loadRate: num("loadRate") || 125,
         unloadRate: num("unloadRate") || 132,
         transitHours: num("transitHours"),
         transitMinutes: num("transitMinutes"),
         qty: {
-            ap: num("qty_ap"),
-            cg: num("qty_cg"),
-            books: num("qty_books"),
-            linen: num("qty_linen"),
-            wr: num("qty_wr")
-        },
-        boxVolumes: {
-            ap: num("vol_ap"),
-            cg: num("vol_cg"),
-            books: num("vol_books"),
-            linen: num("vol_linen"),
-            wr: num("vol_wr")
-        },
+    ap: 0,
+    cg: 0,
+    books: 0,
+    linen: 0,
+    wr: 0
+},
+        boxVolumes: BOX_VOLUMES,
         special: {
             frame: num("svc_frame"),
             bunk: num("svc_bunk"),
@@ -904,6 +857,23 @@ function renderAll(){
     const packing = calcPacking(state);
     const boxVolume = round2(calcBoxVolume(state));
     const totalVolume = round2(state.furnitureVol + boxVolume);
+    const furnitureDisplay = document.getElementById("furnitureVolDisplay");
+if (furnitureDisplay) furnitureDisplay.textContent = state.furnitureVol;
+
+const apDisplay = document.getElementById("qty_ap_display");
+if (apDisplay) apDisplay.textContent = state.qty.ap;
+
+const cgDisplay = document.getElementById("qty_cg_display");
+if (cgDisplay) cgDisplay.textContent = state.qty.cg;
+
+const booksDisplay = document.getElementById("qty_books_display");
+if (booksDisplay) booksDisplay.textContent = state.qty.books;
+
+const linenDisplay = document.getElementById("qty_linen_display");
+if (linenDisplay) linenDisplay.textContent = state.qty.linen;
+
+const wrDisplay = document.getElementById("qty_wr_display");
+if (wrDisplay) wrDisplay.textContent = state.qty.wr;
     const special = calcSpecialLabour(state);
     const loading = calcLoading(totalVolume, state.loadRate, special.loadSideHours);
     const unloading = calcUnloading(totalVolume, state.unloadRate, special.unloadSideHours);
