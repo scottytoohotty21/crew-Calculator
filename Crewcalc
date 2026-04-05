@@ -385,15 +385,15 @@ const BOX_VOLUMES = {
     wr: 10
 };
 const photonFeed = {
-    sequenceLabel: "Sequence 1",
-    packOption: "full",
-    furnitureVol: 420,
+    sequenceLabel: "Sequence 2",
+    packOption: "cg",
+    furnitureVol: 650,
     qty: {
-        ap: 12,
-        cg: 6,
-        books: 10,
-        linen: 4,
-        wr: 3
+        ap: 20,
+        cg: 8,
+        books: 12,
+        linen: 5,
+        wr: 4
     }
 };
 const SPECIAL_MINUTES = {
