@@ -458,33 +458,38 @@ function getIncludedKeys(packOption){
 
 function getState(){
     return {
-                packOption: photonFeed.packOption,
-furnitureVol: photonFeed.furnitureVol,
+        packOption: photonFeed.packOption || "none",
+        furnitureVol: photonFeed.furnitureVol || 0,
         loftVol: num("loftVol"),
         loadRate: num("loadRate") || 125,
         unloadRate: num("unloadRate") || 132,
         transitHours: num("transitHours"),
         transitMinutes: num("transitMinutes"),
+
         qty: {
-    qty: {
-    ap: photonFeed.qty.ap || 0,
-    cg: photonFeed.qty.cg || 0,
-    books: photonFeed.qty.books || 0,
-    linen: photonFeed.qty.linen || 0,
-    wr: photonFeed.qty.wr || 0
-},
+            ap: photonFeed.qty.ap || 0,
+            cg: photonFeed.qty.cg || 0,
+            books: photonFeed.qty.books || 0,
+            linen: photonFeed.qty.linen || 0,
+            wr: photonFeed.qty.wr || 0
+        },
+
         boxVolumes: BOX_VOLUMES,
+
         special: {
             frame: num("svc_frame"),
             bunk: num("svc_bunk"),
             customMinutes: num("svc_custom_minutes"),
-            customNote: document.getElementById("svc_custom_note") ? document.getElementById("svc_custom_note").value.trim() : "",
+            customNote: document.getElementById("svc_custom_note")
+                ? document.getElementById("svc_custom_note").value.trim()
+                : "",
             upright: num("svc_upright"),
             grand: num("svc_grand"),
             clock: num("svc_clock"),
             appliance: num("svc_appliance"),
             crate: num("svc_crate")
         },
+
         exportWrapVol: num("exportWrapVol")
     };
 }
