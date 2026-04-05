@@ -385,17 +385,16 @@ const BOX_VOLUMES = {
     wr: 10
 };
 function getPhotonFeed() {
-    // read real job data here
     return {
-        sequenceLabel: ...,
-        packOption: ...,
-        furnitureVol: ...,
+        sequenceLabel: "Sequence 2",
+        packOption: "cg",
+        furnitureVol: 650,
         qty: {
-            ap: ...,
-            cg: ...,
-            books: ...,
-            linen: ...,
-            wr: ...
+            ap: 20,
+            cg: 8,
+            books: 12,
+            linen: 5,
+            wr: 4
         }
     };
 }
@@ -460,6 +459,7 @@ function getIncludedKeys(packOption){
 }
 
 function getState(){
+const photonFeed = getPhotonFeed();
     return {
         packOption: photonFeed.packOption || "none",
         furnitureVol: photonFeed.furnitureVol || 0,
