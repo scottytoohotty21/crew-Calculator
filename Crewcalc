@@ -881,6 +881,7 @@ function renderValidation(packing, loading, unloading, special, state){
 }
 
 function renderAll(){
+    const photonFeed = getPhotonFeed();
     const state = getState();
     const sequenceLabelDisplay = document.getElementById("sequenceLabelDisplay");
 if (sequenceLabelDisplay) sequenceLabelDisplay.textContent = photonFeed.sequenceLabel || "—";
