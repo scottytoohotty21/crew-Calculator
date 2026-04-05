@@ -914,32 +914,35 @@ function renderValidation(packing, loading, unloading, special, state){
     el.innerHTML = items.map(item => `<div class="validation-item validation-${item.type}">${item.text}</div>`).join("");
 }
 
-function renderAll(){
-const photonFeed = getPhotonFeed();
-const state = getState();
-const photonFeed = getPhotonFeed();
-const sequenceLabelDisplay = document.getElementById("sequenceLabelDisplay");
-if (sequenceLabelDisplay) sequenceLabelDisplay.textContent = photonFeed.sequenceLabel || "—";
+function renderScheduleCalculator(){
+    const photonFeed = getPhotonFeed();
+    const state = getState();
+
+    const sequenceLabelDisplay = document.getElementById("sequenceLabelDisplay");
+    if (sequenceLabelDisplay) sequenceLabelDisplay.textContent = photonFeed.sequenceLabel || "—";
+
     const packing = calcPacking(state);
     const boxVolume = round2(calcBoxVolume(state));
     const totalVolume = round2(state.furnitureVol + boxVolume);
+
     const furnitureDisplay = document.getElementById("furnitureVolDisplay");
-if (furnitureDisplay) furnitureDisplay.textContent = state.furnitureVol;
+    if (furnitureDisplay) furnitureDisplay.textContent = state.furnitureVol;
 
-const apDisplay = document.getElementById("qty_ap_display");
-if (apDisplay) apDisplay.textContent = state.qty.ap;
+    const apDisplay = document.getElementById("qty_ap_display");
+    if (apDisplay) apDisplay.textContent = state.qty.ap;
 
-const cgDisplay = document.getElementById("qty_cg_display");
-if (cgDisplay) cgDisplay.textContent = state.qty.cg;
+    const cgDisplay = document.getElementById("qty_cg_display");
+    if (cgDisplay) cgDisplay.textContent = state.qty.cg;
 
-const booksDisplay = document.getElementById("qty_books_display");
-if (booksDisplay) booksDisplay.textContent = state.qty.books;
+    const booksDisplay = document.getElementById("qty_books_display");
+    if (booksDisplay) booksDisplay.textContent = state.qty.books;
 
-const linenDisplay = document.getElementById("qty_linen_display");
-if (linenDisplay) linenDisplay.textContent = state.qty.linen;
+    const linenDisplay = document.getElementById("qty_linen_display");
+    if (linenDisplay) linenDisplay.textContent = state.qty.linen;
 
-const wrDisplay = document.getElementById("qty_wr_display");
-if (wrDisplay) wrDisplay.textContent = state.qty.wr;
+    const wrDisplay = document.getElementById("qty_wr_display");
+    if (wrDisplay) wrDisplay.textContent = state.qty.wr;
+
     const special = calcSpecialLabour(state);
     const loading = calcLoading(totalVolume, state.loadRate, special.loadSideHours);
     const unloading = calcUnloading(totalVolume, state.unloadRate, special.unloadSideHours);
