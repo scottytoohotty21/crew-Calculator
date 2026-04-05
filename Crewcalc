@@ -385,18 +385,52 @@ const BOX_VOLUMES = {
     wr: 10
 };
 function getPhotonFeed() {
-    return {
-        sequenceLabel: "Sequence 2",
-        packOption: "cg",
-        furnitureVol: 650,
-        qty: {
-            ap: 20,
-            cg: 8,
-            books: 12,
-            linen: 5,
-            wr: 4
-        }
-    };
+    const raw = localStorage.getItem("photon_calculator_feed");
+
+    if (!raw) {
+        return {
+            sequenceLabel: "—",
+            packOption: "none",
+            furnitureVol: 0,
+            qty: {
+                ap: 0,
+                cg: 0,
+                books: 0,
+                linen: 0,
+                wr: 0
+            }
+        };
+    }
+
+    try {
+        const parsed = JSON.parse(raw);
+
+        return {
+            sequenceLabel: parsed.sequenceLabel || "—",
+            packOption: parsed.packOption || "none",
+            furnitureVol: Number(parsed.furnitureVol || 0),
+            qty: {
+                ap: Number(parsed.qty?.ap || 0),
+                cg: Number(parsed.qty?.cg || 0),
+                books: Number(parsed.qty?.books || 0),
+                linen: Number(parsed.qty?.linen || 0),
+                wr: Number(parsed.qty?.wr || 0)
+            }
+        };
+    } catch (err) {
+        return {
+            sequenceLabel: "—",
+            packOption: "none",
+            furnitureVol: 0,
+            qty: {
+                ap: 0,
+                cg: 0,
+                books: 0,
+                linen: 0,
+                wr: 0
+            }
+        };
+    }
 }
 const SPECIAL_MINUTES = {
     frame: 30,
@@ -881,9 +915,10 @@ function renderValidation(packing, loading, unloading, special, state){
 }
 
 function renderAll(){
-    const photonFeed = getPhotonFeed();
-    const state = getState();
-    const sequenceLabelDisplay = document.getElementById("sequenceLabelDisplay");
+const photonFeed = getPhotonFeed();
+const state = getState();
+const photonFeed = getPhotonFeed();
+const sequenceLabelDisplay = document.getElementById("sequenceLabelDisplay");
 if (sequenceLabelDisplay) sequenceLabelDisplay.textContent = photonFeed.sequenceLabel || "—";
     const packing = calcPacking(state);
     const boxVolume = round2(calcBoxVolume(state));
