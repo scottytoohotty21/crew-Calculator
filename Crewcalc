@@ -71,7 +71,7 @@ button,input,select,textarea{font:inherit;}
 .schedule-grid,.pricing-grid{display:grid;gap:12px;}
 .schedule-row{
     display:grid;
-    grid-template-columns:minmax(90px,.9fr) minmax(130px,1fr) minmax(180px,1.4fr) 92px 92px 92px 92px 84px;
+    grid-template-columns:minmax(90px,.9fr) minmax(130px,1fr) minmax(180px,1.4fr) 92px 92px 92px 84px;
     gap:10px;
     align-items:end;
     border:1px solid var(--slate-200);
@@ -173,8 +173,8 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
                     <div class="panel-subtitle">Manual AM / PM planning block that can later be lifted from the calculator</div>
                 </div>
                 <div class="panel-body">
-                    <div class="note-card">
-                        This is a quick planner version. Use it to add day rows manually, then let the vans / foreman / crew totals feed directly into pricing below.
+                                        <div class="note-card">
+                        This is a quick planner version. Use it to add day rows manually, then let the vans / crew totals feed directly into pricing below.
                     </div>
                     <div id="schedulePlanner"></div>
                     <div class="toolbar">
@@ -301,17 +301,20 @@ const prototypeState = {
 const CARTON_TYPES = ["AP", "CG", "BOOKS", "LINEN", "WR"];
 const PRICING_DEFAULTS = [
     { label: "Vans", qty: 1, unitCost: 120 },
-    { label: "Drivers / Foreman", qty: 1, unitCost: 200 },
     { label: "Crew", qty: 0, unitCost: 200 },
     { label: "Mileage", qty: 0, unitCost: 0.45 },
     { label: "Consumables", qty: 0, unitCost: 0 },
     { label: "Cartons", qty: 48, unitCost: 2.5 },
     { label: "Export Wrap", qty: 0, unitCost: 0.30 },
     { label: "Crating", qty: 0, unitCost: 0 },
-    { label: "Nights Out", qty: 0, unitCost: 40 }
+    { label: "Nights Out", qty: 0, unitCost: 40 },
+    { label: "Handyman Rate", qty: 0, unitCost: 0 },
+    { label: "Parking / Parking Admin Fees", qty: 0, unitCost: 0 },
+    { label: "Hoist / Crane", qty: 0, unitCost: 0 },
+    { label: "Ferry", qty: 0, unitCost: 0 }
 ];
 
-const MANDATORY_LABELS = ["Vans", "Drivers / Foreman", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
+const MANDATORY_LABELS = ["Vans", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
 const OPTIONAL_CHOICES = ["Custom", "Handyman Rate", "Parking / Parking Admin Fees", "Hoist / Crane", "Ferry", "Crating"];
 const TASK_OPTIONS = ["Custom", "Pack", "Load", "Unload", "Pack and Load", "Load and Deliver", "Load and Travel", "Deliver and Crew Return"];
 const DAY_PARTS = ["AM", "PM", "Full Day"];
@@ -365,8 +368,8 @@ function buildDocumentLines(arr, emptyText){
 function getScheduleRows(sequence){
     if (!scheduleBySequence[sequence.id]){
         scheduleBySequence[sequence.id] = [
-            { id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Pack and Load", customTask: "", vans: 1, foreman: 1, crew: 2 },
-            { id: createId(), dayLabel: "Day 1", dayPart: "PM", task: "Load and Deliver", customTask: "", vans: 1, foreman: 1, crew: 2 }
+            { id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Pack and Load", customTask: "", vans: 1, crew: 2 },
+            { id: createId(), dayLabel: "Day 1", dayPart: "PM", task: "Load and Deliver", customTask: "", vans: 1, crew: 2 }
         ];
     }
     return scheduleBySequence[sequence.id];
@@ -376,11 +379,10 @@ function calcScheduleTotals(sequence){
     const rows = getScheduleRows(sequence);
     return rows.reduce((acc, row) => {
         acc.vans += Number(row.vans || 0);
-        acc.foreman += Number(row.foreman || 0);
         acc.crew += Number(row.crew || 0);
         acc.rows += 1;
         return acc;
-    }, { vans: 0, foreman: 0, crew: 0, rows: 0 });
+    }, { vans: 0, crew: 0, rows: 0 });
 }
 
 function syncPricingFromSchedule(sequence){
@@ -388,7 +390,6 @@ function syncPricingFromSchedule(sequence){
     if (!pricingBySequence[sequence.id]) return;
     pricingBySequence[sequence.id] = pricingBySequence[sequence.id].map(line => {
         if (line.label === "Vans") return { ...line, qty: totals.vans };
-        if (line.label === "Drivers / Foreman") return { ...line, qty: totals.foreman };
         if (line.label === "Crew") return { ...line, qty: totals.crew };
         return line;
     });
@@ -448,6 +449,7 @@ function calcTotalCosts(sequence){
 function renderSequenceSelect(){
     const select = document.getElementById("sequenceSelect");
     select.innerHTML = prototypeState.sequences.map(seq => `<option value="${seq.id}" ${seq.id === prototypeState.selectedSequenceId ? "selected" : ""}>${escapeHtml(seq.label)}</option>`).join("");
+    select.value = prototypeState.selectedSequenceId;
 }
 
 function renderResponsibilitySummary(inventorySummary){
@@ -520,7 +522,7 @@ function updateManualExcludedNotes(value){
 function addScheduleRow(){
     const sequence = getSelectedSequence();
     const rows = getScheduleRows(sequence);
-    rows.push({ id: createId(), dayLabel: `Day ${rows.length + 1}`, dayPart: "AM", task: "Load", customTask: "", vans: 1, foreman: 1, crew: 2 });
+    rows.push({ id: createId(), dayLabel: `Day ${rows.length + 1}`, dayPart: "AM", task: "Load", customTask: "", vans: 1, crew: 2 });
     pricingSaved = false;
     syncPricingFromSchedule(sequence);
     renderAll();
@@ -531,18 +533,25 @@ function updateScheduleRow(id, field, value){
     const rows = getScheduleRows(sequence);
     scheduleBySequence[sequence.id] = rows.map(row => {
         if (row.id !== id) return row;
-        if (["vans","foreman","crew"].includes(field)) return { ...row, [field]: Number(value || 0) };
+                if (["vans","crew"].includes(field)) return { ...row, [field]: Number(value || 0) };
         return { ...row, [field]: value };
     });
+
     pricingSaved = false;
     syncPricingFromSchedule(sequence);
-    renderAll();
+
+    if (field === "task"){
+        renderAll();
+        return;
+    }
+
+    renderPricing(sequence);
 }
 
 function deleteScheduleRow(id){
     const sequence = getSelectedSequence();
     let rows = getScheduleRows(sequence).filter(row => row.id !== id);
-    if (!rows.length) rows = [{ id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Load", customTask: "", vans: 1, foreman: 1, crew: 2 }];
+    if (!rows.length) rows = [{ id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Load", customTask: "", vans: 1, crew: 2 }];
     scheduleBySequence[sequence.id] = rows;
     pricingSaved = false;
     syncPricingFromSchedule(sequence);
@@ -557,35 +566,31 @@ function renderSchedulePlanner(sequence){
                 <div class="schedule-row">
                     <div>
                         <label class="mini-label">Day</label>
-                        <input class="field" value="${escapeAttr(row.dayLabel)}" onchange="updateScheduleRow('${row.id}','dayLabel',this.value)" />
+                                                <input class="field" value="${escapeAttr(row.dayLabel)}" oninput="updateScheduleRow('${row.id}','dayLabel',this.value)" />
                     </div>
                     <div>
                         <label class="mini-label">Task</label>
                         <select class="field" onchange="updateScheduleRow('${row.id}','task',this.value)">
-                            ${["Custom","Pack","Load","Unload","Pack and Load","Load and Deliver","Load and Travel","Deliver and Crew Return"].map(opt => `<option value="${opt}" ${opt===row.task?"selected":""}>${opt}</option>`).join("")}
+                            ${TASK_OPTIONS.map(opt => `<option value="${opt}" ${opt===row.task?"selected":""}>${opt}</option>`).join("")}
                         </select>
                     </div>
                     <div>
                         <label class="mini-label">Custom Task</label>
-                        <input class="field" value="${escapeAttr(row.customTask || "")}" ${row.task === "Custom" ? "" : "readonly"} onchange="updateScheduleRow('${row.id}','customTask',this.value)" placeholder="Use only if task is custom" />
+                                                <input class="field" value="${escapeAttr(row.customTask || "")}" ${row.task === "Custom" ? "" : "readonly"} oninput="updateScheduleRow('${row.id}','customTask',this.value)" placeholder="Use only if task is custom" />
                     </div>
                     <div>
                         <label class="mini-label">AM / PM</label>
                         <select class="field" onchange="updateScheduleRow('${row.id}','dayPart',this.value)">
-                            ${["AM","PM","Full Day"].map(opt => `<option value="${opt}" ${opt===row.dayPart?"selected":""}>${opt}</option>`).join("")}
+                            ${DAY_PARTS.map(opt => `<option value="${opt}" ${opt===row.dayPart?"selected":""}>${opt}</option>`).join("")}
                         </select>
                     </div>
                     <div>
                         <label class="mini-label">Vans</label>
                         <input type="number" min="0" class="field" value="${row.vans}" oninput="updateScheduleRow('${row.id}','vans',this.value)" />
                     </div>
-                    <div>
-                        <label class="mini-label">Driver / Foreman</label>
-                        <input type="number" min="0" class="field" value="${row.foreman}" oninput="updateScheduleRow('${row.id}','foreman',this.value)" />
-                    </div>
-                    <div>
+                                       <div>
                         <label class="mini-label">Crew</label>
-                        <input type="number" min="0" class="field" value="${row.crew}" oninput="updateScheduleRow('${row.id}','crew',this.value)" />
+                        <input type="number" min="0" class="field" value="${row.crew}" onchange="updateScheduleRow('${row.id}','crew',this.value)" />
                     </div>
                     <div>
                         <button class="action-btn red" onclick="deleteScheduleRow('${row.id}')">Delete</button>
@@ -598,9 +603,7 @@ function renderSchedulePlanner(sequence){
 
 function addPricingLine(){
     const sequence = getSelectedSequence();
-    const lines = getPricingLines(sequence);
-    if (lines.length >= 22) return;
-    lines.push({ id: createId(), label: "", customLabel: "", qty: 0, unitCost: 0 });
+    ensureSingleBlankExtra(sequence);
     pricingSaved = false;
     renderPricing(sequence);
 }
@@ -608,85 +611,98 @@ function addPricingLine(){
 function updatePricingLine(id, field, value){
     const sequence = getSelectedSequence();
     const lines = getPricingLines(sequence);
-    const mandatoryLabels = ["Vans", "Drivers / Foreman", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
 
     pricingBySequence[sequence.id] = lines.map(line => {
         if (line.id !== id) return line;
-        if (field === "qty" || field === "unitCost") return { ...line, [field]: Number(value || 0) };
+        if (field === "qty" || field === "unitCost"){
+            return { ...line, [field]: Number(value || 0) };
+        }
         return { ...line, [field]: value };
     });
 
-    const current = pricingBySequence[sequence.id];
-    const mandatory = current.filter(line => mandatoryLabels.includes(line.label));
-    const extras = current.filter(line => !mandatoryLabels.includes(line.label));
-    const usedExtras = extras.filter(line => line.label && line.label !== "");
+    ensureSingleBlankExtra(sequence);
+    pricingSaved = false;
 
-    pricingBySequence[sequence.id] = [...mandatory, ...usedExtras];
-
-    if (usedExtras.length < 10){
-        pricingBySequence[sequence.id].push({ id: createId(), label: "", customLabel: "", qty: 0, unitCost: 0 });
+    if (field === "label"){
+        renderPricing(sequence);
+        return;
     }
 
-    pricingSaved = false;
-    renderPricing(sequence);
+    const updatedLine = pricingBySequence[sequence.id].find(line => line.id === id);
+    if (!updatedLine) return;
+
+    const row = document.querySelector(`[data-pricing-id="${id}"]`);
+    if (row){
+        const totalField = row.querySelector('[data-role="line-total"]');
+        if (totalField){
+            totalField.value = money(lineTotal(updatedLine));
+        }
+    }
+
+    const totalCosts = calcTotalCosts(sequence);
+    const customerPrice = Number(document.getElementById("customerPriceInput").value || 0);
+    const grossMargin = customerPrice - totalCosts;
+    const grossMarginPct = customerPrice > 0 ? ((grossMargin / customerPrice) * 100) : 0;
+
+    document.getElementById("totalCosts").textContent = money(totalCosts);
+    document.getElementById("customerPriceDisplay").textContent = money(customerPrice);
+    document.getElementById("grossMarginDisplay").textContent = money(grossMargin);
+    document.getElementById("grossMarginSub").textContent = customerPrice > 0
+        ? `${money(grossMarginPct)}% margin on sell price${pricingSaved ? " · saved" : " · unsaved changes"}`
+        : `Customer price minus total costs${pricingSaved ? " · saved" : " · unsaved changes"}`;
 }
 
-function savePricingSet(){ pricingSaved = true; renderPricing(getSelectedSequence()); }
+function savePricingSet(){
+    pricingSaved = true;
+    renderPricing(getSelectedSequence());
+}
 
-function renderPricing(sequence){
+function renderPricing(sequence = getSelectedSequence()){
     const lines = getPricingLines(sequence);
-    const mandatoryLabels = ["Vans", "Drivers / Foreman", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
-    const optionalChoices = ["Custom", "Handyman Rate", "Parking / Parking Admin Fees", "Hoist / Crane", "Ferry", "Crating"];
 
-    const mandatoryLines = lines.filter(line => mandatoryLabels.includes(line.label));
-    const extraLines = lines.filter(line => !mandatoryLabels.includes(line.label));
+        const mandatoryLines = lines.filter(line => MANDATORY_LABELS.includes(line.label));
+    const extraLines = lines.filter(line => !MANDATORY_LABELS.includes(line.label));
     const usedExtras = extraLines.filter(line => line.label && line.label !== "");
-    const blankExtra = extraLines.find(line => !line.label || line.label === "") || (usedExtras.length < 10 ? {
-        id: createId(),
-        label: "",
-        customLabel: "",
-        qty: 0,
-        unitCost: 0
-    } : null);
+    const blankExtra = extraLines.find(line => !line.label || line.label === "") || null;
 
     const extrasToRender = blankExtra ? [...usedExtras, blankExtra] : usedExtras;
 
     const grid = document.getElementById("pricingGrid");
     grid.innerHTML = `
-        ${mandatoryLines.map((line, index) => `
-            <div class="pricing-row">
+                ${mandatoryLines.map((line) => `
+                        <div class="pricing-row" data-pricing-id="${line.id}">
                 <div>
-                    <label class="mini-label">Mandatory Cost ${index + 1}</label>
+                                        <label class="mini-label">&nbsp;</label>
                     <input class="field readonly" readonly value="${escapeAttr(line.label)}" />
                 </div>
                 <div></div>
                 <div>
                     <label class="mini-label">Qty</label>
-                    <input type="number" min="0" step="0.01" class="field" value="${line.qty}" oninput="updatePricingLine('${line.id}','qty',this.value)" />
+                                        <input type="number" min="0" step="0.01" class="field" value="${line.qty}" onchange="updatePricingLine('${line.id}','qty',this.value)" />
                 </div>
                 <div>
                     <label class="mini-label">Unit Cost</label>
-                    <input type="number" min="0" step="0.01" class="field" value="${line.unitCost}" oninput="updatePricingLine('${line.id}','unitCost',this.value)" />
+                                        <input type="number" min="0" step="0.01" class="field" value="${line.unitCost}" onchange="updatePricingLine('${line.id}','unitCost',this.value)" />
                 </div>
                 <div>
                     <label class="mini-label">Line Total</label>
-                    <input class="field readonly" readonly value="${money(lineTotal(line))}" />
+                                        <input class="field readonly" readonly data-role="line-total" value="${money(lineTotal(line))}" />
                 </div>
             </div>
         `).join("")}
 
         ${extrasToRender.map((line) => `
-            <div class="pricing-row">
+                        <div class="pricing-row" data-pricing-id="${line.id}">
                 <div>
                     <label class="mini-label">Select Extra Cost</label>
                     <select class="field" onchange="updatePricingLine('${line.id}','label',this.value)">
                         <option value="" ${line.label === "" ? "selected" : ""}>Select extra cost</option>
-                        ${optionalChoices.map(opt => `<option value="${opt}" ${opt === line.label ? "selected" : ""}>${opt}</option>`).join("")}
+                        ${OPTIONAL_CHOICES.map(opt => `<option value="${opt}" ${opt === line.label ? "selected" : ""}>${opt}</option>`).join("")}
                     </select>
                 </div>
                 <div>
                     <label class="mini-label">Custom Label</label>
-                    <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} onchange="updatePricingLine('${line.id}','customLabel',this.value)" placeholder="Use only if custom" />
+                                        <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} oninput="updatePricingLine('${line.id}','customLabel',this.value)" placeholder="Use only if custom" />
                 </div>
                 <div>
                     <label class="mini-label">Qty</label>
@@ -698,7 +714,7 @@ function renderPricing(sequence){
                 </div>
                 <div>
                     <label class="mini-label">Line Total</label>
-                    <input class="field readonly" readonly value="${money(lineTotal(line))}" />
+                                        <input class="field readonly" readonly data-role="line-total" value="${money(lineTotal(line))}" />
                 </div>
             </div>
         `).join("")}
@@ -727,6 +743,8 @@ function renderAll(){
     renderPricing(sequence);
     document.getElementById("manualExcludedNotes").value = prototypeState.manualExcludedNotes;
 }
+
+document.getElementById("addScheduleRowBtn").addEventListener("click", addScheduleRow);
 
 renderAll();
 </script>
