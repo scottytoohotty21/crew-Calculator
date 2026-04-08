@@ -208,7 +208,7 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
                         <div class="summary-card">
                             <div>
                                 <label class="mini-label">Price To Customer</label>
-                                <input id="customerPriceInput" type="number" min="0" step="0.01" class="field" value="0" />
+                                <input id="customerPriceInput" type="number" min="0" step="0.01" class="field" value="0" onchange="renderPricing(getSelectedSequence())" />
                             </div>
                             <div style="height:12px"></div>
                             <button type="button" class="action-btn blue" id="savePricingBtn" style="width:100%;">Save Pricing</button>
@@ -223,9 +223,7 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
 
                     <div class="pricing-grid" id="pricingGrid"></div>
 
-                    <div class="toolbar">
-                        <button type="button" class="action-btn white" id="addPricingLineBtn">Add Line</button>
-                    </div>
+                    <div class="toolbar"></div>
 
                     <div class="footer-note">Crew replaces porters in this version. Standard default rates are preloaded and can be edited.</div>
                 </div>
@@ -367,18 +365,49 @@ function syncPricingFromSchedule(sequence){
         return line;
     });
 }
-
 function ensureSingleBlankExtra(sequence){
     if (!pricingBySequence[sequence.id]) return;
+
+    const mandatoryLabels = ["Vans", "Drivers / Foreman", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
+
     const lines = pricingBySequence[sequence.id];
-    const mandatory = lines.filter(line => MANDATORY_LABELS.includes(line.label));
-    const extras = lines.filter(line => !MANDATORY_LABELS.includes(line.label));
+    const mandatory = lines.filter(line => mandatoryLabels.includes(line.label));
+    const extras = lines.filter(line => !mandatoryLabels.includes(line.label));
     const usedExtras = extras.filter(line => line.label && line.label !== "");
-    const next = [...mandatory, ...usedExtras];
+
+    pricingBySequence[sequence.id] = [...mandatory, ...usedExtras];
+
     if (usedExtras.length < 10){
-        next.push({ id: createId(), label: "", customLabel: "", qty: 0, unitCost: 0 });
+        pricingBySequence[sequence.id].push({
+            id: createId(),
+            label: "",
+            customLabel: "",
+            qty: 0,
+            unitCost: 0
+        });
     }
-    pricingBySequence[sequence.id] = next;
+}
+
+function getPricingLines(sequence){
+    if (!pricingBySequence[sequence.id]){
+        const calc = sequence.calculator || {};
+        pricingBySequence[sequence.id] = PRICING_DEFAULTS.map(item => {
+            let qty = item.qty;
+            if (item.label === "Cartons") qty = Object.values(calc.cartonTotals || {}).reduce((sum, val) => sum + Number(val || 0), 0);
+            if (item.label === "Export Wrap") qty = Number(calc.exportWrapQty || 0);
+            return {
+                id: createId(),
+                label: item.label,
+                customLabel: "",
+                qty,
+                unitCost: item.unitCost
+            };
+        });
+    }
+
+    syncPricingFromSchedule(sequence);
+    ensureSingleBlankExtra(sequence);
+    return pricingBySequence[sequence.id];
 }
 
 function getPricingLines(sequence){
@@ -516,7 +545,7 @@ function renderSchedulePlanner(sequence){
                 <div class="schedule-row">
                     <div>
                         <label class="mini-label">Day</label>
-                        <input class="field" value="${escapeAttr(row.dayLabel)}" oninput="updateScheduleRow('${row.id}','dayLabel',this.value)" />
+                        <input class="field" value="${escapeAttr(row.dayLabel)}" onchange="updateScheduleRow('${row.id}','dayLabel',this.value)" />
                     </div>
                     <div>
                         <label class="mini-label">Task</label>
@@ -526,7 +555,7 @@ function renderSchedulePlanner(sequence){
                     </div>
                     <div>
                         <label class="mini-label">Custom Task</label>
-                        <input class="field" value="${escapeAttr(row.customTask || "")}" ${row.task === "Custom" ? "" : "readonly"} oninput="updateScheduleRow('${row.id}','customTask',this.value)" placeholder="Use only if task is custom" />
+                        <input class="field" value="${escapeAttr(row.customTask || "")}" ${row.task === "Custom" ? "" : "readonly"} onchange="updateScheduleRow('${row.id}','customTask',this.value)" placeholder="Use only if task is custom" />
                     </div>
                     <div>
                         <label class="mini-label">AM / PM</label>
@@ -569,12 +598,17 @@ function addPricingLine(){
 function updatePricingLine(id, field, value){
     const sequence = getSelectedSequence();
     const lines = getPricingLines(sequence);
+
     pricingBySequence[sequence.id] = lines.map(line => {
         if (line.id !== id) return line;
-        if (field === "qty" || field === "unitCost") return { ...line, [field]: Number(value || 0) };
+        if (field === "qty" || field === "unitCost"){
+            return { ...line, [field]: Number(value || 0) };
+        }
         return { ...line, [field]: value };
     });
+
     ensureSingleBlankExtra(sequence);
+
     pricingSaved = false;
     renderPricing(sequence);
 }
@@ -586,8 +620,11 @@ function savePricingSet(){
 
 function renderPricing(sequence){
     const lines = getPricingLines(sequence);
-    const mandatoryLines = lines.filter(line => MANDATORY_LABELS.includes(line.label));
-    const extraLines = lines.filter(line => !MANDATORY_LABELS.includes(line.label));
+    const mandatoryLabels = ["Vans", "Drivers / Foreman", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
+    const optionalChoices = ["Custom", "Handyman Rate", "Parking / Parking Admin Fees", "Hoist / Crane", "Ferry", "Crating"];
+
+    const mandatoryLines = lines.filter(line => mandatoryLabels.includes(line.label));
+    const extraLines = lines.filter(line => !mandatoryLabels.includes(line.label));
     const usedExtras = extraLines.filter(line => line.label && line.label !== "");
     const blankExtra = extraLines.find(line => !line.label || line.label === "");
     const extrasToRender = blankExtra ? [...usedExtras, blankExtra] : usedExtras;
@@ -616,13 +653,13 @@ function renderPricing(sequence){
             </div>
         `).join("")}
 
-        ${extrasToRender.map((line, index) => `
+        ${extrasToRender.map((line) => `
             <div class="pricing-row">
                 <div>
                     <label class="mini-label">Select Extra Cost</label>
                     <select class="field" onchange="updatePricingLine('${line.id}','label',this.value)">
                         <option value="" ${line.label === "" ? "selected" : ""}>Select extra cost</option>
-                        ${OPTIONAL_CHOICES.map(opt => `<option value="${opt}" ${opt === line.label ? "selected" : ""}>${opt}</option>`).join("")}
+                        ${optionalChoices.map(opt => `<option value="${opt}" ${opt === line.label ? "selected" : ""}>${opt}</option>`).join("")}
                     </select>
                 </div>
                 <div>
@@ -690,7 +727,7 @@ document.getElementById("manualExcludedNotes").addEventListener("input", (e) => 
 document.getElementById("addScheduleRowBtn").addEventListener("click", addScheduleRow);
 document.getElementById("addPricingLineBtn").addEventListener("click", addPricingLine);
 document.getElementById("savePricingBtn").addEventListener("click", savePricingSet);
-document.getElementById("customerPriceInput").addEventListener("input", () => renderPricing(getSelectedSequence()));
+document.getElementById("customerPriceInput").addEventListener("change", () => renderPricing(getSelectedSequence()));
 
 renderAll();
 runSmokeTests();
