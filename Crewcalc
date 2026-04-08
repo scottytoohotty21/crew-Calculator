@@ -641,11 +641,17 @@ function renderPricing(sequence){
     const mandatoryLines = lines.filter(line => mandatoryLabels.includes(line.label));
     const extraLines = lines.filter(line => !mandatoryLabels.includes(line.label));
     const usedExtras = extraLines.filter(line => line.label && line.label !== "");
-    const blankExtra = extraLines.find(line => !line.label || line.label === "") || (usedExtras.length < 10 ? { id: createId(), label: "", customLabel: "", qty: 0, unitCost: 0 } : null);
+    const blankExtra = extraLines.find(line => !line.label || line.label === "") || (usedExtras.length < 10 ? {
+        id: createId(),
+        label: "",
+        customLabel: "",
+        qty: 0,
+        unitCost: 0
+    } : null);
+
     const extrasToRender = blankExtra ? [...usedExtras, blankExtra] : usedExtras;
 
     const grid = document.getElementById("pricingGrid");
-
     grid.innerHTML = `
         ${mandatoryLines.map((line, index) => `
             <div class="pricing-row">
@@ -669,7 +675,7 @@ function renderPricing(sequence){
             </div>
         `).join("")}
 
-        ${extras.map((line, index) => `
+        ${extrasToRender.map((line) => `
             <div class="pricing-row">
                 <div>
                     <label class="mini-label">Select Extra Cost</label>
@@ -680,7 +686,7 @@ function renderPricing(sequence){
                 </div>
                 <div>
                     <label class="mini-label">Custom Label</label>
-                    <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} oninput="updatePricingLine('${line.id}','customLabel',this.value)" placeholder="Use only if custom" />
+                    <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} onchange="updatePricingLine('${line.id}','customLabel',this.value)" placeholder="Use only if custom" />
                 </div>
                 <div>
                     <label class="mini-label">Qty</label>
