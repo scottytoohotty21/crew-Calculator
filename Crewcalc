@@ -225,7 +225,6 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
 
                     <div class="toolbar"></div>
 
-                    <!-- <div class="footer-note">Crew replaces porters in this version. Standard default rates are preloaded and can be edited.</div> -->
                     <div class="footer-note">Crew replaces porters in this version. Standard default rates are preloaded and can be edited.</div>
                 </div>
             </div>
@@ -256,6 +255,15 @@ const prototypeState = {
                 { name: "Book Cartons", volume: 0, cartons: { type: "BOOKS", qty: 8 }, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } }
             ],
             calculator: {
+                totalManHours: 31.4,
+                totalManDays: 3.9,
+                loadingTotals: 13.2,
+                unloadingTotals: 9.1,
+                packingTotals: 5.8,
+                specialLabourTotals: 3.3,
+                disconnectCount: 1,
+                handymanCount: 1,
+                totalVolume: 710,
                 cartonTotals: { AP: 24, CG: 16, BOOKS: 8, LINEN: 0, WR: 0 },
                 exportWrapQty: 75
             }
@@ -274,6 +282,15 @@ const prototypeState = {
                 { name: "Linen Cartons", volume: 0, cartons: { type: "LINEN", qty: 12 }, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } }
             ],
             calculator: {
+                totalManHours: 42.6,
+                totalManDays: 5.3,
+                loadingTotals: 15.9,
+                unloadingTotals: 11.7,
+                packingTotals: 6.5,
+                specialLabourTotals: 8.5,
+                disconnectCount: 0,
+                handymanCount: 0,
+                totalVolume: 273,
                 cartonTotals: { AP: 0, CG: 0, BOOKS: 0, LINEN: 12, WR: 6 },
                 exportWrapQty: 120
             }
@@ -290,13 +307,10 @@ const PRICING_DEFAULTS = [
     { label: "Consumables", qty: 0, unitCost: 0 },
     { label: "Cartons", qty: 48, unitCost: 2.5 },
     { label: "Export Wrap", qty: 0, unitCost: 0.30 },
-    { label: "Nights Out", qty: 0, unitCost: 40 },
     { label: "Crating", qty: 0, unitCost: 0 },
-    { label: "Handyman Rate", qty: 0, unitCost: 0 },
-    { label: "Parking / Parking Admin Fees", qty: 0, unitCost: 0 },
-    { label: "Hoist / Crane", qty: 0, unitCost: 0 },
-    { label: "Ferry", qty: 0, unitCost: 0 }
+    { label: "Nights Out", qty: 0, unitCost: 40 }
 ];
+
 const MANDATORY_LABELS = ["Vans", "Drivers / Foreman", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
 const OPTIONAL_CHOICES = ["Custom", "Handyman Rate", "Parking / Parking Admin Fees", "Hoist / Crane", "Ferry", "Crating"];
 const TASK_OPTIONS = ["Custom", "Pack", "Load", "Unload", "Pack and Load", "Load and Deliver", "Load and Travel", "Deliver and Crew Return"];
@@ -306,8 +320,10 @@ let pricingSaved = false;
 let pricingBySequence = {};
 let scheduleBySequence = {};
 
+function round1(value){ return Math.round((Number(value || 0) + Number.EPSILON) * 10) / 10; }
+function round2(value){ return Math.round((Number(value || 0) + Number.EPSILON) * 100) / 100; }
 function money(value){ return Number(value || 0).toFixed(2); }
-function createId(){ return `row_${Date.now()}_${Math.random().toString(36).slice(2,7)}`; }
+function createId(){ return `line_${Date.now()}_${Math.random().toString(36).slice(2,7)}`; }
 function escapeHtml(value){ return String(value == null ? "" : value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
 function escapeAttr(value){ return String(value == null ? "" : value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 
@@ -317,6 +333,14 @@ function getSelectedSequence(){
 
 function summariseInventory(sequence){
     const lines = sequence.inventory || [];
+    const listedInventoryLines = lines.length;
+    const totalFurnitureVolume = round2(lines.reduce((sum, line) => sum + (line.cartons ? 0 : Number(line.volume || 0)), 0));
+    const cartonTotals = CARTON_TYPES.reduce((acc, type) => {
+        acc[type] = lines.reduce((sum, line) => sum + ((line.cartons && line.cartons.type === type) ? Number(line.cartons.qty || 0) : 0), 0);
+        return acc;
+    }, {});
+    const cartonGrandTotal = Object.values(cartonTotals).reduce((sum, qty) => sum + qty, 0);
+
     const actions = { dismantle: [], exportWrap: [], crate: [], disconnect: [], handyman: [], damage: [], noted: [], excluded: [] };
     lines.forEach(line => {
         const flags = line.actionFlags || {};
@@ -329,7 +353,8 @@ function summariseInventory(sequence){
         if (flags.noted) actions.noted.push(line.name);
         if (flags.excluded) actions.excluded.push(line.name);
     });
-    return { actions };
+
+    return { listedInventoryLines, totalFurnitureVolume, cartonTotals, cartonGrandTotal, actions };
 }
 
 function buildDocumentLines(arr, emptyText){
@@ -340,20 +365,22 @@ function buildDocumentLines(arr, emptyText){
 function getScheduleRows(sequence){
     if (!scheduleBySequence[sequence.id]){
         scheduleBySequence[sequence.id] = [
-            { id: createId(), dayLabel: "Day 1", task: "Pack and Load", customTask: "", dayPart: "AM", vans: 1, foreman: 1, crew: 2 },
-            { id: createId(), dayLabel: "Day 1", task: "Load and Deliver", customTask: "", dayPart: "PM", vans: 1, foreman: 1, crew: 2 }
+            { id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Pack and Load", customTask: "", vans: 1, foreman: 1, crew: 2 },
+            { id: createId(), dayLabel: "Day 1", dayPart: "PM", task: "Load and Deliver", customTask: "", vans: 1, foreman: 1, crew: 2 }
         ];
     }
     return scheduleBySequence[sequence.id];
 }
 
 function calcScheduleTotals(sequence){
-    return getScheduleRows(sequence).reduce((acc, row) => {
+    const rows = getScheduleRows(sequence);
+    return rows.reduce((acc, row) => {
         acc.vans += Number(row.vans || 0);
         acc.foreman += Number(row.foreman || 0);
         acc.crew += Number(row.crew || 0);
+        acc.rows += 1;
         return acc;
-    }, { vans: 0, foreman: 0, crew: 0 });
+    }, { vans: 0, foreman: 0, crew: 0, rows: 0 });
 }
 
 function syncPricingFromSchedule(sequence){
@@ -366,14 +393,13 @@ function syncPricingFromSchedule(sequence){
         return line;
     });
 }
+
 function ensureSingleBlankExtra(sequence){
     if (!pricingBySequence[sequence.id]) return;
 
-    const mandatoryLabels = ["Vans", "Drivers / Foreman", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
-
     const lines = pricingBySequence[sequence.id];
-    const mandatory = lines.filter(line => mandatoryLabels.includes(line.label));
-    const extras = lines.filter(line => !mandatoryLabels.includes(line.label));
+    const mandatory = lines.filter(line => MANDATORY_LABELS.includes(line.label));
+    const extras = lines.filter(line => !MANDATORY_LABELS.includes(line.label));
     const usedExtras = extras.filter(line => line.label && line.label !== "");
 
     pricingBySequence[sequence.id] = [...mandatory, ...usedExtras];
@@ -411,21 +437,6 @@ function getPricingLines(sequence){
     return pricingBySequence[sequence.id];
 }
 
-function getPricingLines(sequence){
-    if (!pricingBySequence[sequence.id]){
-        const calc = sequence.calculator || {};
-        pricingBySequence[sequence.id] = PRICING_DEFAULTS.map(item => {
-            let qty = item.qty;
-            if (item.label === "Cartons") qty = Object.values(calc.cartonTotals || {}).reduce((sum, val) => sum + Number(val || 0), 0);
-            if (item.label === "Export Wrap") qty = Number(calc.exportWrapQty || 0);
-            return { id: createId(), label: item.label, customLabel: "", qty, unitCost: item.unitCost };
-        });
-    }
-    syncPricingFromSchedule(sequence);
-    ensureSingleBlankExtra(sequence);
-    return pricingBySequence[sequence.id];
-}
-
 function lineTotal(line){
     return Number(line.qty || 0) * Number(line.unitCost || 0);
 }
@@ -441,7 +452,7 @@ function renderSequenceSelect(){
 
 function renderResponsibilitySummary(inventorySummary){
     const actions = inventorySummary.actions;
-    document.getElementById("leftResponsibilityCard").innerHTML = `
+    const html = `
         <div class="document-block">
             <div class="document-section">
                 <div class="document-heading">Dismantle Items</div>
@@ -473,6 +484,7 @@ function renderResponsibilitySummary(inventorySummary){
             </div>
         </div>
     `;
+    document.getElementById("leftResponsibilityCard").innerHTML = html;
 }
 
 function renderExcludedSummary(inventorySummary){
@@ -508,7 +520,7 @@ function updateManualExcludedNotes(value){
 function addScheduleRow(){
     const sequence = getSelectedSequence();
     const rows = getScheduleRows(sequence);
-    rows.push({ id: createId(), dayLabel: `Day ${rows.length + 1}`, task: "Load", customTask: "", dayPart: "AM", vans: 1, foreman: 1, crew: 2 });
+    rows.push({ id: createId(), dayLabel: `Day ${rows.length + 1}`, dayPart: "AM", task: "Load", customTask: "", vans: 1, foreman: 1, crew: 2 });
     pricingSaved = false;
     syncPricingFromSchedule(sequence);
     renderAll();
@@ -516,7 +528,8 @@ function addScheduleRow(){
 
 function updateScheduleRow(id, field, value){
     const sequence = getSelectedSequence();
-    scheduleBySequence[sequence.id] = getScheduleRows(sequence).map(row => {
+    const rows = getScheduleRows(sequence);
+    scheduleBySequence[sequence.id] = rows.map(row => {
         if (row.id !== id) return row;
         if (["vans","foreman","crew"].includes(field)) return { ...row, [field]: Number(value || 0) };
         return { ...row, [field]: value };
@@ -529,9 +542,7 @@ function updateScheduleRow(id, field, value){
 function deleteScheduleRow(id){
     const sequence = getSelectedSequence();
     let rows = getScheduleRows(sequence).filter(row => row.id !== id);
-    if (!rows.length){
-        rows = [{ id: createId(), dayLabel: "Day 1", task: "Load", customTask: "", dayPart: "AM", vans: 1, foreman: 1, crew: 2 }];
-    }
+    if (!rows.length) rows = [{ id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Load", customTask: "", vans: 1, foreman: 1, crew: 2 }];
     scheduleBySequence[sequence.id] = rows;
     pricingSaved = false;
     syncPricingFromSchedule(sequence);
@@ -542,7 +553,7 @@ function renderSchedulePlanner(sequence){
     const rows = getScheduleRows(sequence);
     document.getElementById("schedulePlanner").innerHTML = `
         <div class="schedule-grid">
-            ${rows.map(row => `
+            ${rows.map((row) => `
                 <div class="schedule-row">
                     <div>
                         <label class="mini-label">Day</label>
@@ -551,7 +562,7 @@ function renderSchedulePlanner(sequence){
                     <div>
                         <label class="mini-label">Task</label>
                         <select class="field" onchange="updateScheduleRow('${row.id}','task',this.value)">
-                            ${TASK_OPTIONS.map(opt => `<option value="${opt}" ${opt === row.task ? "selected" : ""}>${opt}</option>`).join("")}
+                            ${["Custom","Pack","Load","Unload","Pack and Load","Load and Deliver","Load and Travel","Deliver and Crew Return"].map(opt => `<option value="${opt}" ${opt===row.task?"selected":""}>${opt}</option>`).join("")}
                         </select>
                     </div>
                     <div>
@@ -561,7 +572,7 @@ function renderSchedulePlanner(sequence){
                     <div>
                         <label class="mini-label">AM / PM</label>
                         <select class="field" onchange="updateScheduleRow('${row.id}','dayPart',this.value)">
-                            ${DAY_PARTS.map(opt => `<option value="${opt}" ${opt === row.dayPart ? "selected" : ""}>${opt}</option>`).join("")}
+                            ${["AM","PM","Full Day"].map(opt => `<option value="${opt}" ${opt===row.dayPart?"selected":""}>${opt}</option>`).join("")}
                         </select>
                     </div>
                     <div>
@@ -577,7 +588,7 @@ function renderSchedulePlanner(sequence){
                         <input type="number" min="0" class="field" value="${row.crew}" oninput="updateScheduleRow('${row.id}','crew',this.value)" />
                     </div>
                     <div>
-                        <button type="button" class="action-btn red" onclick="deleteScheduleRow('${row.id}')">Delete</button>
+                        <button class="action-btn red" onclick="deleteScheduleRow('${row.id}')">Delete</button>
                     </div>
                 </div>
             `).join("")}
@@ -588,10 +599,8 @@ function renderSchedulePlanner(sequence){
 function addPricingLine(){
     const sequence = getSelectedSequence();
     const lines = getPricingLines(sequence);
-    const usedExtras = lines.filter(line => !MANDATORY_LABELS.includes(line.label) && line.label && line.label !== "");
-    if (usedExtras.length >= 10) return;
-    pricingBySequence[sequence.id].push({ id: createId(), label: "", customLabel: "", qty: 0, unitCost: 0 });
-    ensureSingleBlankExtra(sequence);
+    if (lines.length >= 22) return;
+    lines.push({ id: createId(), label: "", customLabel: "", qty: 0, unitCost: 0 });
     pricingSaved = false;
     renderPricing(sequence);
 }
@@ -599,25 +608,30 @@ function addPricingLine(){
 function updatePricingLine(id, field, value){
     const sequence = getSelectedSequence();
     const lines = getPricingLines(sequence);
+    const mandatoryLabels = ["Vans", "Drivers / Foreman", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
 
     pricingBySequence[sequence.id] = lines.map(line => {
         if (line.id !== id) return line;
-        if (field === "qty" || field === "unitCost"){
-            return { ...line, [field]: Number(value || 0) };
-        }
+        if (field === "qty" || field === "unitCost") return { ...line, [field]: Number(value || 0) };
         return { ...line, [field]: value };
     });
 
-    ensureSingleBlankExtra(sequence);
+    const current = pricingBySequence[sequence.id];
+    const mandatory = current.filter(line => mandatoryLabels.includes(line.label));
+    const extras = current.filter(line => !mandatoryLabels.includes(line.label));
+    const usedExtras = extras.filter(line => line.label && line.label !== "");
+
+    pricingBySequence[sequence.id] = [...mandatory, ...usedExtras];
+
+    if (usedExtras.length < 10){
+        pricingBySequence[sequence.id].push({ id: createId(), label: "", customLabel: "", qty: 0, unitCost: 0 });
+    }
 
     pricingSaved = false;
     renderPricing(sequence);
 }
 
-function savePricingSet(){
-    pricingSaved = true;
-    renderPricing(getSelectedSequence());
-}
+function savePricingSet(){ pricingSaved = true; renderPricing(getSelectedSequence()); }
 
 function renderPricing(sequence){
     const lines = getPricingLines(sequence);
@@ -627,10 +641,11 @@ function renderPricing(sequence){
     const mandatoryLines = lines.filter(line => mandatoryLabels.includes(line.label));
     const extraLines = lines.filter(line => !mandatoryLabels.includes(line.label));
     const usedExtras = extraLines.filter(line => line.label && line.label !== "");
-    const blankExtra = extraLines.find(line => !line.label || line.label === "");
+    const blankExtra = extraLines.find(line => !line.label || line.label === "") || (usedExtras.length < 10 ? { id: createId(), label: "", customLabel: "", qty: 0, unitCost: 0 } : null);
     const extrasToRender = blankExtra ? [...usedExtras, blankExtra] : usedExtras;
 
     const grid = document.getElementById("pricingGrid");
+
     grid.innerHTML = `
         ${mandatoryLines.map((line, index) => `
             <div class="pricing-row">
@@ -654,7 +669,7 @@ function renderPricing(sequence){
             </div>
         `).join("")}
 
-        ${extrasToRender.map((line) => `
+        ${extras.map((line, index) => `
             <div class="pricing-row">
                 <div>
                     <label class="mini-label">Select Extra Cost</label>
@@ -705,33 +720,9 @@ function renderAll(){
     renderSchedulePlanner(sequence);
     renderPricing(sequence);
     document.getElementById("manualExcludedNotes").value = prototypeState.manualExcludedNotes;
-    document.getElementById("customerPriceInput").dispatchEvent(new Event("input"));
 }
-
-function runSmokeTests(){
-    console.assert(typeof addPricingLine === "function", "addPricingLine should exist");
-    console.assert(typeof renderAll === "function", "renderAll should exist");
-    console.assert(typeof addScheduleRow === "function", "addScheduleRow should exist");
-    const seq = getSelectedSequence();
-    const lines = getPricingLines(seq);
-    const blankExtras = lines.filter(line => !MANDATORY_LABELS.includes(line.label) && (!line.label || line.label === ""));
-    console.assert(blankExtras.length === 1, "There should be exactly one blank extra cost row");
-}
-
-document.getElementById("sequenceSelect").addEventListener("change", (e) => {
-    prototypeState.selectedSequenceId = e.target.value;
-    pricingSaved = false;
-    renderAll();
-});
-document.getElementById("manualExcludedAddBtn").addEventListener("click", addManualExcluded);
-document.getElementById("manualExcludedNotes").addEventListener("input", (e) => updateManualExcludedNotes(e.target.value));
-document.getElementById("addScheduleRowBtn").addEventListener("click", addScheduleRow);
-document.getElementById("addPricingLineBtn").addEventListener("click", addPricingLine);
-document.getElementById("savePricingBtn").addEventListener("click", savePricingSet);
-document.getElementById("customerPriceInput").addEventListener("change", () => renderPricing(getSelectedSequence()));
 
 renderAll();
-runSmokeTests();
 </script>
 </body>
 </html>
