@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Photon Packing, Loading & Unloading Lab</title>
+<title>Photon Summary & Pricing Lab</title>
 <style>
 :root{
     --bg:#f1f5f9;
@@ -13,6 +13,8 @@
     --blue:#3b82f6;
     --blue-2:#2563eb;
     --blue-50:#eff6ff;
+    --red:#dc2626;
+    --red-50:#fef2f2;
     --slate-50:#f8fafc;
     --slate-100:#f1f5f9;
     --slate-200:#e2e8f0;
@@ -20,18 +22,8 @@
     --slate-400:#94a3b8;
     --slate-500:#64748b;
     --slate-700:#334155;
-    --green-50:#f0fdf4;
-    --green-200:#bbf7d0;
-    --green-800:#166534;
-    --amber-50:#fff7ed;
-    --amber-200:#fed7aa;
-    --amber-800:#c2410c;
-    --red-50:#fef2f2;
-    --red-200:#fecaca;
-    --red-800:#b91c1c;
     --shadow:0 10px 30px rgba(15,23,42,0.08);
 }
-
 *{box-sizing:border-box;}
 body{
     margin:0;
@@ -40,25 +32,18 @@ body{
     font-family:Inter,Segoe UI,Arial,sans-serif;
     color:var(--navy);
 }
-button,input,select{font:inherit;}
-.shell{max-width:1280px;margin:0 auto;}
+button,input,select,textarea{font:inherit;}
+.shell{max-width:1380px;margin:0 auto;}
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px;}
 .brand{display:flex;align-items:center;gap:12px;}
-.logo-circle{
-    width:34px;height:34px;border-radius:999px;background:var(--navy);
-    border:2px solid #ef4444;display:flex;align-items:center;justify-content:center;
-}
+.logo-circle{width:34px;height:34px;border-radius:999px;background:var(--navy);border:2px solid #ef4444;display:flex;align-items:center;justify-content:center;}
 .logo-inner{width:10px;height:10px;border-radius:999px;background:#ef4444;box-shadow:0 0 10px rgba(239,68,68,0.6);}
 .brand-title{font-size:28px;font-weight:900;line-height:1;text-transform:uppercase;letter-spacing:-0.05em;margin:0;}
 .brand-sub{font-size:10px;font-weight:900;color:var(--blue);text-transform:uppercase;letter-spacing:.22em;margin-top:4px;}
-.status-pill{
-    border:1px solid var(--slate-300);background:var(--card);border-radius:999px;padding:8px 12px;
-    font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-500);white-space:nowrap;
-}
-.layout{display:grid;grid-template-columns:430px 1fr;gap:16px;align-items:start;}
-.panel{
-    background:var(--card);border:1px solid var(--slate-200);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;
-}
+.status-pill{border:1px solid var(--slate-300);background:var(--card);border-radius:999px;padding:8px 12px;font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-500);white-space:nowrap;}
+.layout{display:grid;grid-template-columns:360px 1fr;gap:16px;align-items:start;}
+.stack{display:grid;gap:16px;}
+.panel{background:var(--card);border:1px solid var(--slate-200);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;}
 .panel-head{background:var(--navy);padding:14px 16px;border-bottom:1px solid var(--navy-2);}
 .panel-title{color:#fff;font-size:12px;font-weight:900;text-transform:uppercase;}
 .panel-subtitle{color:#93c5fd;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:4px;}
@@ -67,50 +52,59 @@ button,input,select{font:inherit;}
 .section-block + .section-block{margin-top:14px;}
 .section-title{font-size:11px;font-weight:900;text-transform:uppercase;color:var(--navy);margin-bottom:12px;}
 .mini-label{display:block;font-size:10px;font-weight:900;color:var(--slate-500);text-transform:uppercase;margin-bottom:6px;letter-spacing:.02em;}
-.field{
-    width:100%;border:1.5px solid var(--slate-300);border-radius:10px;padding:11px 12px;
-    font-size:14px;font-weight:700;outline:none;background:#fff;color:var(--navy);
-}
+.field{width:100%;border:1.5px solid var(--slate-300);border-radius:10px;padding:11px 12px;font-size:14px;font-weight:700;outline:none;background:#fff;color:var(--navy);}
 .field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.08);}
+.field.readonly{background:var(--slate-50);color:var(--slate-700);}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
-.summary-card{background:#fff;border:1px solid var(--slate-200);border-radius:16px;padding:16px;min-height:128px;}
+.summary-card{background:#fff;border:1px solid var(--slate-200);border-radius:16px;padding:16px;min-height:118px;}
 .summary-label{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-400);margin-bottom:8px;line-height:1.35;}
-.summary-value{font-size:30px;font-weight:900;line-height:1;color:var(--navy);}
+.summary-value{font-size:28px;font-weight:900;line-height:1;color:var(--navy);}
 .summary-sub{font-size:10px;font-weight:800;text-transform:uppercase;color:var(--slate-500);margin-top:8px;line-height:1.35;}
-.note-card{
-    background:var(--blue-50);border:1px solid #bfdbfe;color:#1d4ed8;border-radius:14px;padding:12px 14px;
-    font-size:11px;font-weight:800;text-transform:uppercase;line-height:1.45;
+.document-block{background:#fff;border:1px solid var(--slate-200);border-radius:14px;padding:14px;}
+.document-section + .document-section{margin-top:14px;padding-top:12px;border-top:1px solid var(--slate-200);}
+.document-heading{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-400);margin-bottom:8px;letter-spacing:.04em;}
+.document-lines{display:grid;gap:6px;}
+.document-line{font-size:12px;font-weight:700;color:var(--slate-700);line-height:1.45;}
+.document-empty{font-size:12px;font-weight:700;color:var(--slate-500);line-height:1.45;font-style:italic;}
+.note-card{background:var(--blue-50);border:1px solid #bfdbfe;color:#1d4ed8;border-radius:14px;padding:12px 14px;font-size:11px;font-weight:800;text-transform:uppercase;line-height:1.45;}
+.schedule-grid,.pricing-grid{display:grid;gap:12px;}
+.schedule-row{
+    display:grid;
+    grid-template-columns:minmax(90px,.9fr) minmax(130px,1fr) minmax(180px,1.4fr) 92px 92px 92px 92px 84px;
+    gap:10px;
+    align-items:end;
+    border:1px solid var(--slate-200);
+    border-radius:16px;
+    padding:12px;
+    background:#fff;
 }
-.info-card{background:#fff;border:1px solid var(--slate-200);border-radius:16px;padding:14px;}
-.info-head{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-400);margin-bottom:8px;}
-.info-body{font-size:12px;font-weight:700;color:var(--slate-700);line-height:1.55;}
+.pricing-row{
+    display:grid;
+    grid-template-columns:1.35fr 1.8fr .7fr .85fr .85fr;
+    gap:10px;
+    align-items:end;
+    border:1px solid var(--slate-200);
+    border-radius:16px;
+    padding:12px;
+    background:#fff;
+}
+.action-btn{height:44px;border-radius:10px;border:1px solid transparent;padding:0 14px;font-size:11px;font-weight:900;text-transform:uppercase;cursor:pointer;}
+.action-btn.blue{background:var(--blue);color:#fff;border-color:var(--blue-2);}
+.action-btn.white{background:#fff;color:var(--slate-700);border-color:var(--slate-300);}
+.action-btn.red{background:var(--red-50);color:var(--red);border-color:#fecaca;}
+.toolbar{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;}
 .footer-note{margin-top:12px;font-size:10px;font-weight:800;text-transform:uppercase;color:var(--slate-400);line-height:1.45;}
-.schedule-shell{margin-top:12px;border:1px solid var(--slate-200);border-radius:16px;padding:14px;background:var(--slate-50);}
-.schedule-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
-.schedule-title{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-400);}
-.schedule-btn{height:38px;border-radius:10px;border:1px solid var(--slate-300);background:#fff;color:var(--slate-700);padding:0 14px;font-size:11px;font-weight:900;text-transform:uppercase;cursor:pointer;}
-.schedule-list{display:grid;gap:12px;}
-.schedule-row{border:1px solid var(--slate-200);border-radius:14px;background:#fff;padding:12px;}
-.schedule-row-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;}
-.schedule-row-title{font-size:11px;font-weight:900;text-transform:uppercase;color:var(--navy);}
-.schedule-remove{height:32px;border-radius:8px;border:1px solid var(--red-200);background:var(--red-50);color:var(--red-800);padding:0 10px;font-size:10px;font-weight:900;text-transform:uppercase;cursor:pointer;}
-.schedule-grid{display:grid;grid-template-columns:1.2fr 1.2fr .8fr .8fr;gap:10px;}
-.validation-list{display:grid;gap:8px;margin-top:12px;}
-.validation-item{border-radius:12px;padding:10px 12px;font-size:11px;font-weight:800;text-transform:uppercase;line-height:1.4;}
-.validation-ok{background:var(--green-50);border:1px solid var(--green-200);color:var(--green-800);}
-.validation-warn{background:var(--amber-50);border:1px solid var(--amber-200);color:var(--amber-800);}
-.validation-error{background:var(--red-50);border:1px solid var(--red-200);color:var(--red-800);}
-@media (max-width: 980px){
+textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
+@media (max-width:1100px){
     .layout{grid-template-columns:1fr;}
     .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
 }
-@media (max-width: 760px){
-    .schedule-grid{grid-template-columns:1fr 1fr;}
+@media (max-width:980px){
+    .pricing-row,.schedule-row{grid-template-columns:1fr 1fr;}
 }
-@media (max-width: 680px){
-    body{padding:12px;}
-    .summary-grid,.grid-2,.schedule-grid{grid-template-columns:1fr;}
+@media (max-width:760px){
+    .summary-grid,.grid-2{grid-template-columns:1fr;}
     .topbar{align-items:flex-start;flex-direction:column;}
 }
 </style>
@@ -122,879 +116,584 @@ button,input,select{font:inherit;}
             <div class="logo-circle"><div class="logo-inner"></div></div>
             <div>
                 <div class="brand-title">Photon</div>
-                <div class="brand-sub">Packing, Loading & Unloading Lab</div>
+                <div class="brand-sub">Summary & Pricing Lab</div>
             </div>
         </div>
-        <div class="status-pill">Sequence Ready · Separate Packing / Loading / Unloading</div>
+        <div class="status-pill">Standalone Prototype · Safe Summary Layer</div>
     </div>
 
     <div class="layout">
         <div class="panel">
             <div class="panel-head">
-                <div class="panel-title">Inputs</div>
-                <div class="panel-subtitle">Manual for now, ready to be fed from the previous app tab later</div>
+                <div class="panel-title">Prototype Controls</div>
+                <div class="panel-subtitle">Use this as the safe side project before wiring into the live app</div>
             </div>
             <div class="panel-body">
                 <div class="section-block">
-    <div class="section-title">Sequence</div>
-    <div>
-        <label class="mini-label">Sequence</label>
-        <div id="sequenceLabelDisplay" class="field" style="background:#f8fafc;">—</div>
-    </div>
-</div>
-                
-                
-
-                <div class="section-block">
-                    <div class="section-title">Transit Time</div>
-                    <div class="grid-2">
-                        <div>
-                            <label class="mini-label">Transit Hours</label>
-                            <input id="transitHours" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Transit Minutes</label>
-                            <input id="transitMinutes" type="number" min="0" max="59" class="field" value="30" oninput="renderScheduleCalculator()" />
-                        </div>
+                    <div class="section-title">Sequence Selection</div>
+                    <div>
+                        <label class="mini-label">Selected Sequence</label>
+                        <select id="sequenceSelect" class="field"></select>
                     </div>
                 </div>
 
                 <div class="section-block">
-    <div class="section-title">Volume Inputs</div>
-    <div class="grid-2">
-        <div>
-            <label class="mini-label">Furniture Volume (CUFT)</label>
-            <div id="furnitureVolDisplay" class="field" style="background:#f8fafc;">0</div>
-        </div>
-        <div>
-            <label class="mini-label">Loft Effects Volume (CUFT)</label>
-            <input id="loftVol" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
-        </div>
-        <div>
-            <label class="mini-label">Loading Rate (CUFT / Man-Hour)</label>
-            <input id="loadRate" type="number" min="1" class="field" value="125" oninput="renderScheduleCalculator()" />
-        </div>
-        <div>
-            <label class="mini-label">Unloading Rate (CUFT / Man-Hour)</label>
-            <input id="unloadRate" type="number" min="1" class="field" value="132" oninput="renderScheduleCalculator()" />
-        </div>
-    </div>
-</div>
+                    <div class="section-title">Removal Crew Responsibilities</div>
+                    <div id="leftResponsibilityCard"></div>
+                </div>
 
                 <div class="section-block">
-    <div class="section-title">Box Totals</div>
-    <div class="grid-2">
-        <div>
-            <label class="mini-label">AP (All Purpose)</label>
-            <div id="qty_ap_display" class="field" style="background:#f8fafc;">0</div>
-        </div>
-        <div>
-            <label class="mini-label">CG (China & Glassware)</label>
-            <div id="qty_cg_display" class="field" style="background:#f8fafc;">0</div>
-        </div>
-        <div>
-            <label class="mini-label">Book Cartons</label>
-            <div id="qty_books_display" class="field" style="background:#f8fafc;">0</div>
-        </div>
-        <div>
-            <label class="mini-label">Linen Cartons</label>
-            <div id="qty_linen_display" class="field" style="background:#f8fafc;">0</div>
-        </div>
-        <div>
-            <label class="mini-label">WR (Wardrobe)</label>
-            <div id="qty_wr_display" class="field" style="background:#f8fafc;">0</div>
-        </div>
-    </div>
-</div>
-
-                
-
-                <div class="section-block">
-                    <div class="section-title">Special Labour Inputs</div>
-                    <div class="grid-2">
-                        <div>
-                            <label class="mini-label">Frame Beds</label>
-                            <input id="svc_frame" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
+                    <div class="section-title">Exclusions / Customer Responsibilities</div>
+                    <div id="leftExcludedCard"></div>
+                    <div style="height:12px"></div>
+                    <div>
+                        <label class="mini-label">Add Manual Excluded Item</label>
+                        <div class="grid-2">
+                            <input id="manualExcludedInput" class="field" placeholder="e.g. Garage racking" />
+                            <button type="button" class="field" style="cursor:pointer;background:var(--blue);color:#fff;border-color:var(--blue-2);" id="manualExcludedAddBtn">Add</button>
                         </div>
-                        <div>
-                            <label class="mini-label">Bunk Beds</label>
-                            <input id="svc_bunk" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Custom Item Minutes (each side)</label>
-                            <input id="svc_custom_minutes" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Custom Item Note</label>
-                            <input id="svc_custom_note" type="text" maxlength="40" class="field" value="" oninput="renderScheduleCalculator()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Upright Pianos</label>
-                            <input id="svc_upright" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Baby / Grand Pianos</label>
-                            <input id="svc_grand" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Grandfather Clocks</label>
-                            <input id="svc_clock" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Washing Machines / Dishwashers</label>
-                            <input id="svc_appliance" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Crating</label>
-                            <input id="svc_crate" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Export Wrap Volume (CUFT)</label>
-                            <input id="exportWrapVol" type="number" min="0" class="field" value="0" oninput="renderScheduleCalculator()" />
-                        </div>
+                    </div>
+                    <div style="height:12px"></div>
+                    <div>
+                        <label class="mini-label">Manual Excluded Notes</label>
+                        <textarea id="manualExcludedNotes" class="field" placeholder="Short pricing / summary notes for excluded scope"></textarea>
                     </div>
                 </div>
 
                 <div class="note-card">
-    Sequence, packing and inventory totals are now intended to be fed from Photon. Transit, labour assumptions and planner rows remain editable here.
-</div>
+                    This prototype is designed to aggregate summary data first. Pricing is visible in-page, but still isolated from the live app.
+                </div>
             </div>
         </div>
 
-        <div class="panel">
-            <div class="panel-head">
-                <div class="panel-title">Live Results</div>
-                <div class="panel-subtitle">Three rows: packing, loading, then unloading</div>
+        <div class="stack">
+            <div class="panel">
+                <div class="panel-head">
+                    <div class="panel-title">Schedule Planner</div>
+                    <div class="panel-subtitle">Manual AM / PM planning block that can later be lifted from the calculator</div>
+                </div>
+                <div class="panel-body">
+                    <div class="note-card">
+                        This is a quick planner version. Use it to add day rows manually, then let the vans / foreman / crew totals feed directly into pricing below.
+                    </div>
+                    <div id="schedulePlanner"></div>
+                    <div class="toolbar">
+                        <button type="button" class="action-btn white" id="addScheduleRowBtn">Add Schedule Row</button>
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                <div class="summary-grid">
-                    <div class="summary-card">
-                        <div class="summary-label">Packing Mode</div>
-                        <div class="summary-value" id="summaryMode">—</div>
-                        <div class="summary-sub">No packing, CG packing, or full packing</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Total Volume</div>
-                        <div class="summary-value" id="summaryTotalVolume">0</div>
-                        <div class="summary-sub">Furniture + box volume</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Packing Man Hrs</div>
-                        <div class="summary-value" id="summaryPackHours">0.00</div>
-                        <div class="summary-sub">Cartons only</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Packing Man Days</div>
-                        <div class="summary-value" id="summaryPackDays">0.0</div>
-                        <div class="summary-sub">Based on 8 hours per day</div>
-                    </div>
 
-                    <div class="summary-card">
-                        <div class="summary-label">Special Labour Hrs</div>
-                        <div class="summary-value" id="summarySpecialHours">0.00</div>
-                        <div class="summary-sub">Beds, pianos, clocks, loft and wrap</div>
-                    </div>
-                    
-                      
-                    <div class="summary-card">
-                        <div class="summary-label">Loading Man Hrs</div>
-                        <div class="summary-value" id="summaryLoadHours">0.00</div>
-                        <div class="summary-sub">Volume loading plus load-side specials</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Loading Man Days</div>
-                        <div class="summary-value" id="summaryLoadDays">0.0</div>
-                        <div class="summary-sub">Based on 8 hours per day</div>
-                    </div>
-
-                    <div class="summary-card">
-                        <div class="summary-label">If Loaded By Completion</div>
-                        <div class="summary-value" id="summaryLoadCompletion">0.0</div>
-                        <div class="summary-sub">Men needed for a 4-hour loading window</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Loading Rate</div>
-                        <div class="summary-value" id="summaryLoadRate">125</div>
-                        <div class="summary-sub">Cuft per man-hour</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Unloading Man Hours</div>
-                        <div class="summary-value" id="summaryUnloadHours">0.00</div>
-                        <div class="summary-sub">Volume unloading plus unload-side specials</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Unloading Man Days</div>
-                        <div class="summary-value" id="summaryUnloadDays">0.0</div>
-                        <div class="summary-sub">Based on 8 hours per day</div>
-                    </div>
-
-                    <div class="summary-card">
-                        <div class="summary-label">If Delivering On Completion</div>
-                        <div class="summary-value" id="summaryUnloadCompletion">0.0</div>
-                        <div class="summary-sub">Men needed for a 4-hour unloading window</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Unloading Rate</div>
-                        <div class="summary-value" id="summaryUnloadRate">132</div>
-                        <div class="summary-sub">Cuft per man-hour</div>
-                    </div>
+            <div class="panel">
+                <div class="panel-head">
+                    <div class="panel-title">Pricing Placeholder</div>
+                    <div class="panel-subtitle">Customer-facing numbers first, cost lines beneath</div>
                 </div>
-
-                <div style="height:12px"></div>
-
-                <div class="info-card">
-                    <div class="info-head">Current Logic</div>
-                    <div class="info-body" id="logicText"></div>
-                </div>
-
-                <div style="height:12px"></div>
-
-                <div class="info-card">
-                    <div class="info-head">Special Labour Breakdown</div>
-                    <div class="info-body" id="specialText"></div>
-                </div>
-
-                <div class="schedule-shell">
-                    <div class="schedule-toolbar">
-                        <div class="schedule-title">Manual Schedule Planner</div>
-                        <button class="schedule-btn" onclick="addScheduleDay()">Add Day</button>
+                <div class="panel-body">
+                    <div class="summary-grid">
+                        <div class="summary-card">
+                            <div class="summary-label">Total Costs</div>
+                            <div class="summary-value" id="totalCosts">0.00</div>
+                            <div class="summary-sub">Auto-added from pricing lines</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-label">Price To Customer</div>
+                            <div class="summary-value" id="customerPriceDisplay">0.00</div>
+                            <div class="summary-sub">Manual sell price input</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-label">Gross Margin</div>
+                            <div class="summary-value" id="grossMarginDisplay">0.00</div>
+                            <div class="summary-sub" id="grossMarginSub">Customer price minus total costs</div>
+                        </div>
+                        <div class="summary-card">
+                            <div>
+                                <label class="mini-label">Price To Customer</label>
+                                <input id="customerPriceInput" type="number" min="0" step="0.01" class="field" value="0" />
+                            </div>
+                            <div style="height:12px"></div>
+                            <button type="button" class="action-btn blue" id="savePricingBtn" style="width:100%;">Save Pricing</button>
+                        </div>
                     </div>
-                    <div class="schedule-list" id="scheduleList"></div>
-                    <div class="validation-list" id="validationList"></div>
-                </div>
 
-                <div class="footer-note">Packing, loading and unloading remain separate streams in this version. The 4-hour completion figures show the crew needed to complete that activity within a half-day completion window.</div>
+                    <div style="height:16px"></div>
+
+                    <div class="note-card">
+                        Quantity can be fed from inventory later. Unit costs auto-populate but stay editable. One save button sits at the top next to customer pricing.
+                    </div>
+
+                    <div class="pricing-grid" id="pricingGrid"></div>
+
+                    <div class="toolbar">
+                        <button type="button" class="action-btn white" id="addPricingLineBtn">Add Line</button>
+                    </div>
+
+                    <div class="footer-note">Crew replaces porters in this version. Standard default rates are preloaded and can be edited.</div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-const BOX_RATES = {
-    ap: 10,
-    cg: 4,
-    books: 15,
-    linen: 10,
-    wr: 8
-};
-const BOX_VOLUMES = {
-    ap: 4,
-    cg: 4,
-    books: 2,
-    linen: 5,
-    wr: 10
-};
-function getPhotonFeed() {
-    const raw = localStorage.getItem("photon_calculator_feed");
-
-    if (!raw) {
-        return {
-            sequenceLabel: "—",
-            packOption: "none",
-            furnitureVol: 0,
-            qty: {
-                ap: 0,
-                cg: 0,
-                books: 0,
-                linen: 0,
-                wr: 0
+const prototypeState = {
+    selectedSequenceId: "seq_1",
+    manualExcluded: [],
+    manualExcludedNotes: "",
+    sequences: [
+        {
+            id: "seq_1",
+            label: "Sequence 1",
+            moveType: "DOMESTIC LOCAL",
+            packingType: "FULL PACKING",
+            inventory: [
+                { name: "3 Seater Sofa", volume: 180, cartons: null, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
+                { name: "Frame Bed", volume: 55, cartons: null, actionFlags: { dismantle:true, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
+                { name: "Dining Table", volume: 75, cartons: null, actionFlags: { dismantle:true, exportWrap:true, crate:false, disconnect:false, handyman:false, damage:false, noted:true, excluded:false } },
+                { name: "Grandfather Clock", volume: 25, cartons: null, actionFlags: { dismantle:false, exportWrap:false, crate:true, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
+                { name: "Dishwasher", volume: 20, cartons: null, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:true, handyman:false, damage:false, noted:false, excluded:false } },
+                { name: "Wall Shelving", volume: 10, cartons: null, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:true, damage:false, noted:false, excluded:true } },
+                { name: "China & Glass Cartons", volume: 0, cartons: { type: "CG", qty: 16 }, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
+                { name: "All Purpose Cartons", volume: 0, cartons: { type: "AP", qty: 24 }, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
+                { name: "Book Cartons", volume: 0, cartons: { type: "BOOKS", qty: 8 }, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } }
+            ],
+            calculator: {
+                cartonTotals: { AP: 24, CG: 16, BOOKS: 8, LINEN: 0, WR: 0 },
+                exportWrapQty: 75
             }
-        };
-    }
-
-    try {
-        const parsed = JSON.parse(raw);
-
-        return {
-            sequenceLabel: parsed.sequenceLabel || "—",
-            packOption: parsed.packOption || "none",
-            furnitureVol: Number(parsed.furnitureVol || 0),
-            qty: {
-                ap: Number(parsed.qty?.ap || 0),
-                cg: Number(parsed.qty?.cg || 0),
-                books: Number(parsed.qty?.books || 0),
-                linen: Number(parsed.qty?.linen || 0),
-                wr: Number(parsed.qty?.wr || 0)
-            }
-        };
-    } catch (err) {
-        return {
-            sequenceLabel: "—",
-            packOption: "none",
-            furnitureVol: 0,
-            qty: {
-                ap: 0,
-                cg: 0,
-                books: 0,
-                linen: 0,
-                wr: 0
-            }
-        };
-    }
-}
-const SPECIAL_MINUTES = {
-    frame: 30,
-    bunk: 60,
-    
-    upright: 50,
-    grand: 120,
-    clock: 60,
-    appliance: 60,
-    crate: 30
-};
-
-const MORNING_LOAD_RATE = 125;
-const AFTERNOON_LOAD_RATE_AFTER_AM = 55;
-
-const DAY_PARTS = ["Full Day", "AM", "PM"];
-const TASK_OPTIONS = [
-    "Pack",
-    "Load",
-    "Unload",
-    "Pack and Load",
-    "Load and Deliver",
-    "Load and Travel",
-    "Deliver and Crew Return"
-];
-
-let manualSchedule = [
-    { id: createId(), groupId: createId(), dayPart: "Full Day", task: "Pack", men: 2, hours: 8 }
-];
-
-function createId(){
-    return `day_${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
-}
-
-function num(id){
-    const el = document.getElementById(id);
-    if (!el) return 0;
-    const value = parseFloat(el.value);
-    return Number.isFinite(value) && value > 0 ? value : 0;
-}
-
-function round2(value){
-    return Math.round((Number(value || 0) + Number.EPSILON) * 100) / 100;
-}
-
-function round1(value){
-    return Math.round((Number(value || 0) + Number.EPSILON) * 10) / 10;
-}
-
-function getPackModeLabel(packOption){
-    if (packOption === "none") return "No";
-    if (packOption === "cg") return "CG";
-    return "Full";
-}
-
-function getIncludedKeys(packOption){
-    if (packOption === "none") return [];
-    if (packOption === "cg") return ["cg"];
-    return ["ap", "cg", "books", "linen", "wr"];
-}
-
-function getState(){
-const photonFeed = getPhotonFeed();
-    return {
-        packOption: photonFeed.packOption || "none",
-        furnitureVol: photonFeed.furnitureVol || 0,
-        loftVol: num("loftVol"),
-        loadRate: num("loadRate") || 125,
-        unloadRate: num("unloadRate") || 132,
-        transitHours: num("transitHours"),
-        transitMinutes: num("transitMinutes"),
-
-        qty: {
-            ap: photonFeed.qty.ap || 0,
-            cg: photonFeed.qty.cg || 0,
-            books: photonFeed.qty.books || 0,
-            linen: photonFeed.qty.linen || 0,
-            wr: photonFeed.qty.wr || 0
         },
-
-        boxVolumes: BOX_VOLUMES,
-
-        special: {
-            frame: num("svc_frame"),
-            bunk: num("svc_bunk"),
-            customMinutes: num("svc_custom_minutes"),
-            customNote: document.getElementById("svc_custom_note")
-                ? document.getElementById("svc_custom_note").value.trim()
-                : "",
-            upright: num("svc_upright"),
-            grand: num("svc_grand"),
-            clock: num("svc_clock"),
-            appliance: num("svc_appliance"),
-            crate: num("svc_crate")
-        },
-
-        exportWrapVol: num("exportWrapVol")
-    };
-}
-
-function calcPacking(state){
-    const includedKeys = getIncludedKeys(state.packOption);
-    const packHours = Object.keys(BOX_RATES).reduce((sum, key) => {
-        const qty = state.qty[key] || 0;
-        if (!includedKeys.includes(key)) return sum;
-        return sum + (qty / BOX_RATES[key]);
-    }, 0);
-    return {
-        packHours: round2(packHours),
-        packDays: round1(packHours / 8)
-    };
-}
-
-function calcBoxVolume(state){
-    return Object.keys(state.qty).reduce((sum, key) => {
-        return sum + ((state.qty[key] || 0) * (state.boxVolumes[key] || 0));
-    }, 0);
-}
-
-function calcSpecialLabour(state){
-    const includedFrameBeds = 2;
-    const includedExportWrapVol = 50;
-
-    const extraFrameBeds = Math.max(0, state.special.frame - includedFrameBeds);
-    const extraExportWrapVol = Math.max(0, state.exportWrapVol - includedExportWrapVol);
-    const transitTotalMinutes = (state.transitHours * 60) + state.transitMinutes;
-    const extraTransitMinutes = Math.max(0, transitTotalMinutes - 30);
-
-    const loadMinutes =
-        (extraFrameBeds * 15) +
-        (state.special.bunk * 30) +
-        (state.special.customMinutes > 0 ? state.special.customMinutes : 0) +
-        (state.special.upright * 25) +
-        (state.special.grand * 60) +
-        (state.special.clock * 30) +
-        (state.special.appliance * 30) +
-        (state.special.crate * 15) +
-        ((state.loftVol / 100) * 20) +
-        ((extraExportWrapVol / 100) * 25);
-
-    const unloadMinutes =
-        (extraFrameBeds * 15) +
-        (state.special.bunk * 30) +
-        (state.special.customMinutes > 0 ? state.special.customMinutes : 0) +
-        (state.special.upright * 25) +
-        (state.special.grand * 60) +
-        (state.special.clock * 30) +
-        (state.special.appliance * 30) +
-        (state.special.crate * 15) +
-        extraTransitMinutes;
-
-    const totalHours = (loadMinutes + unloadMinutes) / 60;
-
-    return {
-        specialHours: round2(totalHours),
-        loadSideHours: round2(loadMinutes / 60),
-        unloadSideHours: round2(unloadMinutes / 60),
-        extraTransitHours: round2(extraTransitMinutes / 60),
-        breakdown: {
-            frame: round2((extraFrameBeds * 30) / 60),
-            bunk: round2((state.special.bunk * 60) / 60),
-            custom: round2(((state.special.customMinutes > 0 ? state.special.customMinutes * 2 : 0)) / 60),
-            upright: round2((state.special.upright * 50) / 60),
-            grand: round2((state.special.grand * 120) / 60),
-            clock: round2((state.special.clock * 60) / 60),
-            appliance: round2((state.special.appliance * 60) / 60),
-            crate: round2((state.special.crate * 30) / 60),
-            loft: round2(((state.loftVol / 100) * 20) / 60),
-            exportWrap: round2(((extraExportWrapVol / 100) * 25) / 60),
-            transit: round2(extraTransitMinutes / 60),
-            includedFrameBeds,
-            includedExportWrapVol
+        {
+            id: "seq_2",
+            label: "Sequence 2",
+            moveType: "EXPORT",
+            packingType: "EXPORT WRAP",
+            inventory: [
+                { name: "King Mattress", volume: 60, cartons: null, actionFlags: { dismantle:false, exportWrap:true, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
+                { name: "Bunk Bed", volume: 85, cartons: null, actionFlags: { dismantle:true, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
+                { name: "Baby Grand Piano", volume: 110, cartons: null, actionFlags: { dismantle:false, exportWrap:false, crate:true, disconnect:false, handyman:false, damage:true, noted:true, excluded:false } },
+                { name: "Utility Shelf", volume: 18, cartons: null, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:true } },
+                { name: "Wardrobe Cartons", volume: 0, cartons: { type: "WR", qty: 6 }, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
+                { name: "Linen Cartons", volume: 0, cartons: { type: "LINEN", qty: 12 }, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } }
+            ],
+            calculator: {
+                cartonTotals: { AP: 0, CG: 0, BOOKS: 0, LINEN: 12, WR: 6 },
+                exportWrapQty: 120
+            }
         }
-    };
+    ]
+};
+
+const CARTON_TYPES = ["AP", "CG", "BOOKS", "LINEN", "WR"];
+const PRICING_DEFAULTS = [
+    { label: "Vans", qty: 1, unitCost: 120 },
+    { label: "Drivers / Foreman", qty: 1, unitCost: 200 },
+    { label: "Crew", qty: 0, unitCost: 200 },
+    { label: "Mileage", qty: 0, unitCost: 0.45 },
+    { label: "Consumables", qty: 0, unitCost: 0 },
+    { label: "Cartons", qty: 48, unitCost: 2.5 },
+    { label: "Export Wrap", qty: 0, unitCost: 0.30 },
+    { label: "Nights Out", qty: 0, unitCost: 40 },
+    { label: "Crating", qty: 0, unitCost: 0 },
+    { label: "Handyman Rate", qty: 0, unitCost: 0 },
+    { label: "Parking / Parking Admin Fees", qty: 0, unitCost: 0 },
+    { label: "Hoist / Crane", qty: 0, unitCost: 0 },
+    { label: "Ferry", qty: 0, unitCost: 0 }
+];
+const MANDATORY_LABELS = ["Vans", "Drivers / Foreman", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
+const OPTIONAL_CHOICES = ["Custom", "Handyman Rate", "Parking / Parking Admin Fees", "Hoist / Crane", "Ferry", "Crating"];
+const TASK_OPTIONS = ["Custom", "Pack", "Load", "Unload", "Pack and Load", "Load and Deliver", "Load and Travel", "Deliver and Crew Return"];
+const DAY_PARTS = ["AM", "PM", "Full Day"];
+
+let pricingSaved = false;
+let pricingBySequence = {};
+let scheduleBySequence = {};
+
+function money(value){ return Number(value || 0).toFixed(2); }
+function createId(){ return `row_${Date.now()}_${Math.random().toString(36).slice(2,7)}`; }
+function escapeHtml(value){ return String(value == null ? "" : value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
+function escapeAttr(value){ return String(value == null ? "" : value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+function getSelectedSequence(){
+    return prototypeState.sequences.find(seq => seq.id === prototypeState.selectedSequenceId) || prototypeState.sequences[0];
 }
 
-function calcLoading(totalVolume, loadRate, loadSideSpecialHours){
-    const volumeHours = totalVolume / loadRate;
-    const totalHours = volumeHours + loadSideSpecialHours;
-    return {
-        hours: round2(totalHours),
-        days: round1(totalHours / 8),
-        completionCrew: round1(totalHours / 4),
-        volumeHours: round2(volumeHours)
-    };
+function summariseInventory(sequence){
+    const lines = sequence.inventory || [];
+    const actions = { dismantle: [], exportWrap: [], crate: [], disconnect: [], handyman: [], damage: [], noted: [], excluded: [] };
+    lines.forEach(line => {
+        const flags = line.actionFlags || {};
+        if (flags.dismantle) actions.dismantle.push(line.name);
+        if (flags.exportWrap) actions.exportWrap.push(line.name);
+        if (flags.crate) actions.crate.push(line.name);
+        if (flags.disconnect) actions.disconnect.push(line.name);
+        if (flags.handyman) actions.handyman.push(line.name);
+        if (flags.damage) actions.damage.push(line.name);
+        if (flags.noted) actions.noted.push(line.name);
+        if (flags.excluded) actions.excluded.push(line.name);
+    });
+    return { actions };
 }
 
-function calcUnloading(totalVolume, unloadRate, unloadSideSpecialHours){
-    const volumeHours = totalVolume / unloadRate;
-    const totalHours = volumeHours + unloadSideSpecialHours;
-    return {
-        hours: round2(totalHours),
-        days: round1(totalHours / 8),
-        completionCrew: round1(totalHours / 4),
-        volumeHours: round2(volumeHours)
-    };
+function buildDocumentLines(arr, emptyText){
+    if (!arr.length) return `<div class="document-empty">${escapeHtml(emptyText)}</div>`;
+    return `<div class="document-lines">${arr.map(item => `<div class="document-line">• ${escapeHtml(item)}</div>`).join("")}</div>`;
 }
 
-function optionHtml(options, selected){
-    return options.map(opt => `<option value="${opt}" ${String(opt) === String(selected) ? "selected" : ""}>${opt}</option>`).join("");
-}
-
-function addScheduleDay(){
-    const groupId = createId();
-    manualSchedule.push({ id: createId(), groupId, dayPart: "Full Day", task: "Load", men: 2, hours: 8 });
-    renderScheduleCalculator();
-}
-
-function removeScheduleDay(id){
-    if (manualSchedule.length <= 1) return;
-    const row = manualSchedule.find(day => day.id === id);
-    if (!row) return;
-    manualSchedule = manualSchedule.filter(day => day.groupId !== row.groupId);
-    if (manualSchedule.length === 0){
-        manualSchedule = [{ id: createId(), groupId: createId(), dayPart: "Full Day", task: "Pack", men: 2, hours: 8 }];
+function getScheduleRows(sequence){
+    if (!scheduleBySequence[sequence.id]){
+        scheduleBySequence[sequence.id] = [
+            { id: createId(), dayLabel: "Day 1", task: "Pack and Load", customTask: "", dayPart: "AM", vans: 1, foreman: 1, crew: 2 },
+            { id: createId(), dayLabel: "Day 1", task: "Load and Deliver", customTask: "", dayPart: "PM", vans: 1, foreman: 1, crew: 2 }
+        ];
     }
-    renderScheduleCalculator();
+    return scheduleBySequence[sequence.id];
 }
 
-function ensurePmPair(row){
-    const pairExists = manualSchedule.some(day => day.groupId === row.groupId && day.dayPart === "PM");
-    if (!pairExists){
-        manualSchedule.push({
-            id: createId(),
-            groupId: row.groupId,
-            dayPart: "PM",
-            task: "Unload",
-            men: row.men,
-            hours: 4
+function calcScheduleTotals(sequence){
+    return getScheduleRows(sequence).reduce((acc, row) => {
+        acc.vans += Number(row.vans || 0);
+        acc.foreman += Number(row.foreman || 0);
+        acc.crew += Number(row.crew || 0);
+        return acc;
+    }, { vans: 0, foreman: 0, crew: 0 });
+}
+
+function syncPricingFromSchedule(sequence){
+    const totals = calcScheduleTotals(sequence);
+    if (!pricingBySequence[sequence.id]) return;
+    pricingBySequence[sequence.id] = pricingBySequence[sequence.id].map(line => {
+        if (line.label === "Vans") return { ...line, qty: totals.vans };
+        if (line.label === "Drivers / Foreman") return { ...line, qty: totals.foreman };
+        if (line.label === "Crew") return { ...line, qty: totals.crew };
+        return line;
+    });
+}
+
+function ensureSingleBlankExtra(sequence){
+    if (!pricingBySequence[sequence.id]) return;
+    const lines = pricingBySequence[sequence.id];
+    const mandatory = lines.filter(line => MANDATORY_LABELS.includes(line.label));
+    const extras = lines.filter(line => !MANDATORY_LABELS.includes(line.label));
+    const usedExtras = extras.filter(line => line.label && line.label !== "");
+    const next = [...mandatory, ...usedExtras];
+    if (usedExtras.length < 10){
+        next.push({ id: createId(), label: "", customLabel: "", qty: 0, unitCost: 0 });
+    }
+    pricingBySequence[sequence.id] = next;
+}
+
+function getPricingLines(sequence){
+    if (!pricingBySequence[sequence.id]){
+        const calc = sequence.calculator || {};
+        pricingBySequence[sequence.id] = PRICING_DEFAULTS.map(item => {
+            let qty = item.qty;
+            if (item.label === "Cartons") qty = Object.values(calc.cartonTotals || {}).reduce((sum, val) => sum + Number(val || 0), 0);
+            if (item.label === "Export Wrap") qty = Number(calc.exportWrapQty || 0);
+            return { id: createId(), label: item.label, customLabel: "", qty, unitCost: item.unitCost };
         });
     }
+    syncPricingFromSchedule(sequence);
+    ensureSingleBlankExtra(sequence);
+    return pricingBySequence[sequence.id];
 }
 
-function normalizeGroup(groupId){
-    const rows = manualSchedule.filter(day => day.groupId === groupId);
-    const hasAm = rows.some(day => day.dayPart === "AM");
-    const hasPm = rows.some(day => day.dayPart === "PM");
-    const hasFull = rows.some(day => day.dayPart === "Full Day");
-
-    if (hasAm && !hasPm){
-        const amRow = rows.find(day => day.dayPart === "AM");
-        ensurePmPair(amRow);
-    }
-
-    if (hasFull && rows.length > 1){
-        manualSchedule = manualSchedule.filter(day => !(day.groupId === groupId && day.dayPart !== "Full Day"));
-    }
+function lineTotal(line){
+    return Number(line.qty || 0) * Number(line.unitCost || 0);
 }
 
-function updateScheduleDay(id, field, value){
-    manualSchedule = manualSchedule.map(day => {
-        if (day.id !== id) return day;
-        if (field === "men" || field === "hours") {
-            return { ...day, [field]: Math.max(0, Number(value) || 0) };
-        }
-        return { ...day, [field]: value };
+function calcTotalCosts(sequence){
+    return getPricingLines(sequence).reduce((sum, line) => sum + lineTotal(line), 0);
+}
+
+function renderSequenceSelect(){
+    const select = document.getElementById("sequenceSelect");
+    select.innerHTML = prototypeState.sequences.map(seq => `<option value="${seq.id}" ${seq.id === prototypeState.selectedSequenceId ? "selected" : ""}>${escapeHtml(seq.label)}</option>`).join("");
+}
+
+function renderResponsibilitySummary(inventorySummary){
+    const actions = inventorySummary.actions;
+    document.getElementById("leftResponsibilityCard").innerHTML = `
+        <div class="document-block">
+            <div class="document-section">
+                <div class="document-heading">Dismantle Items</div>
+                ${buildDocumentLines(actions.dismantle, "None")}
+            </div>
+            <div class="document-section">
+                <div class="document-heading">Export Wrap Items</div>
+                ${buildDocumentLines(actions.exportWrap, "None")}
+            </div>
+            <div class="document-section">
+                <div class="document-heading">Crated Items</div>
+                ${buildDocumentLines(actions.crate, "None")}
+            </div>
+            <div class="document-section">
+                <div class="document-heading">Disconnect Items</div>
+                ${buildDocumentLines(actions.disconnect, "None")}
+            </div>
+            <div class="document-section">
+                <div class="document-heading">Handyman Items</div>
+                ${buildDocumentLines(actions.handyman, "None")}
+            </div>
+            <div class="document-section">
+                <div class="document-heading">Damage Items</div>
+                ${buildDocumentLines(actions.damage, "None")}
+            </div>
+            <div class="document-section">
+                <div class="document-heading">Noted Items</div>
+                ${buildDocumentLines(actions.noted, "None")}
+            </div>
+        </div>
+    `;
+}
+
+function renderExcludedSummary(inventorySummary){
+    const listedExcluded = inventorySummary.actions.excluded || [];
+    const manualExcluded = prototypeState.manualExcluded || [];
+    document.getElementById("leftExcludedCard").innerHTML = `
+        <div class="document-block">
+            <div class="document-section">
+                <div class="document-heading">Inventory Excluded Items</div>
+                ${buildDocumentLines(listedExcluded, "None")}
+            </div>
+            <div class="document-section">
+                <div class="document-heading">Manual Excluded Items</div>
+                ${buildDocumentLines(manualExcluded, "None yet")}
+            </div>
+        </div>
+    `;
+}
+
+function addManualExcluded(){
+    const input = document.getElementById("manualExcludedInput");
+    const value = input.value.trim();
+    if (!value) return;
+    prototypeState.manualExcluded.push(value);
+    input.value = "";
+    renderAll();
+}
+
+function updateManualExcludedNotes(value){
+    prototypeState.manualExcludedNotes = value;
+}
+
+function addScheduleRow(){
+    const sequence = getSelectedSequence();
+    const rows = getScheduleRows(sequence);
+    rows.push({ id: createId(), dayLabel: `Day ${rows.length + 1}`, task: "Load", customTask: "", dayPart: "AM", vans: 1, foreman: 1, crew: 2 });
+    pricingSaved = false;
+    syncPricingFromSchedule(sequence);
+    renderAll();
+}
+
+function updateScheduleRow(id, field, value){
+    const sequence = getSelectedSequence();
+    scheduleBySequence[sequence.id] = getScheduleRows(sequence).map(row => {
+        if (row.id !== id) return row;
+        if (["vans","foreman","crew"].includes(field)) return { ...row, [field]: Number(value || 0) };
+        return { ...row, [field]: value };
     });
-
-    const row = manualSchedule.find(day => day.id === id);
-    if (row && field === "dayPart"){
-        if (value === "AM"){
-            const updated = manualSchedule.find(day => day.id === id);
-            updated.hours = 4;
-            updated.task = "Load";
-            ensurePmPair(updated);
-        }
-        if (value === "PM"){
-            const updated = manualSchedule.find(day => day.id === id);
-            updated.hours = 4;
-            updated.task = "Unload";
-            const hasAm = manualSchedule.some(day => day.groupId === updated.groupId && day.dayPart === "AM");
-            if (!hasAm){
-                manualSchedule.push({
-                    id: createId(),
-                    groupId: updated.groupId,
-                    dayPart: "AM",
-                    task: "Load",
-                    men: updated.men,
-                    hours: 4
-                });
-            }
-        }
-        if (value === "Full Day"){
-            manualSchedule = manualSchedule.filter(day => day.groupId !== row.groupId || day.id === row.id);
-            manualSchedule = manualSchedule.map(day => day.id === row.id ? { ...day, dayPart: "Full Day", hours: 8, task: day.task === "Unload" ? "Load and Deliver" : day.task } : day);
-        }
-        normalizeGroup(row.groupId);
-    }
-
-    renderScheduleCalculator();
+    pricingSaved = false;
+    syncPricingFromSchedule(sequence);
+    renderAll();
 }
 
-function renderSchedulePlanner(){
-    const list = document.getElementById("scheduleList");
-    if (!list) return;
+function deleteScheduleRow(id){
+    const sequence = getSelectedSequence();
+    let rows = getScheduleRows(sequence).filter(row => row.id !== id);
+    if (!rows.length){
+        rows = [{ id: createId(), dayLabel: "Day 1", task: "Load", customTask: "", dayPart: "AM", vans: 1, foreman: 1, crew: 2 }];
+    }
+    scheduleBySequence[sequence.id] = rows;
+    pricingSaved = false;
+    syncPricingFromSchedule(sequence);
+    renderAll();
+}
 
-    const groups = [];
-    const seen = new Set();
-    manualSchedule.forEach(day => {
-        if (!seen.has(day.groupId)){
-            seen.add(day.groupId);
-            groups.push(day.groupId);
-        }
-    });
-
-    list.innerHTML = groups.map((groupId, groupIndex) => {
-        const rows = manualSchedule.filter(day => day.groupId === groupId).sort((a,b) => {
-            const order = { "Full Day": 0, "AM": 1, "PM": 2 };
-            return order[a.dayPart] - order[b.dayPart];
-        });
-
-        return rows.map((day, rowIndex) => `
-            <div class="schedule-row">
-                <div class="schedule-row-head">
-                    <div class="schedule-row-title">Day ${groupIndex + 1}${rows.length > 1 ? ` · ${day.dayPart}` : ""}</div>
-                    ${rowIndex === 0 && manualSchedule.length > 1 ? `<button class="schedule-remove" onclick="removeScheduleDay('${day.id}')">Delete</button>` : ""}
-                </div>
-                <div class="schedule-grid">
+function renderSchedulePlanner(sequence){
+    const rows = getScheduleRows(sequence);
+    document.getElementById("schedulePlanner").innerHTML = `
+        <div class="schedule-grid">
+            ${rows.map(row => `
+                <div class="schedule-row">
+                    <div>
+                        <label class="mini-label">Day</label>
+                        <input class="field" value="${escapeAttr(row.dayLabel)}" oninput="updateScheduleRow('${row.id}','dayLabel',this.value)" />
+                    </div>
                     <div>
                         <label class="mini-label">Task</label>
-                        <select class="field" onchange="updateScheduleDay('${day.id}','task',this.value)">
-                            ${optionHtml(TASK_OPTIONS, day.task)}
+                        <select class="field" onchange="updateScheduleRow('${row.id}','task',this.value)">
+                            ${TASK_OPTIONS.map(opt => `<option value="${opt}" ${opt === row.task ? "selected" : ""}>${opt}</option>`).join("")}
                         </select>
                     </div>
                     <div>
-                        <label class="mini-label">Day Part</label>
-                        <select class="field" onchange="updateScheduleDay('${day.id}','dayPart',this.value)">
-                            ${optionHtml(DAY_PARTS, day.dayPart)}
+                        <label class="mini-label">Custom Task</label>
+                        <input class="field" value="${escapeAttr(row.customTask || "")}" ${row.task === "Custom" ? "" : "readonly"} oninput="updateScheduleRow('${row.id}','customTask',this.value)" placeholder="Use only if task is custom" />
+                    </div>
+                    <div>
+                        <label class="mini-label">AM / PM</label>
+                        <select class="field" onchange="updateScheduleRow('${row.id}','dayPart',this.value)">
+                            ${DAY_PARTS.map(opt => `<option value="${opt}" ${opt === row.dayPart ? "selected" : ""}>${opt}</option>`).join("")}
                         </select>
                     </div>
                     <div>
-                        <label class="mini-label">Men</label>
-                        <select class="field" onchange="updateScheduleDay('${day.id}','men',this.value)">
-                            ${optionHtml([1,2,3,4], day.men)}
-                        </select>
+                        <label class="mini-label">Vans</label>
+                        <input type="number" min="0" class="field" value="${row.vans}" oninput="updateScheduleRow('${row.id}','vans',this.value)" />
                     </div>
                     <div>
-                        <label class="mini-label">Hours</label>
-                        <input type="number" min="0" step="0.5" class="field" value="${day.hours}" oninput="updateScheduleDay('${day.id}','hours',this.value)" />
+                        <label class="mini-label">Driver / Foreman</label>
+                        <input type="number" min="0" class="field" value="${row.foreman}" oninput="updateScheduleRow('${row.id}','foreman',this.value)" />
+                    </div>
+                    <div>
+                        <label class="mini-label">Crew</label>
+                        <input type="number" min="0" class="field" value="${row.crew}" oninput="updateScheduleRow('${row.id}','crew',this.value)" />
+                    </div>
+                    <div>
+                        <button type="button" class="action-btn red" onclick="deleteScheduleRow('${row.id}')">Delete</button>
                     </div>
                 </div>
+            `).join("")}
+        </div>
+    `;
+}
+
+function addPricingLine(){
+    const sequence = getSelectedSequence();
+    const lines = getPricingLines(sequence);
+    const usedExtras = lines.filter(line => !MANDATORY_LABELS.includes(line.label) && line.label && line.label !== "");
+    if (usedExtras.length >= 10) return;
+    pricingBySequence[sequence.id].push({ id: createId(), label: "", customLabel: "", qty: 0, unitCost: 0 });
+    ensureSingleBlankExtra(sequence);
+    pricingSaved = false;
+    renderPricing(sequence);
+}
+
+function updatePricingLine(id, field, value){
+    const sequence = getSelectedSequence();
+    const lines = getPricingLines(sequence);
+    pricingBySequence[sequence.id] = lines.map(line => {
+        if (line.id !== id) return line;
+        if (field === "qty" || field === "unitCost") return { ...line, [field]: Number(value || 0) };
+        return { ...line, [field]: value };
+    });
+    ensureSingleBlankExtra(sequence);
+    pricingSaved = false;
+    renderPricing(sequence);
+}
+
+function savePricingSet(){
+    pricingSaved = true;
+    renderPricing(getSelectedSequence());
+}
+
+function renderPricing(sequence){
+    const lines = getPricingLines(sequence);
+    const mandatoryLines = lines.filter(line => MANDATORY_LABELS.includes(line.label));
+    const extraLines = lines.filter(line => !MANDATORY_LABELS.includes(line.label));
+    const usedExtras = extraLines.filter(line => line.label && line.label !== "");
+    const blankExtra = extraLines.find(line => !line.label || line.label === "");
+    const extrasToRender = blankExtra ? [...usedExtras, blankExtra] : usedExtras;
+
+    const grid = document.getElementById("pricingGrid");
+    grid.innerHTML = `
+        ${mandatoryLines.map((line, index) => `
+            <div class="pricing-row">
+                <div>
+                    <label class="mini-label">Mandatory Cost ${index + 1}</label>
+                    <input class="field readonly" readonly value="${escapeAttr(line.label)}" />
+                </div>
+                <div></div>
+                <div>
+                    <label class="mini-label">Qty</label>
+                    <input type="number" min="0" step="0.01" class="field" value="${line.qty}" oninput="updatePricingLine('${line.id}','qty',this.value)" />
+                </div>
+                <div>
+                    <label class="mini-label">Unit Cost</label>
+                    <input type="number" min="0" step="0.01" class="field" value="${line.unitCost}" oninput="updatePricingLine('${line.id}','unitCost',this.value)" />
+                </div>
+                <div>
+                    <label class="mini-label">Line Total</label>
+                    <input class="field readonly" readonly value="${money(lineTotal(line))}" />
+                </div>
             </div>
-        `).join("");
-    }).join("");
+        `).join("")}
+
+        ${extrasToRender.map((line, index) => `
+            <div class="pricing-row">
+                <div>
+                    <label class="mini-label">Select Extra Cost</label>
+                    <select class="field" onchange="updatePricingLine('${line.id}','label',this.value)">
+                        <option value="" ${line.label === "" ? "selected" : ""}>Select extra cost</option>
+                        ${OPTIONAL_CHOICES.map(opt => `<option value="${opt}" ${opt === line.label ? "selected" : ""}>${opt}</option>`).join("")}
+                    </select>
+                </div>
+                <div>
+                    <label class="mini-label">Custom Label</label>
+                    <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} oninput="updatePricingLine('${line.id}','customLabel',this.value)" placeholder="Use only if custom" />
+                </div>
+                <div>
+                    <label class="mini-label">Qty</label>
+                    <input type="number" min="0" step="0.01" class="field" value="${line.qty}" oninput="updatePricingLine('${line.id}','qty',this.value)" />
+                </div>
+                <div>
+                    <label class="mini-label">Unit Cost</label>
+                    <input type="number" min="0" step="0.01" class="field" value="${line.unitCost}" oninput="updatePricingLine('${line.id}','unitCost',this.value)" />
+                </div>
+                <div>
+                    <label class="mini-label">Line Total</label>
+                    <input class="field readonly" readonly value="${money(lineTotal(line))}" />
+                </div>
+            </div>
+        `).join("")}
+    `;
+
+    const totalCosts = calcTotalCosts(sequence);
+    const customerPrice = Number(document.getElementById("customerPriceInput").value || 0);
+    const grossMargin = customerPrice - totalCosts;
+    const grossMarginPct = customerPrice > 0 ? ((grossMargin / customerPrice) * 100) : 0;
+
+    document.getElementById("totalCosts").textContent = money(totalCosts);
+    document.getElementById("customerPriceDisplay").textContent = money(customerPrice);
+    document.getElementById("grossMarginDisplay").textContent = money(grossMargin);
+    document.getElementById("grossMarginSub").textContent = customerPrice > 0
+        ? `${money(grossMarginPct)}% margin on sell price${pricingSaved ? " · saved" : " · unsaved changes"}`
+        : `Customer price minus total costs${pricingSaved ? " · saved" : " · unsaved changes"}`;
 }
 
-function calcScheduleValidation(packing, loading, unloading, special, state){
-    const effectiveLoadHours = round2(loading.hours);
-    const required = {
-        Pack: packing.packHours,
-        Load: effectiveLoadHours,
-        Unload: unloading.hours
-    };
-
-    const allocated = {
-        Pack: 0,
-        Load: 0,
-        Unload: 0
-    };
-
-    let sharedPackLoadPool = 0;
-    let sharedLoadUnloadPool = 0;
-
-    const groups = {};
-    manualSchedule.forEach(day => {
-        if (!groups[day.groupId]) groups[day.groupId] = [];
-        groups[day.groupId].push(day);
-    });
-
-    Object.values(groups).forEach(rows => {
-        const hasAmLoadish = rows.some(day => day.dayPart === "AM" && ["Load", "Pack and Load", "Load and Deliver", "Load and Travel"].includes(day.task));
-
-        rows.forEach(day => {
-            const men = Number(day.men) || 0;
-            const hours = Number(day.hours) || 0;
-            const capacity = men * hours;
-
-            switch(day.task){
-                case "Pack":
-                    allocated.Pack += capacity;
-                    break;
-                case "Unload":
-                case "Deliver and Crew Return":
-                    allocated.Unload += capacity;
-                    break;
-                case "Pack and Load":
-                    if (day.dayPart === "AM") {
-                        sharedPackLoadPool += capacity;
-                    } else if (day.dayPart === "PM" && hasAmLoadish) {
-                        const pmLoadHours = round2((men * hours * AFTERNOON_LOAD_RATE_AFTER_AM) / state.loadRate);
-                        sharedPackLoadPool += pmLoadHours;
-                    } else {
-                        sharedPackLoadPool += capacity;
-                    }
-                    break;
-                case "Load and Deliver":
-                    if (day.dayPart === "AM") {
-                        sharedLoadUnloadPool += capacity;
-                    } else if (day.dayPart === "PM" && hasAmLoadish) {
-                        const pmLoadHours = round2((men * hours * AFTERNOON_LOAD_RATE_AFTER_AM) / state.loadRate);
-                        sharedLoadUnloadPool += pmLoadHours + Math.max(0, capacity - pmLoadHours);
-                    } else {
-                        sharedLoadUnloadPool += capacity;
-                    }
-                    break;
-                case "Load":
-                case "Load and Travel": {
-                    let loadHoursEquivalent = capacity;
-                    if (day.dayPart === "PM" && hasAmLoadish) {
-                        const pmVolume = men * hours * AFTERNOON_LOAD_RATE_AFTER_AM;
-                        loadHoursEquivalent = round2(pmVolume / state.loadRate);
-                    }
-                    allocated.Load += loadHoursEquivalent;
-                    break;
-                }
-                default:
-                    break;
-            }
-        });
-    });
-
-    const packNeedAfterDirect = Math.max(0, required.Pack - allocated.Pack);
-    const packLoadPoolToPack = Math.min(sharedPackLoadPool, packNeedAfterDirect);
-    allocated.Pack += packLoadPoolToPack;
-    allocated.Load += Math.max(0, sharedPackLoadPool - packLoadPoolToPack);
-
-    const loadNeedAfterPackPool = Math.max(0, required.Load - allocated.Load);
-    const loadUnloadPoolToLoad = Math.min(sharedLoadUnloadPool, loadNeedAfterPackPool);
-    allocated.Load += loadUnloadPoolToLoad;
-    allocated.Unload += Math.max(0, sharedLoadUnloadPool - loadUnloadPoolToLoad);
-
-    const passIcon = "✓";
-    const failIcon = "✕";
-    const warnIcon = "!";
-
-    const results = Object.keys(required).map(task => {
-        const req = required[task] || 0;
-        const cap = allocated[task] || 0;
-        const diff = round2(cap - req);
-
-        if (req === 0 && cap === 0) {
-            return { type: "ok", text: `${passIcon} ${task} not required and none allocated.` };
-        }
-        if (cap + 0.01 < req) {
-            return { type: "error", text: `${failIcon} ${task} short by ${Math.abs(diff).toFixed(2)} man-hours.` };
-        }
-        if (diff > 0.5) {
-            return { type: "warn", text: `${warnIcon} ${task} has ${diff.toFixed(2)} spare man-hours allocated.` };
-        }
-        return { type: "ok", text: `${passIcon} ${task} capacity matches requirement.` };
-    });
-
-    if (sharedPackLoadPool > 0){
-        results.push({ type: "ok", text: `${passIcon} Pack and Load rows use a shared labour pool, so spare pack capacity can offset load demand.` });
-    }
-    if (sharedLoadUnloadPool > 0){
-        results.push({ type: "ok", text: `${passIcon} Load and Deliver rows use a shared labour pool, so spare load capacity can offset unload demand.` });
-    }
-    results.push({
-        type: special.extraTransitHours > 0 ? "warn" : "ok",
-        text: special.extraTransitHours > 0
-            ? `${warnIcon} Transit beyond the first 30 minutes adds ${special.extraTransitHours.toFixed(2)} hours to the unload side and may reduce delivery-side feasibility.`
-            : `${passIcon} Transit is within the first 30 minutes included allowance.`
-    });
-    results.push({
-        type: "ok",
-        text: `${passIcon} Planner load validation uses ${MORNING_LOAD_RATE} cuft per man-hour in the morning and ${AFTERNOON_LOAD_RATE_AFTER_AM} cuft per man-hour for PM loading when it follows AM loading on the same day.`
-    });
-    results.push({
-        type: "ok",
-        text: `${passIcon} Load-side specials are included in loading, and unload-side specials are included in unloading for schedule checking.`
-    });
-
-    return results;
+function renderAll(){
+    renderSequenceSelect();
+    const sequence = getSelectedSequence();
+    const inventorySummary = summariseInventory(sequence);
+    renderResponsibilitySummary(inventorySummary);
+    renderExcludedSummary(inventorySummary);
+    renderSchedulePlanner(sequence);
+    renderPricing(sequence);
+    document.getElementById("manualExcludedNotes").value = prototypeState.manualExcludedNotes;
+    document.getElementById("customerPriceInput").dispatchEvent(new Event("input"));
 }
 
-function renderValidation(packing, loading, unloading, special, state){
-    const el = document.getElementById("validationList");
-    if (!el) return;
-    const items = calcScheduleValidation(packing, loading, unloading, special, state);
-    el.innerHTML = items.map(item => `<div class="validation-item validation-${item.type}">${item.text}</div>`).join("");
+function runSmokeTests(){
+    console.assert(typeof addPricingLine === "function", "addPricingLine should exist");
+    console.assert(typeof renderAll === "function", "renderAll should exist");
+    console.assert(typeof addScheduleRow === "function", "addScheduleRow should exist");
+    const seq = getSelectedSequence();
+    const lines = getPricingLines(seq);
+    const blankExtras = lines.filter(line => !MANDATORY_LABELS.includes(line.label) && (!line.label || line.label === ""));
+    console.assert(blankExtras.length === 1, "There should be exactly one blank extra cost row");
 }
 
-function renderScheduleCalculator(){
-    const photonFeed = getPhotonFeed();
-    const state = getState();
+document.getElementById("sequenceSelect").addEventListener("change", (e) => {
+    prototypeState.selectedSequenceId = e.target.value;
+    pricingSaved = false;
+    renderAll();
+});
+document.getElementById("manualExcludedAddBtn").addEventListener("click", addManualExcluded);
+document.getElementById("manualExcludedNotes").addEventListener("input", (e) => updateManualExcludedNotes(e.target.value));
+document.getElementById("addScheduleRowBtn").addEventListener("click", addScheduleRow);
+document.getElementById("addPricingLineBtn").addEventListener("click", addPricingLine);
+document.getElementById("savePricingBtn").addEventListener("click", savePricingSet);
+document.getElementById("customerPriceInput").addEventListener("input", () => renderPricing(getSelectedSequence()));
 
-    const sequenceLabelDisplay = document.getElementById("sequenceLabelDisplay");
-    if (sequenceLabelDisplay) sequenceLabelDisplay.textContent = photonFeed.sequenceLabel || "—";
-
-    const packing = calcPacking(state);
-    const boxVolume = round2(calcBoxVolume(state));
-    const totalVolume = round2(state.furnitureVol + boxVolume);
-
-    const furnitureDisplay = document.getElementById("furnitureVolDisplay");
-    if (furnitureDisplay) furnitureDisplay.textContent = state.furnitureVol;
-
-    const apDisplay = document.getElementById("qty_ap_display");
-    if (apDisplay) apDisplay.textContent = state.qty.ap;
-
-    const cgDisplay = document.getElementById("qty_cg_display");
-    if (cgDisplay) cgDisplay.textContent = state.qty.cg;
-
-    const booksDisplay = document.getElementById("qty_books_display");
-    if (booksDisplay) booksDisplay.textContent = state.qty.books;
-
-    const linenDisplay = document.getElementById("qty_linen_display");
-    if (linenDisplay) linenDisplay.textContent = state.qty.linen;
-
-    const wrDisplay = document.getElementById("qty_wr_display");
-    if (wrDisplay) wrDisplay.textContent = state.qty.wr;
-
-    const special = calcSpecialLabour(state);
-    const loading = calcLoading(totalVolume, state.loadRate, special.loadSideHours);
-    const unloading = calcUnloading(totalVolume, state.unloadRate, special.unloadSideHours);
-
-    document.getElementById("summaryMode").textContent = getPackModeLabel(state.packOption);
-    document.getElementById("summaryTotalVolume").textContent = totalVolume;
-    document.getElementById("summaryPackHours").textContent = packing.packHours.toFixed(2);
-    document.getElementById("summaryPackDays").textContent = packing.packDays.toFixed(1);
-    document.getElementById("summarySpecialHours").textContent = special.specialHours.toFixed(2);
-    document.getElementById("summaryLoadHours").textContent = loading.hours.toFixed(2);
-    document.getElementById("summaryLoadDays").textContent = loading.days.toFixed(1);
-    document.getElementById("summaryLoadCompletion").textContent = loading.completionCrew.toFixed(1);
-    document.getElementById("summaryLoadRate").textContent = state.loadRate;
-
-    document.getElementById("summaryUnloadHours").textContent = unloading.hours.toFixed(2);
-    document.getElementById("summaryUnloadDays").textContent = unloading.days.toFixed(1);
-    document.getElementById("summaryUnloadCompletion").textContent = unloading.completionCrew.toFixed(1);
-    document.getElementById("summaryUnloadRate").textContent = state.unloadRate;
-
-    const packingRule = state.packOption === "none"
-        ? "No packing selected, so packing labour is held at zero."
-        : state.packOption === "cg"
-            ? "CG packing selected, so only CG cartons contribute to packing labour."
-            : "Full packing selected, so all carton types contribute to packing labour.";
-
-    document.getElementById("logicText").textContent =
-        `${packingRule} Total volume is furniture volume plus calculated box volume. ` +
-        `Loft effects volume is used for extra loft labour only and does not change total move volume. ` +
-        `Loading uses total volume ÷ ${state.loadRate} cuft per man-hour, then adds load-side specials. ` +
-        `Unloading uses total volume ÷ ${state.unloadRate} cuft per man-hour, then adds unload-side specials. ` +
-        `Two regular frame beds and 50 cuft of export wrap are treated as already included before extra special time is added.`;
-
-    document.getElementById("specialText").textContent =
-        `Frame beds: ${special.breakdown.frame.toFixed(2)} hrs extra after first ${special.breakdown.includedFrameBeds} included · ` +
-        `Bunk beds: ${special.breakdown.bunk.toFixed(2)} hrs · ` +
-        `${state.special.customNote ? state.special.customNote : "Custom item"}: ${special.breakdown.custom.toFixed(2)} hrs · ` +
-        `Upright pianos: ${special.breakdown.upright.toFixed(2)} hrs · ` +
-        `Baby / grand pianos: ${special.breakdown.grand.toFixed(2)} hrs · ` +
-        `Grandfather clocks: ${special.breakdown.clock.toFixed(2)} hrs · ` +
-        `Appliances: ${special.breakdown.appliance.toFixed(2)} hrs · ` +
-        `Crating: ${special.breakdown.crate.toFixed(2)} hrs · ` +
-        `Loft effects: ${special.breakdown.loft.toFixed(2)} hrs · ` +
-        `Export wrapping: ${special.breakdown.exportWrap.toFixed(2)} hrs extra after first ${special.breakdown.includedExportWrapVol} cuft included · ` +
-        `Transit impact: ${special.breakdown.transit.toFixed(2)} hrs after first 30 mins included. ` +
-        `Load side specials: ${special.loadSideHours.toFixed(2)} hrs · Unload side specials: ${special.unloadSideHours.toFixed(2)} hrs.`;
-
-    renderSchedulePlanner();
-    renderValidation(packing, loading, unloading, special, state);
-}
-
-renderScheduleCalculator();
+renderAll();
+runSmokeTests();
 </script>
 </body>
 </html>
-
