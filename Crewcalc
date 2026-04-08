@@ -225,6 +225,7 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
 
                     <div class="toolbar"></div>
 
+                    <!-- <div class="footer-note">Crew replaces porters in this version. Standard default rates are preloaded and can be edited.</div> -->
                     <div class="footer-note">Crew replaces porters in this version. Standard default rates are preloaded and can be edited.</div>
                 </div>
             </div>
