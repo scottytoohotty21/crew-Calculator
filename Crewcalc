@@ -41,7 +41,21 @@ button,input,select,textarea{font:inherit;}
 .brand-title{font-size:28px;font-weight:900;line-height:1;text-transform:uppercase;letter-spacing:-0.05em;margin:0;}
 .brand-sub{font-size:10px;font-weight:900;color:var(--blue);text-transform:uppercase;letter-spacing:.22em;margin-top:4px;}
 .status-pill{border:1px solid var(--slate-300);background:var(--card);border-radius:999px;padding:8px 12px;font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-500);white-space:nowrap;}
-.layout{display:grid;grid-template-columns:360px 1fr;gap:16px;align-items:start;}
+.layout{display:grid;gap:16px;align-items:start;}
+.summary-strip{
+    position:sticky;
+    top:12px;
+    z-index:30;
+}
+.summary-strip .panel-body{padding:12px 16px;}
+.summary-grid-top{grid-template-columns:repeat(4,minmax(0,1fr));}
+.schedule-panel{margin-top:0;}
+.bottom-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:16px;
+    align-items:start;
+}
 .stack{display:grid;gap:16px;}
 .panel{background:var(--card);border:1px solid var(--slate-200);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;}
 .panel-head{background:var(--navy);padding:14px 16px;border-bottom:1px solid var(--navy-2);}
@@ -56,7 +70,7 @@ button,input,select,textarea{font:inherit;}
 .field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.08);}
 .field.readonly{background:var(--slate-50);color:var(--slate-700);}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:stretch;}
 .summary-card{background:#fff;border:1px solid var(--slate-200);border-radius:16px;padding:16px;min-height:118px;}
 .summary-label{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-400);margin-bottom:8px;line-height:1.35;}
 .summary-value{font-size:28px;font-weight:900;line-height:1;color:var(--navy);}
@@ -96,16 +110,23 @@ button,input,select,textarea{font:inherit;}
 .toolbar{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;}
 .footer-note{margin-top:12px;font-size:10px;font-weight:800;text-transform:uppercase;color:var(--slate-400);line-height:1.45;}
 textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
-@media (max-width:1100px){
-    .layout{grid-template-columns:1fr;}
+@media (max-width:900px){
+    .bottom-layout{grid-template-columns:1fr;}
     .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
 }
 @media (max-width:980px){
     .pricing-row,.schedule-row{grid-template-columns:1fr 1fr;}
+    .summary-strip{
+        position:sticky;
+        top:8px;
+    }
 }
 @media (max-width:760px){
-    .summary-grid,.grid-2{grid-template-columns:1fr;}
+    .summary-grid,.grid-2,.summary-grid-top{grid-template-columns:1fr;}
     .topbar{align-items:flex-start;flex-direction:column;}
+    .summary-strip{
+        position:static;
+    }
 }
 </style>
 </head>
@@ -122,46 +143,97 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
         <div class="status-pill">Standalone Prototype · Safe Summary Layer</div>
     </div>
 
-    <div class="layout">
-        <div class="panel">
-            <div class="panel-head">
-                <div class="panel-title">Prototype Controls</div>
-                <div class="panel-subtitle">Use this as the safe side project before wiring into the live app</div>
-            </div>
-            <div class="panel-body">
-                <div class="section-block">
-                    <div class="section-title">Sequence Selection</div>
-                    <div>
-                        <label class="mini-label">Selected Sequence</label>
-                        <select id="sequenceSelect" class="field"></select>
-                    </div>
+        <div class="summary-strip panel">
+        <div class="panel-body">
+            <div class="summary-grid summary-grid-top">
+                <div class="summary-card">
+                    <div class="summary-label">Total Costs</div>
+                    <div class="summary-value" id="totalCosts">0.00</div>
+                    <div class="summary-sub">Auto-added from pricing lines</div>
                 </div>
-
-                <div class="section-block">
-                    <div class="section-title">Removal Crew Responsibilities</div>
-                    <div id="leftResponsibilityCard"></div>
+                <div class="summary-card">
+                    <div class="summary-label">Price To Customer</div>
+                    <div class="summary-value" id="customerPriceDisplay">0.00</div>
+                    <div class="summary-sub">Manual sell price input</div>
                 </div>
-
-                <div class="section-block">
-                    <div class="section-title">Exclusions / Customer Responsibilities</div>
-                    <div id="leftExcludedCard"></div>
+                <div class="summary-card">
+                    <div class="summary-label">Gross Margin</div>
+                    <div class="summary-value" id="grossMarginDisplay">0.00</div>
+                    <div class="summary-sub" id="grossMarginSub">Customer price minus total costs</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Additional Costs Total</div>
+                    <div class="summary-value" id="additionalCostsTotalDisplay">0.00</div>
+                    <div class="summary-sub">Optional extras shown separately</div>
                     <div style="height:12px"></div>
-                    <div>
-                        <label class="mini-label">Add Manual Excluded Item</label>
-                        <div class="grid-2">
-                            <input id="manualExcludedInput" class="field" placeholder="e.g. Garage racking" />
-                            <button type="button" class="field" style="cursor:pointer;background:var(--blue);color:#fff;border-color:var(--blue-2);" id="manualExcludedAddBtn">Add</button>
+                    <label class="mini-label">Price To Customer</label>
+                    <input id="customerPriceInput" type="number" min="0" step="0.01" class="field" value="0" onchange="renderPricing(getSelectedSequence())" />
+                    <div style="height:12px"></div>
+                    <button type="button" class="action-btn blue" id="savePricingBtn" style="width:100%;">Save Pricing</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="schedule-panel panel">
+        <div class="panel-head">
+            <div class="panel-title">Schedule Planner</div>
+            <div class="panel-subtitle">Manual AM / PM planning block that can later be lifted from the calculator</div>
+        </div>
+        <div class="panel-body">
+            <div class="note-card">
+                This is a quick planner version. Use it to add day rows manually, then let the vans / crew totals feed directly into pricing below.
+            </div>
+            <div id="schedulePlanner"></div>
+            <div class="toolbar">
+                <button type="button" class="action-btn white" id="addScheduleRowBtn">Add Schedule Row</button>
+                <button type="button" class="action-btn white" id="copySchedulePlanBtn">Copy Plan from Schedule Tab</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-layout">
+        <div class="stack">
+            <div class="panel">
+                <div class="panel-head">
+                    <div class="panel-title">Prototype Controls</div>
+                    <div class="panel-subtitle">Use this as the safe side project before wiring into the live app</div>
+                </div>
+                <div class="panel-body">
+                    <div class="section-block">
+                        <div class="section-title">Sequence Selection</div>
+                        <div>
+                            <label class="mini-label">Selected Sequence</label>
+                            <select id="sequenceSelect" class="field"></select>
                         </div>
                     </div>
-                    <div style="height:12px"></div>
-                    <div>
-                        <label class="mini-label">Manual Excluded Notes</label>
-                        <textarea id="manualExcludedNotes" class="field" placeholder="Short pricing / summary notes for excluded scope"></textarea>
-                    </div>
-                </div>
 
-                <div class="note-card">
-                    This prototype is designed to aggregate summary data first. Pricing is visible in-page, but still isolated from the live app.
+                    <div class="section-block">
+                        <div class="section-title">Removal Crew Responsibilities</div>
+                        <div id="leftResponsibilityCard"></div>
+                    </div>
+
+                    <div class="section-block">
+                        <div class="section-title">Exclusions / Customer Responsibilities</div>
+                        <div id="leftExcludedCard"></div>
+                        <div style="height:12px"></div>
+                        <div>
+                            <label class="mini-label">Add Manual Excluded Item</label>
+                            <div class="grid-2">
+                                <input id="manualExcludedInput" class="field" placeholder="e.g. Garage racking" />
+                                <button type="button" class="field" style="cursor:pointer;background:var(--blue);color:#fff;border-color:var(--blue-2);" id="manualExcludedAddBtn">Add</button>
+                            </div>
+                        </div>
+                        <div style="height:12px"></div>
+                        <div>
+                            <label class="mini-label">Manual Excluded Notes</label>
+                            <textarea id="manualExcludedNotes" class="field" placeholder="Short pricing / summary notes for excluded scope"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="note-card">
+                        This prototype is designed to aggregate summary data first. Pricing is visible in-page, but still isolated from the live app.
+                    </div>
                 </div>
             </div>
         </div>
@@ -169,55 +241,10 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
         <div class="stack">
             <div class="panel">
                 <div class="panel-head">
-                    <div class="panel-title">Schedule Planner</div>
-                    <div class="panel-subtitle">Manual AM / PM planning block that can later be lifted from the calculator</div>
-                </div>
-                <div class="panel-body">
-                                        <div class="note-card">
-                        This is a quick planner version. Use it to add day rows manually, then let the vans / crew totals feed directly into pricing below.
-                    </div>
-                    <div id="schedulePlanner"></div>
-                                        <div class="toolbar">
-                        <button type="button" class="action-btn white" id="addScheduleRowBtn">Add Schedule Row</button>
-                        <button type="button" class="action-btn white" id="copySchedulePlanBtn">Copy Plan from Schedule Tab</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-head">
                     <div class="panel-title">Pricing Placeholder</div>
                     <div class="panel-subtitle">Customer-facing numbers first, cost lines beneath</div>
                 </div>
                 <div class="panel-body">
-                    <div class="summary-grid">
-                        <div class="summary-card">
-                            <div class="summary-label">Total Costs</div>
-                            <div class="summary-value" id="totalCosts">0.00</div>
-                            <div class="summary-sub">Auto-added from pricing lines</div>
-                        </div>
-                        <div class="summary-card">
-                            <div class="summary-label">Price To Customer</div>
-                            <div class="summary-value" id="customerPriceDisplay">0.00</div>
-                            <div class="summary-sub">Manual sell price input</div>
-                        </div>
-                        <div class="summary-card">
-                            <div class="summary-label">Gross Margin</div>
-                            <div class="summary-value" id="grossMarginDisplay">0.00</div>
-                            <div class="summary-sub" id="grossMarginSub">Customer price minus total costs</div>
-                        </div>
-                        <div class="summary-card">
-                            <div>
-                                <label class="mini-label">Price To Customer</label>
-                                <input id="customerPriceInput" type="number" min="0" step="0.01" class="field" value="0" onchange="renderPricing(getSelectedSequence())" />
-                            </div>
-                            <div style="height:12px"></div>
-                            <button type="button" class="action-btn blue" id="savePricingBtn" style="width:100%;">Save Pricing</button>
-                        </div>
-                    </div>
-
-                                        <div style="height:16px"></div>
-
                     <div class="document-block" id="additionalCostsSummaryCard"></div>
 
                     <div style="height:16px"></div>
@@ -226,7 +253,7 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
                         Quantity can be fed from inventory later. Unit costs auto-populate but stay editable. One save button sits at the top next to customer pricing.
                     </div>
 
-                                        <div class="pricing-grid" id="pricingGrid"></div>
+                    <div class="pricing-grid" id="pricingGrid"></div>
 
                     <div class="toolbar">
                         <button type="button" class="action-btn white" onclick="addPricingLine()">Add Cost Row</button>
@@ -234,8 +261,8 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
 
                     <div style="height:16px"></div>
 
-                    <div class="section-block">
-                        <div class="section-title">Optional Additional Costs</div>
+                    <div class="section-block" style="background:var(--blue-50);border-color:#bfdbfe;">
+                        <div class="section-title" style="color:#1d4ed8;">Optional Additional Costs</div>
                         <div class="pricing-grid" id="additionalCostsGrid"></div>
                         <div class="toolbar">
                             <button type="button" class="action-btn white" onclick="addAdditionalCostLine()">Add Additional Cost Row</button>
@@ -699,7 +726,14 @@ function updateAdditionalCostLine(id, field, value){
     });
 
     pricingSaved = false;
-    renderPricing(sequence);
+
+    if (field === "label"){
+        renderPricing(sequence);
+        return;
+    }
+
+    renderAdditionalCosts(sequence);
+    renderAdditionalCostsSummary(sequence);
 }
 
 function additionalLineTotal(line){
@@ -735,6 +769,8 @@ function renderAdditionalCostsSummary(sequence){
             <div class="document-line">${money(total)}</div>
         </div>
     `;
+
+    document.getElementById("additionalCostsTotalDisplay").textContent = money(total);
 }
 
 function renderAdditionalCosts(sequence){
@@ -746,22 +782,22 @@ function renderAdditionalCosts(sequence){
             <div class="pricing-row" data-additional-cost-id="${line.id}">
                 <div>
                     <label class="mini-label">Select Additional Cost</label>
-                    <select class="field" onchange="updateAdditionalCostLine('${line.id}','label',this.value)">
+                                        <select class="field" onchange="updateAdditionalCostLine('${line.id}','label',this.value)">
                         <option value="" ${line.label === "" ? "selected" : ""}>Select additional cost</option>
                         ${ADDITIONAL_COST_CHOICES.map(opt => `<option value="${opt}" ${opt === line.label ? "selected" : ""}>${opt}</option>`).join("")}
                     </select>
                 </div>
                 <div>
                     <label class="mini-label">Custom Label</label>
-                    <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} oninput="updateAdditionalCostLine('${line.id}','customLabel',this.value)" placeholder="Use only if custom" />
+                                        <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} onchange="updateAdditionalCostLine('${line.id}','customLabel',this.value)" placeholder="Use only if custom" />
                 </div>
                 <div>
                     <label class="mini-label">Qty</label>
-                    <input type="number" min="0" step="0.01" class="field" value="${line.qty}" onchange="updateAdditionalCostLine('${line.id}','qty',this.value)" />
+                                        <input type="number" min="0" step="0.01" class="field" value="${line.qty}" onchange="updateAdditionalCostLine('${line.id}','qty',this.value)" />
                 </div>
                 <div>
                     <label class="mini-label">Unit Cost</label>
-                    <input type="number" min="0" step="0.01" class="field" value="${line.unitCost}" onchange="updateAdditionalCostLine('${line.id}','unitCost',this.value)" />
+                                        <input type="number" min="0" step="0.01" class="field" value="${line.unitCost}" onchange="updateAdditionalCostLine('${line.id}','unitCost',this.value)" />
                 </div>
                 <div>
                     <label class="mini-label">Line Total</label>
