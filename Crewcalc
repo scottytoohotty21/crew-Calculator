@@ -216,16 +216,30 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
                         </div>
                     </div>
 
+                                        <div style="height:16px"></div>
+
+                    <div class="document-block" id="additionalCostsSummaryCard"></div>
+
                     <div style="height:16px"></div>
 
                     <div class="note-card">
                         Quantity can be fed from inventory later. Unit costs auto-populate but stay editable. One save button sits at the top next to customer pricing.
                     </div>
 
-                    <div class="pricing-grid" id="pricingGrid"></div>
+                                        <div class="pricing-grid" id="pricingGrid"></div>
 
-                                        <div class="toolbar">
+                    <div class="toolbar">
                         <button type="button" class="action-btn white" onclick="addPricingLine()">Add Cost Row</button>
+                    </div>
+
+                    <div style="height:16px"></div>
+
+                    <div class="section-block">
+                        <div class="section-title">Optional Additional Costs</div>
+                        <div class="pricing-grid" id="additionalCostsGrid"></div>
+                        <div class="toolbar">
+                            <button type="button" class="action-btn white" onclick="addAdditionalCostLine()">Add Additional Cost Row</button>
+                        </div>
                     </div>
 
                     <div class="footer-note">Crew replaces porters in this version. Standard default rates are preloaded and can be edited.</div>
@@ -314,11 +328,13 @@ const PRICING_DEFAULTS = [
 
 const MANDATORY_LABELS = ["Vans", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
 const OPTIONAL_CHOICES = ["Custom", "Handyman Rate", "Parking / Parking Admin Fees", "Hoist / Crane", "Ferry", "Crating"];
+const ADDITIONAL_COST_CHOICES = ["Custom", "Handyman", "Electrician", "Plumber", "Decorator", "Cleaner"];
 const TASK_OPTIONS = ["Custom", "Pack", "Load", "Unload", "Pack and Load", "Load and Deliver", "Load and Travel", "Deliver and Crew Return"];
 const DAY_PARTS = ["AM", "PM", "Full Day"];
 
 let pricingSaved = false;
 let pricingBySequence = {};
+let additionalCostsBySequence = {};
 let scheduleBySequence = {};
 
 function round1(value){ return Math.round((Number(value || 0) + Number.EPSILON) * 10) / 10; }
@@ -622,6 +638,139 @@ function addPricingLine(){
     pricingSaved = false;
     renderPricing(sequence);
 }
+function ensureSingleBlankAdditionalCost(sequence){
+    if (!additionalCostsBySequence[sequence.id]){
+        additionalCostsBySequence[sequence.id] = [
+            {
+                id: createId(),
+                label: "",
+                customLabel: "",
+                qty: 0,
+                unitCost: 0
+            }
+        ];
+    }
+
+    if (!additionalCostsBySequence[sequence.id].length){
+        additionalCostsBySequence[sequence.id].push({
+            id: createId(),
+            label: "",
+            customLabel: "",
+            qty: 0,
+            unitCost: 0
+        });
+    }
+}
+
+function getAdditionalCostLines(sequence){
+    ensureSingleBlankAdditionalCost(sequence);
+    return additionalCostsBySequence[sequence.id];
+}
+
+function addAdditionalCostLine(){
+    const sequence = getSelectedSequence();
+    const lines = getAdditionalCostLines(sequence);
+
+    additionalCostsBySequence[sequence.id] = [
+        ...lines,
+        {
+            id: createId(),
+            label: "",
+            customLabel: "",
+            qty: 0,
+            unitCost: 0
+        }
+    ];
+
+    pricingSaved = false;
+    renderPricing(sequence);
+}
+
+function updateAdditionalCostLine(id, field, value){
+    const sequence = getSelectedSequence();
+    const lines = getAdditionalCostLines(sequence);
+
+    additionalCostsBySequence[sequence.id] = lines.map(line => {
+        if (line.id !== id) return line;
+        if (field === "qty" || field === "unitCost"){
+            return { ...line, [field]: Number(value || 0) };
+        }
+        return { ...line, [field]: value };
+    });
+
+    pricingSaved = false;
+    renderPricing(sequence);
+}
+
+function additionalLineTotal(line){
+    return Number(line.qty || 0) * Number(line.unitCost || 0);
+}
+
+function calcAdditionalCostsTotal(sequence){
+    return getAdditionalCostLines(sequence).reduce((sum, line) => {
+        if (!line.label) return sum;
+        return sum + additionalLineTotal(line);
+    }, 0);
+}
+
+function renderAdditionalCostsSummary(sequence){
+    const lines = getAdditionalCostLines(sequence).filter(line => line.label && line.label !== "");
+    const total = calcAdditionalCostsTotal(sequence);
+
+    document.getElementById("additionalCostsSummaryCard").innerHTML = `
+        <div class="document-section">
+            <div class="document-heading">Optional Additional Costs</div>
+            ${lines.length ? `
+                <div class="document-lines">
+                    ${lines.map(line => `
+                        <div class="document-line">
+                            • ${escapeHtml(line.label === "Custom" ? (line.customLabel || "Custom") : line.label)} — ${money(additionalLineTotal(line))}
+                        </div>
+                    `).join("")}
+                </div>
+            ` : `<div class="document-empty">No optional additional costs added</div>`}
+        </div>
+        <div class="document-section">
+            <div class="document-heading">Additional Costs Total</div>
+            <div class="document-line">${money(total)}</div>
+        </div>
+    `;
+}
+
+function renderAdditionalCosts(sequence){
+    const lines = getAdditionalCostLines(sequence);
+    const grid = document.getElementById("additionalCostsGrid");
+
+    grid.innerHTML = `
+        ${lines.map((line) => `
+            <div class="pricing-row" data-additional-cost-id="${line.id}">
+                <div>
+                    <label class="mini-label">Select Additional Cost</label>
+                    <select class="field" onchange="updateAdditionalCostLine('${line.id}','label',this.value)">
+                        <option value="" ${line.label === "" ? "selected" : ""}>Select additional cost</option>
+                        ${ADDITIONAL_COST_CHOICES.map(opt => `<option value="${opt}" ${opt === line.label ? "selected" : ""}>${opt}</option>`).join("")}
+                    </select>
+                </div>
+                <div>
+                    <label class="mini-label">Custom Label</label>
+                    <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} oninput="updateAdditionalCostLine('${line.id}','customLabel',this.value)" placeholder="Use only if custom" />
+                </div>
+                <div>
+                    <label class="mini-label">Qty</label>
+                    <input type="number" min="0" step="0.01" class="field" value="${line.qty}" onchange="updateAdditionalCostLine('${line.id}','qty',this.value)" />
+                </div>
+                <div>
+                    <label class="mini-label">Unit Cost</label>
+                    <input type="number" min="0" step="0.01" class="field" value="${line.unitCost}" onchange="updateAdditionalCostLine('${line.id}','unitCost',this.value)" />
+                </div>
+                <div>
+                    <label class="mini-label">Line Total</label>
+                    <input class="field readonly" readonly value="${money(additionalLineTotal(line))}" />
+                </div>
+            </div>
+        `).join("")}
+    `;
+}
 
 function updatePricingLine(id, field, value){
     const sequence = getSelectedSequence();
@@ -738,12 +887,15 @@ function renderPricing(sequence = getSelectedSequence()){
     const grossMargin = customerPrice - totalCosts;
     const grossMarginPct = customerPrice > 0 ? ((grossMargin / customerPrice) * 100) : 0;
 
-    document.getElementById("totalCosts").textContent = money(totalCosts);
+     document.getElementById("totalCosts").textContent = money(totalCosts);
     document.getElementById("customerPriceDisplay").textContent = money(customerPrice);
     document.getElementById("grossMarginDisplay").textContent = money(grossMargin);
     document.getElementById("grossMarginSub").textContent = customerPrice > 0
         ? `${money(grossMarginPct)}% margin on sell price${pricingSaved ? " · saved" : " · unsaved changes"}`
         : `Customer price minus total costs${pricingSaved ? " · saved" : " · unsaved changes"}`;
+
+    renderAdditionalCosts(sequence);
+    renderAdditionalCostsSummary(sequence);
 }
 
 function renderAll(){
@@ -754,6 +906,8 @@ function renderAll(){
     renderExcludedSummary(inventorySummary);
     renderSchedulePlanner(sequence);
     renderPricing(sequence);
+    renderAdditionalCosts(sequence);
+    renderAdditionalCostsSummary(sequence);
     document.getElementById("manualExcludedNotes").value = prototypeState.manualExcludedNotes;
 }
 
