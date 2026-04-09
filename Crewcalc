@@ -177,8 +177,9 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
                         This is a quick planner version. Use it to add day rows manually, then let the vans / crew totals feed directly into pricing below.
                     </div>
                     <div id="schedulePlanner"></div>
-                    <div class="toolbar">
+                                        <div class="toolbar">
                         <button type="button" class="action-btn white" id="addScheduleRowBtn">Add Schedule Row</button>
+                        <button type="button" class="action-btn white" id="copySchedulePlanBtn">Copy Plan from Schedule Tab</button>
                     </div>
                 </div>
             </div>
@@ -368,8 +369,7 @@ function buildDocumentLines(arr, emptyText){
 function getScheduleRows(sequence){
     if (!scheduleBySequence[sequence.id]){
         scheduleBySequence[sequence.id] = [
-            { id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Pack and Load", customTask: "", vans: 1, crew: 2 },
-            { id: createId(), dayLabel: "Day 1", dayPart: "PM", task: "Load and Deliver", customTask: "", vans: 1, crew: 2 }
+            { id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Pack and Load", customTask: "", vans: 1, crew: 2 }
         ];
     }
     return scheduleBySequence[sequence.id];
@@ -526,6 +526,9 @@ function addScheduleRow(){
     pricingSaved = false;
     syncPricingFromSchedule(sequence);
     renderAll();
+}
+function copyPlanFromScheduleTab(){
+    alert("Schedule tab copy is not wired into this standalone prototype yet.");
 }
 
 function updateScheduleRow(id, field, value){
@@ -745,6 +748,7 @@ function renderAll(){
 }
 
 document.getElementById("addScheduleRowBtn").addEventListener("click", addScheduleRow);
+document.getElementById("copySchedulePlanBtn").addEventListener("click", copyPlanFromScheduleTab);
 
 renderAll();
 </script>
