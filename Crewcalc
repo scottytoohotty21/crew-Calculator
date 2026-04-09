@@ -224,7 +224,9 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
 
                     <div class="pricing-grid" id="pricingGrid"></div>
 
-                    <div class="toolbar"></div>
+                                        <div class="toolbar">
+                        <button type="button" class="action-btn white" onclick="addPricingLine()">Add Cost Row</button>
+                    </div>
 
                     <div class="footer-note">Crew replaces porters in this version. Standard default rates are preloaded and can be edited.</div>
                 </div>
@@ -401,19 +403,22 @@ function ensureSingleBlankExtra(sequence){
     const lines = pricingBySequence[sequence.id];
     const mandatory = lines.filter(line => MANDATORY_LABELS.includes(line.label));
     const extras = lines.filter(line => !MANDATORY_LABELS.includes(line.label));
-    const usedExtras = extras.filter(line => line.label && line.label !== "");
 
-    pricingBySequence[sequence.id] = [...mandatory, ...usedExtras];
-
-    if (usedExtras.length < 10){
-        pricingBySequence[sequence.id].push({
-            id: createId(),
-            label: "",
-            customLabel: "",
-            qty: 0,
-            unitCost: 0
-        });
+    if (!extras.length){
+        pricingBySequence[sequence.id] = [
+            ...mandatory,
+            {
+                id: createId(),
+                label: "",
+                customLabel: "",
+                qty: 0,
+                unitCost: 0
+            }
+        ];
+        return;
     }
+
+    pricingBySequence[sequence.id] = [...mandatory, ...extras];
 }
 
 function getPricingLines(sequence){
@@ -606,7 +611,19 @@ function renderSchedulePlanner(sequence){
 
 function addPricingLine(){
     const sequence = getSelectedSequence();
-    ensureSingleBlankExtra(sequence);
+    const lines = getPricingLines(sequence);
+
+    pricingBySequence[sequence.id] = [
+        ...lines,
+        {
+            id: createId(),
+            label: "",
+            customLabel: "",
+            qty: 0,
+            unitCost: 0
+        }
+    ];
+
     pricingSaved = false;
     renderPricing(sequence);
 }
@@ -665,10 +682,8 @@ function renderPricing(sequence = getSelectedSequence()){
 
         const mandatoryLines = lines.filter(line => MANDATORY_LABELS.includes(line.label));
     const extraLines = lines.filter(line => !MANDATORY_LABELS.includes(line.label));
-    const usedExtras = extraLines.filter(line => line.label && line.label !== "");
-    const blankExtra = extraLines.find(line => !line.label || line.label === "") || null;
 
-    const extrasToRender = blankExtra ? [...usedExtras, blankExtra] : usedExtras;
+    const extrasToRender = extraLines;
 
     const grid = document.getElementById("pricingGrid");
     grid.innerHTML = `
