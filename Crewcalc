@@ -309,12 +309,7 @@ const PRICING_DEFAULTS = [
     { label: "Consumables", qty: 0, unitCost: 0 },
     { label: "Cartons", qty: 48, unitCost: 2.5 },
     { label: "Export Wrap", qty: 0, unitCost: 0.30 },
-    { label: "Crating", qty: 0, unitCost: 0 },
-    { label: "Nights Out", qty: 0, unitCost: 40 },
-    { label: "Handyman Rate", qty: 0, unitCost: 0 },
-    { label: "Parking / Parking Admin Fees", qty: 0, unitCost: 0 },
-    { label: "Hoist / Crane", qty: 0, unitCost: 0 },
-    { label: "Ferry", qty: 0, unitCost: 0 }
+    { label: "Nights Out", qty: 0, unitCost: 40 }
 ];
 
 const MANDATORY_LABELS = ["Vans", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
