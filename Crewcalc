@@ -138,6 +138,16 @@ button,input,select,textarea{font:inherit;}
     padding:12px;
     background:#fff;
 }
+.additional-cost-row{
+    display:grid;
+    grid-template-columns:1.15fr 1.45fr .7fr .8fr .8fr 84px;
+    gap:10px;
+    align-items:end;
+    border:1px solid var(--slate-200);
+    border-radius:16px;
+    padding:12px;
+    background:#fff;
+}
 .action-btn{height:44px;border-radius:10px;border:1px solid transparent;padding:0 14px;font-size:11px;font-weight:900;text-transform:uppercase;cursor:pointer;}
 .action-btn.blue{background:var(--blue);color:#fff;border-color:var(--blue-2);}
 .action-btn.white{background:#fff;color:var(--slate-700);border-color:var(--slate-300);}
@@ -258,9 +268,8 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
                     <div class="panel-title">Prototype Controls</div>
                     <div class="panel-subtitle">Use this as the safe side project before wiring into the live app</div>
                 </div>
-                <div class="panel-body">
-                  
-                                        <div class="section-block">
+                               <div class="panel-body">
+                    <div class="section-block">
                         <div class="section-title">Removal Crew Responsibilities</div>
                         <div id="leftResponsibilityCard"></div>
                     </div>
@@ -415,10 +424,20 @@ const OPTIONAL_CHOICES = ["Custom", "Handyman Rate", "Parking / Parking Admin Fe
 const ADDITIONAL_COST_CHOICES = ["Custom", "Handyman", "Electrician", "Plumber", "Decorator", "Cleaner"];
 const TASK_OPTIONS = ["Custom", "Pack", "Load", "Unload", "Pack and Load", "Load and Deliver", "Load and Travel", "Deliver and Crew Return"];
 const DAY_PARTS = ["AM", "PM", "Full Day"];
+const RESPONSIBILITY_FIELDS = [
+    { key: "dismantle", label: "Dismantling" },
+    { key: "exportWrap", label: "Export Wrapping" },
+    { key: "crate", label: "Crates" },
+    { key: "disconnect", label: "Disconnect" },
+    { key: "handyman", label: "Handyman" },
+    { key: "damage", label: "Damage" },
+    { key: "noted", label: "Notes" }
+];
 
 let pricingSaved = false;
 let pricingBySequence = {};
 let additionalCostsBySequence = {};
+let responsibilityNotesBySequence = {};
 let scheduleBySequence = {};
 
 function round1(value){ return Math.round((Number(value || 0) + Number.EPSILON) * 10) / 10; }
@@ -457,10 +476,29 @@ function summariseInventory(sequence){
 
     return { listedInventoryLines, totalFurnitureVolume, cartonTotals, cartonGrandTotal, actions };
 }
-
 function buildDocumentLines(arr, emptyText){
     if (!arr.length) return `<div class="document-empty">${escapeHtml(emptyText)}</div>`;
     return `<div class="document-lines">${arr.map(item => `<div class="document-line">• ${escapeHtml(item)}</div>`).join("")}</div>`;
+}
+
+function getResponsibilityNotes(sequence, inventorySummary){
+    if (!responsibilityNotesBySequence[sequence.id]){
+        const actions = inventorySummary.actions || {};
+        responsibilityNotesBySequence[sequence.id] = RESPONSIBILITY_FIELDS.reduce((acc, field) => {
+            acc[field.key] = (actions[field.key] || []).join("\n");
+            return acc;
+        }, {});
+    }
+    return responsibilityNotesBySequence[sequence.id];
+}
+
+function updateResponsibilityNote(fieldKey, value){
+    const sequence = getSelectedSequence();
+    const current = responsibilityNotesBySequence[sequence.id] || {};
+    responsibilityNotesBySequence[sequence.id] = {
+        ...current,
+        [fieldKey]: value
+    };
 }
 
 function getScheduleRows(sequence){
@@ -552,40 +590,27 @@ function renderSequenceSelect(){
     select.value = prototypeState.selectedSequenceId;
 }
 
-function renderResponsibilitySummary(inventorySummary){
-    const actions = inventorySummary.actions;
+function renderResponsibilitySummary(sequence, inventorySummary){
+    const notes = getResponsibilityNotes(sequence, inventorySummary);
+
     const html = `
         <div class="document-block">
-            <div class="document-section">
-                <div class="document-heading">Dismantle Items</div>
-                ${buildDocumentLines(actions.dismantle, "None")}
-            </div>
-            <div class="document-section">
-                <div class="document-heading">Export Wrap Items</div>
-                ${buildDocumentLines(actions.exportWrap, "None")}
-            </div>
-            <div class="document-section">
-                <div class="document-heading">Crated Items</div>
-                ${buildDocumentLines(actions.crate, "None")}
-            </div>
-            <div class="document-section">
-                <div class="document-heading">Disconnect Items</div>
-                ${buildDocumentLines(actions.disconnect, "None")}
-            </div>
-            <div class="document-section">
-                <div class="document-heading">Handyman Items</div>
-                ${buildDocumentLines(actions.handyman, "None")}
-            </div>
-            <div class="document-section">
-                <div class="document-heading">Damage Items</div>
-                ${buildDocumentLines(actions.damage, "None")}
-            </div>
-            <div class="document-section">
-                <div class="document-heading">Noted Items</div>
-                ${buildDocumentLines(actions.noted, "None")}
+            <div class="document-lines" style="gap:12px;">
+                ${RESPONSIBILITY_FIELDS.map(field => `
+                    <div>
+                        <label class="mini-label">${escapeHtml(field.label)}</label>
+                        <textarea
+                            class="field"
+                            style="min-height:72px;"
+                            oninput="updateResponsibilityNote('${field.key}', this.value)"
+                            placeholder="Add items or notes, one per line"
+                        >${escapeHtml(notes[field.key] || "")}</textarea>
+                    </div>
+                `).join("")}
             </div>
         </div>
     `;
+
     document.getElementById("leftResponsibilityCard").innerHTML = html;
 }
 
@@ -801,6 +826,26 @@ function addAdditionalCostLine(){
     renderPricing(sequence);
 }
 
+function deleteAdditionalCostLine(id){
+    const sequence = getSelectedSequence();
+    let lines = getAdditionalCostLines(sequence).filter(line => line.id !== id);
+
+    if (!lines.length){
+        lines = [
+            {
+                id: createId(),
+                label: "",
+                customLabel: "",
+                qty: 0,
+                unitCost: 0
+            }
+        ];
+    }
+
+    additionalCostsBySequence[sequence.id] = lines;
+    pricingSaved = false;
+    renderPricing(sequence);
+}
 function updateAdditionalCostLine(id, field, value){
     const sequence = getSelectedSequence();
     const lines = getAdditionalCostLines(sequence);
@@ -867,7 +912,7 @@ function renderAdditionalCosts(sequence){
 
     grid.innerHTML = `
         ${lines.map((line) => `
-            <div class="pricing-row" data-additional-cost-id="${line.id}">
+                        <div class="additional-cost-row" data-additional-cost-id="${line.id}">
                 <div>
                     <label class="mini-label">Select Additional Cost</label>
                                         <select class="field" onchange="updateAdditionalCostLine('${line.id}','label',this.value)">
@@ -887,9 +932,13 @@ function renderAdditionalCosts(sequence){
                     <label class="mini-label">Unit Cost</label>
                                         <input type="number" min="0" step="0.01" class="field" value="${line.unitCost}" onchange="updateAdditionalCostLine('${line.id}','unitCost',this.value)" />
                 </div>
-                <div>
+                                <div>
                     <label class="mini-label">Line Total</label>
                     <input class="field readonly" readonly value="${money(additionalLineTotal(line))}" />
+                </div>
+                <div>
+                    <label class="mini-label">&nbsp;</label>
+                    <button type="button" class="action-btn red" onclick="deleteAdditionalCostLine('${line.id}')">Delete</button>
                 </div>
             </div>
         `).join("")}
@@ -1026,10 +1075,11 @@ function renderAll(){
     renderSequenceSelect();
     const sequence = getSelectedSequence();
     const inventorySummary = summariseInventory(sequence);
-    renderResponsibilitySummary(inventorySummary);
+
+    renderSchedulePlanner(sequence);
+    renderResponsibilitySummary(sequence, inventorySummary);
     renderMoveSummary(sequence, inventorySummary);
     renderExcludedSummary(inventorySummary);
-    renderSchedulePlanner(sequence);
     renderPricing(sequence);
     renderAdditionalCosts(sequence);
     renderAdditionalCostsSummary(sequence);
