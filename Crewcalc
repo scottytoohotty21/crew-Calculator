@@ -104,6 +104,15 @@ button,input,select,textarea{font:inherit;}
 .field{width:100%;border:1.5px solid var(--slate-300);border-radius:10px;padding:9px 12px;font-size:14px;font-weight:700;outline:none;background:#fff;color:var(--navy);}
 .field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.08);}
 .field.readonly{background:var(--slate-50);color:var(--slate-700);}
+.field.editable-detail{
+    background:var(--blue-50);
+    border-color:#bfdbfe;
+    color:var(--navy);
+}
+.field.editable-detail:focus{
+    border-color:var(--blue);
+    box-shadow:0 0 0 3px rgba(59,130,246,0.12);
+}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:stretch;}
 .summary-card{
@@ -717,7 +726,7 @@ function renderAdditionalCostsBreakdown(sequence){
             <div class="document-heading">Optional Additional Cost Services</div>
             <div class="document-lines">
                 ${lines.map(line => `
-                    <div class="document-line">• ${escapeHtml(line.label === "Custom" ? (line.customLabel || "Custom") : line.label)} — ${money(additionalLineTotal(line))}</div>
+                   <div class="document-line">• ${escapeHtml(line.customLabel || (line.label === "Custom" ? "Custom" : line.label || ""))} — ${money(additionalLineTotal(line))}</div>
                 `).join("")}
             </div>
         </div>
@@ -857,10 +866,66 @@ function renderSequenceSelect(){
     select.value = prototypeState.selectedSequenceId;
 }
 
+function normaliseDayLabel(value){
+    return String(value || "").trim().toLowerCase();
+}
+
+function getDayNumberFromLabel(label){
+    const match = String(label || "").match(/day\s*(\d+)/i);
+    return match ? Number(match[1]) : null;
+}
+
+function getNextScheduleDayLabel(rows){
+    const dayNumbers = rows
+        .map(row => getDayNumberFromLabel(row.dayLabel))
+        .filter(num => Number.isFinite(num));
+
+    const nextDayNumber = dayNumbers.length ? Math.max(...dayNumbers) + 1 : 1;
+    return `Day ${nextDayNumber}`;
+}
 function addScheduleRow(){
     const sequence = getSelectedSequence();
     const rows = getScheduleRows(sequence);
-    rows.push({ id: createId(), dayLabel: `Day ${rows.length + 1}`, dayPart: "AM", task: "Load", customTask: "", vans: 1, crew: 2, nightsOut: false });
+    const lastRow = rows[rows.length - 1];
+
+    let newRow;
+
+    if (!lastRow){
+        newRow = {
+            id: createId(),
+            dayLabel: "Day 1",
+            dayPart: "AM",
+            task: "Load",
+            customTask: "",
+            vans: 1,
+            crew: 2,
+            nightsOut: false
+        };
+    } else if (lastRow.dayPart === "AM"){
+        newRow = {
+            id: createId(),
+            dayLabel: lastRow.dayLabel || "Day 1",
+            dayPart: "PM",
+            task: lastRow.task || "Load",
+            customTask: "",
+            vans: Number(lastRow.vans || 0),
+            crew: Number(lastRow.crew || 0),
+            nightsOut: false
+        };
+    } else {
+        newRow = {
+            id: createId(),
+            dayLabel: getNextScheduleDayLabel(rows),
+            dayPart: "AM",
+            task: "Load",
+            customTask: "",
+            vans: 1,
+            crew: 2,
+            nightsOut: false
+        };
+    }
+
+    rows.push(newRow);
     pricingSaved = false;
     syncPricingFromSchedule(sequence);
     renderAll();
@@ -872,17 +937,30 @@ function copyPlanFromScheduleTab(){
 function updateScheduleRow(id, field, value){
     const sequence = getSelectedSequence();
     const rows = getScheduleRows(sequence);
-    scheduleBySequence[sequence.id] = rows.map(row => {
+
+    let updatedRows = rows.map(row => {
         if (row.id !== id) return row;
-                if (["vans","crew"].includes(field)) return { ...row, [field]: Number(value || 0) };
-if (field === "nightsOut") return { ...row, nightsOut: value === "true" };
+        if (["vans","crew"].includes(field)) return { ...row, [field]: Number(value || 0) };
+        if (field === "nightsOut") return { ...row, nightsOut: value === "true" };
         return { ...row, [field]: value };
     });
+
+    const changedRow = updatedRows.find(row => row.id === id);
+
+    if (changedRow && changedRow.dayPart === "Full Day"){
+        const changedDayKey = normaliseDayLabel(changedRow.dayLabel) || changedRow.id;
+        updatedRows = updatedRows.filter(row => {
+            if (row.id === id) return true;
+            return normaliseDayLabel(row.dayLabel) !== changedDayKey;
+        });
+    }
+
+    scheduleBySequence[sequence.id] = updatedRows;
 
     pricingSaved = false;
     syncPricingFromSchedule(sequence);
 
-    if (field === "task"){
+    if (["task","dayPart","dayLabel"].includes(field)){
         renderAll();
         return;
     }
@@ -917,8 +995,8 @@ function renderSchedulePlanner(sequence){
                         </select>
                     </div>
                     <div>
-                        <label class="mini-label">Custom Task</label>
-                                                <input class="field" value="${escapeAttr(row.customTask || "")}" ${row.task === "Custom" ? "" : "readonly"} oninput="updateScheduleRow('${row.id}','customTask',this.value)" placeholder="Use only if task is custom" />
+                       <label class="mini-label">Task Detail</label>
+                                                <input class="field editable-detail" value="${escapeAttr(row.customTask || (row.task === "Custom" ? "" : row.task || ""))}" oninput="updateScheduleRow('${row.id}','customTask',this.value)" placeholder="Optional task detail" />
                     </div>
                     <div>
                         <label class="mini-label">AM / PM</label>
@@ -1133,8 +1211,8 @@ function renderAdditionalCosts(sequence){
                     </select>
                 </div>
                 <div>
-                    <label class="mini-label">Custom Label</label>
-                    <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} onchange="updateAdditionalCostLine('${line.id}','customLabel',this.value)" placeholder="Use only if custom" />
+                    <label class="mini-label">Label Detail</label>
+                    <input class="field editable-detail" value="${escapeAttr(line.customLabel || (line.label === "Custom" ? "" : line.label || ""))}" onchange="updateAdditionalCostLine('${line.id}','customLabel',this.value)" placeholder="Optional label detail" />
                 </div>
                 <div>
                     <label class="mini-label">Qty</label>
@@ -1239,8 +1317,8 @@ function renderPricing(sequence = getSelectedSequence()){
                     </select>
                 </div>
                 <div>
-                    <label class="mini-label">Custom Label</label>
-                    <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} oninput="updatePricingLine('${line.id}','customLabel',this.value)" placeholder="Use only if custom" />
+                    <label class="mini-label">Label Detail</label>
+                    <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} oninput="updatePricingLine('${line.id}','customL<input class="field editable-detail" value="${escapeAttr(line.customLabel || (line.label === "Custom" ? "" : line.label || ""))}" oninput="updatePricingLine('${line.id}','customLabel',this.value)" placeholder="Optional label detail" />abel',this.value)" placeholder="Use only if custom" />
                 </div>
                 <div>
                     <label class="mini-label">Qty</label>
