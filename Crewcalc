@@ -56,33 +56,33 @@ button,input,select,textarea{font:inherit;}
         "costs margin additional customer"
         "sequence sequence save customer";
     gap:8px;
-    align-items:stretch;
+    align-items:start;
 }
 .summary-card-compact{
     min-height:auto;
-    padding:8px 12px;
+    padding:5px 12px 1mm 12px;
 }
 .summary-card-compact .summary-value{
-    font-size:24px;
+    font-size:22px;
 }
 .summary-card-tall{
     grid-area:customer;
 }
 .summary-sequence-card{
     grid-area:sequence;
-    padding-top:6px;
-    padding-bottom:6px;
+    padding-top:4px;
+    padding-bottom:1mm;
 }
 .summary-save-card{
     grid-area:save;
     display:flex;
     align-items:center;
     justify-content:center;
-    padding-top:6px;
-    padding-bottom:6px;
+    padding-top:4px;
+    padding-bottom:1mm;
 }
 .summary-save-card .action-btn{
-    height:40px;
+    height:36px;
 }
 .schedule-panel{margin-top:0;}
 .bottom-layout{
@@ -101,15 +101,21 @@ button,input,select,textarea{font:inherit;}
 .section-block + .section-block{margin-top:14px;}
 .section-title{font-size:11px;font-weight:900;text-transform:uppercase;color:var(--navy);margin-bottom:12px;}
 .mini-label{display:block;font-size:10px;font-weight:900;color:var(--slate-500);text-transform:uppercase;margin-bottom:6px;letter-spacing:.02em;}
-.field{width:100%;border:1.5px solid var(--slate-300);border-radius:10px;padding:11px 12px;font-size:14px;font-weight:700;outline:none;background:#fff;color:var(--navy);}
+.field{width:100%;border:1.5px solid var(--slate-300);border-radius:10px;padding:9px 12px;font-size:14px;font-weight:700;outline:none;background:#fff;color:var(--navy);}
 .field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.08);}
 .field.readonly{background:var(--slate-50);color:var(--slate-700);}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:stretch;}
-.summary-card{background:#fff;border:1px solid var(--slate-200);border-radius:16px;padding:16px;min-height:118px;}
+.summary-card{
+    background:#fff;
+    border:1px solid var(--slate-200);
+    border-radius:16px;
+    padding:16px;
+    min-height:auto;
+}
 .summary-label{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-400);margin-bottom:8px;line-height:1.35;}
 .summary-value{font-size:28px;font-weight:900;line-height:1;color:var(--navy);}
-.summary-sub{font-size:10px;font-weight:800;text-transform:uppercase;color:var(--slate-500);margin-top:8px;line-height:1.35;}
+.summary-sub{font-size:10px;font-weight:800;text-transform:uppercase;color:var(--slate-500);margin-top:1mm;line-height:1.2;}
 .document-block{background:#fff;border:1px solid var(--slate-200);border-radius:14px;padding:14px;}
 .document-section + .document-section{margin-top:14px;padding-top:12px;border-top:1px solid var(--slate-200);}
 .document-heading{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-400);margin-bottom:8px;letter-spacing:.04em;}
@@ -127,6 +133,15 @@ button,input,select,textarea{font:inherit;}
     border-radius:16px;
     padding:12px;
     background:#fff;
+}
+.schedule-resource-cell{
+    background:var(--blue-50);
+    border:1px solid #bfdbfe;
+    border-radius:12px;
+    padding:10px;
+}
+.schedule-resource-cell .mini-label{
+    color:var(--blue-2);
 }
 .pricing-row{
     display:grid;
@@ -744,10 +759,34 @@ function getScheduleRows(sequence){
 
 function calcScheduleTotals(sequence){
     const rows = getScheduleRows(sequence);
-    return rows.reduce((acc, row) => {
-        acc.vans += Number(row.vans || 0);
-        acc.crew += Number(row.crew || 0);
-        acc.nightsOut += row.nightsOut ? 1 : 0;
+    const days = {};
+
+    rows.forEach(row => {
+        const dayKey = String(row.dayLabel || "").trim().toLowerCase() || `row_${row.id}`;
+
+        if (!days[dayKey]){
+            days[dayKey] = {
+                vans: 0,
+                crew: 0,
+                nightsOutCrew: 0
+            };
+        }
+
+        const rowVans = Number(row.vans || 0);
+        const rowCrew = Number(row.crew || 0);
+
+        days[dayKey].vans = Math.max(days[dayKey].vans, rowVans);
+        days[dayKey].crew = Math.max(days[dayKey].crew, rowCrew);
+
+        if (row.nightsOut){
+            days[dayKey].nightsOutCrew = Math.max(days[dayKey].nightsOutCrew, rowCrew);
+        }
+    });
+
+    return Object.values(days).reduce((acc, day) => {
+        acc.vans += day.vans;
+        acc.crew += day.crew;
+        acc.nightsOut += day.nightsOutCrew;
         acc.rows += 1;
         return acc;
     }, { vans: 0, crew: 0, nightsOut: 0, rows: 0 });
@@ -887,15 +926,15 @@ function renderSchedulePlanner(sequence){
                             ${DAY_PARTS.map(opt => `<option value="${opt}" ${opt===row.dayPart?"selected":""}>${opt}</option>`).join("")}
                         </select>
                     </div>
-                    <div>
+                                       <div class="schedule-resource-cell">
                         <label class="mini-label">Vans</label>
                         <input type="number" min="0" class="field" value="${row.vans}" oninput="updateScheduleRow('${row.id}','vans',this.value)" />
                     </div>
-                                                           <div>
+                    <div class="schedule-resource-cell">
                         <label class="mini-label">Crew</label>
                         <input type="number" min="0" class="field" value="${row.crew}" onchange="updateScheduleRow('${row.id}','crew',this.value)" />
                     </div>
-                                      <div>
+                    <div class="schedule-resource-cell">
                         <label class="mini-label">Night Out</label>
                         <div class="toggle-wrap">
                             <label class="toggle-switch">
