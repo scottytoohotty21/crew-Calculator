@@ -409,8 +409,8 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
                 </div>
 
                 <div class="summary-card summary-card-compact summary-card-tall">
-                    <label class="mini-label">Price To Customer</label>
-                    <input id="customerPriceInput" type="number" min="0" step="0.01" class="field" value="0" onchange="renderPricing(getSelectedSequence())" />
+                    <label class="mini-label">Enter Quote Price</label>
+                    <input id="customerPriceInput" type="number" min="0" step="0.01" class="field editable-detail" value="0" onchange="renderPricing(getSelectedSequence())" />
                     <div style="height:4px"></div>
                     <div class="summary-value" id="customerPriceDisplay">0.00</div>
                 </div>
@@ -1362,7 +1362,7 @@ function renderPricing(sequence = getSelectedSequence()){
                 </div>
                 <div>
                     <label class="mini-label">Label Detail</label>
-                    <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} oninput="updatePricingLine('${line.id}','customL<input class="field editable-detail" value="${escapeAttr(line.customLabel || (line.label === "Custom" ? "" : line.label || ""))}" oninput="updatePricingLine('${line.id}','customLabel',this.value)" placeholder="Optional label detail" />abel',this.value)" placeholder="Use only if custom" />
+<input class="field editable-detail" value="${escapeAttr(line.customLabel || (line.label === "Custom" ? "" : line.label || ""))}" oninput="updatePricingLine('${line.id}','customLabel',this.value)" placeholder="Optional label detail" />
                 </div>
                 <div>
                     <label class="mini-label">Qty</label>
