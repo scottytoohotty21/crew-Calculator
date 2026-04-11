@@ -120,7 +120,7 @@ button,input,select,textarea{font:inherit;}
 .schedule-grid,.pricing-grid{display:grid;gap:12px;}
 .schedule-row{
     display:grid;
-    grid-template-columns:minmax(90px,.9fr) minmax(130px,1fr) minmax(180px,1.4fr) 92px 92px 92px 84px;
+    grid-template-columns:minmax(90px,.9fr) minmax(130px,1fr) minmax(180px,1.4fr) 92px 92px 92px 110px 84px;
     gap:10px;
     align-items:end;
     border:1px solid var(--slate-200);
@@ -131,6 +131,16 @@ button,input,select,textarea{font:inherit;}
 .pricing-row{
     display:grid;
     grid-template-columns:1.35fr 1.8fr .7fr .85fr .85fr;
+    gap:10px;
+    align-items:end;
+    border:1px solid var(--slate-200);
+    border-radius:16px;
+    padding:12px;
+    background:#fff;
+}
+.core-extra-row{
+    display:grid;
+    grid-template-columns:1.2fr 1.5fr .7fr .85fr .85fr 84px;
     gap:10px;
     align-items:end;
     border:1px solid var(--slate-200);
@@ -363,10 +373,13 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
                     <div class="panel-title">Core Costing</div>
                     <div class="panel-subtitle">Fixed operational rows that drive cost base</div>
                 </div>
-                <div class="panel-body">
-                    <div class="pricing-grid" id="pricingGrid"></div>
-                    <div class="footer-note">Core costing should stay fixed here. Do not use this section for long-form scope summary.</div>
-                </div>
+               <div class="panel-body">
+    <div class="pricing-grid" id="pricingGrid"></div>
+    <div class="toolbar">
+        <button type="button" class="action-btn white" onclick="addPricingLine()">Add Core Cost Row</button>
+    </div>
+    <div class="footer-note">Core costing should stay focused on move cost base. Use Optional Additional Cost Services for quote extras.</div>
+</div>
             </div>
 
             <div class="panel">
@@ -675,7 +688,7 @@ function renderCommercialSummary(sequence){
 function getScheduleRows(sequence){
     if (!scheduleBySequence[sequence.id]){
         scheduleBySequence[sequence.id] = [
-            { id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Pack and Load", customTask: "", vans: 1, crew: 2 }
+           { id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Pack and Load", customTask: "", vans: 1, crew: 2, nightsOut: false }
         ];
     }
     return scheduleBySequence[sequence.id];
@@ -686,9 +699,10 @@ function calcScheduleTotals(sequence){
     return rows.reduce((acc, row) => {
         acc.vans += Number(row.vans || 0);
         acc.crew += Number(row.crew || 0);
+        acc.nightsOut += row.nightsOut ? 1 : 0;
         acc.rows += 1;
         return acc;
-    }, { vans: 0, crew: 0, rows: 0 });
+    }, { vans: 0, crew: 0, nightsOut: 0, rows: 0 });
 }
 
 function syncPricingFromSchedule(sequence){
@@ -697,30 +711,25 @@ function syncPricingFromSchedule(sequence){
     pricingBySequence[sequence.id] = pricingBySequence[sequence.id].map(line => {
         if (line.label === "Vans") return { ...line, qty: totals.vans };
         if (line.label === "Crew") return { ...line, qty: totals.crew };
+        if (line.label === "Nights Out") return { ...line, qty: totals.nightsOut };
         return line;
     });
 }
 
-function ensureSingleBlankExtra(sequence){
+function normalisePricingLines(sequence){
     if (!pricingBySequence[sequence.id]) return;
 
     const lines = pricingBySequence[sequence.id];
-    const mandatory = lines.filter(line => MANDATORY_LABELS.includes(line.label));
-    const extras = lines.filter(line => !MANDATORY_LABELS.includes(line.label));
+    const mandatory = [];
+    const extras = [];
 
-    if (!extras.length){
-        pricingBySequence[sequence.id] = [
-            ...mandatory,
-            {
-                id: createId(),
-                label: "",
-                customLabel: "",
-                qty: 0,
-                unitCost: 0
-            }
-        ];
-        return;
-    }
+    lines.forEach(line => {
+        if (MANDATORY_LABELS.includes(line.label)){
+            mandatory.push(line);
+        } else if (line.label || line.customLabel || Number(line.qty || 0) || Number(line.unitCost || 0)){
+            extras.push(line);
+        }
+    });
 
     pricingBySequence[sequence.id] = [...mandatory, ...extras];
 }
@@ -743,7 +752,7 @@ function getPricingLines(sequence){
     }
 
     syncPricingFromSchedule(sequence);
-    ensureSingleBlankExtra(sequence);
+    normalisePricingLines(sequence);
     return pricingBySequence[sequence.id];
 }
 
@@ -764,7 +773,7 @@ function renderSequenceSelect(){
 function addScheduleRow(){
     const sequence = getSelectedSequence();
     const rows = getScheduleRows(sequence);
-    rows.push({ id: createId(), dayLabel: `Day ${rows.length + 1}`, dayPart: "AM", task: "Load", customTask: "", vans: 1, crew: 2 });
+    rows.push({ id: createId(), dayLabel: `Day ${rows.length + 1}`, dayPart: "AM", task: "Load", customTask: "", vans: 1, crew: 2, nightsOut: false });
     pricingSaved = false;
     syncPricingFromSchedule(sequence);
     renderAll();
@@ -779,6 +788,7 @@ function updateScheduleRow(id, field, value){
     scheduleBySequence[sequence.id] = rows.map(row => {
         if (row.id !== id) return row;
                 if (["vans","crew"].includes(field)) return { ...row, [field]: Number(value || 0) };
+if (field === "nightsOut") return { ...row, nightsOut: value === "true" };
         return { ...row, [field]: value };
     });
 
@@ -796,7 +806,7 @@ function updateScheduleRow(id, field, value){
 function deleteScheduleRow(id){
     const sequence = getSelectedSequence();
     let rows = getScheduleRows(sequence).filter(row => row.id !== id);
-    if (!rows.length) rows = [{ id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Load", customTask: "", vans: 1, crew: 2 }];
+    if (!rows.length) rows = [{ id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Load", customTask: "", vans: 1, crew: 2, nightsOut: false }];
     scheduleBySequence[sequence.id] = rows;
     pricingSaved = false;
     syncPricingFromSchedule(sequence);
@@ -833,9 +843,16 @@ function renderSchedulePlanner(sequence){
                         <label class="mini-label">Vans</label>
                         <input type="number" min="0" class="field" value="${row.vans}" oninput="updateScheduleRow('${row.id}','vans',this.value)" />
                     </div>
-                                       <div>
+                                                           <div>
                         <label class="mini-label">Crew</label>
                         <input type="number" min="0" class="field" value="${row.crew}" onchange="updateScheduleRow('${row.id}','crew',this.value)" />
+                    </div>
+                    <div>
+                        <label class="mini-label">Night Out</label>
+                        <select class="field" onchange="updateScheduleRow('${row.id}','nightsOut',this.value)">
+                            <option value="false" ${row.nightsOut ? "" : "selected"}>No</option>
+                            <option value="true" ${row.nightsOut ? "selected" : ""}>Yes</option>
+                        </select>
                     </div>
                     <div>
                         <button class="action-btn red" onclick="deleteScheduleRow('${row.id}')">Delete</button>
@@ -861,6 +878,13 @@ function addPricingLine(){
         }
     ];
 
+    pricingSaved = false;
+    renderPricing(sequence);
+}
+
+function deletePricingLine(id){
+    const sequence = getSelectedSequence();
+    pricingBySequence[sequence.id] = getPricingLines(sequence).filter(line => line.id !== id);
     pricingSaved = false;
     renderPricing(sequence);
 }
@@ -1056,7 +1080,7 @@ function updatePricingLine(id, field, value){
         return { ...line, [field]: value };
     });
 
-    ensureSingleBlankExtra(sequence);
+    normalisePricingLines(sequence);
     pricingSaved = false;
 
     if (field === "label"){
@@ -1117,17 +1141,17 @@ function renderPricing(sequence = getSelectedSequence()){
         `).join("")}
 
         ${extrasToRender.map((line) => `
-                        <div class="pricing-row" data-pricing-id="${line.id}">
+                        <div class="core-extra-row" data-pricing-id="${line.id}">
                 <div>
-                    <label class="mini-label">Select Extra Cost</label>
+                    <label class="mini-label">Select Core Cost</label>
                     <select class="field" onchange="updatePricingLine('${line.id}','label',this.value)">
-                        <option value="" ${line.label === "" ? "selected" : ""}>Select extra cost</option>
+                        <option value="" ${line.label === "" ? "selected" : ""}>Select core cost</option>
                         ${OPTIONAL_CHOICES.map(opt => `<option value="${opt}" ${opt === line.label ? "selected" : ""}>${opt}</option>`).join("")}
                     </select>
                 </div>
                 <div>
                     <label class="mini-label">Custom Label</label>
-                                        <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} oninput="updatePricingLine('${line.id}','customLabel',this.value)" placeholder="Use only if custom" />
+                    <input class="field" value="${escapeAttr(line.customLabel || "")}" ${line.label === "Custom" ? "" : "readonly"} oninput="updatePricingLine('${line.id}','customLabel',this.value)" placeholder="Use only if custom" />
                 </div>
                 <div>
                     <label class="mini-label">Qty</label>
@@ -1139,7 +1163,11 @@ function renderPricing(sequence = getSelectedSequence()){
                 </div>
                 <div>
                     <label class="mini-label">Line Total</label>
-                                        <input class="field readonly" readonly data-role="line-total" value="${money(lineTotal(line))}" />
+                    <input class="field readonly" readonly data-role="line-total" value="${money(lineTotal(line))}" />
+                </div>
+                <div>
+                    <label class="mini-label">&nbsp;</label>
+                    <button type="button" class="action-btn red" onclick="deletePricingLine('${line.id}')">Delete</button>
                 </div>
             </div>
         `).join("")}
