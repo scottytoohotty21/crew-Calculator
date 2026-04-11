@@ -219,6 +219,54 @@ button,input,select,textarea{font:inherit;}
     }
 }
 .action-btn{height:44px;border-radius:10px;border:1px solid transparent;padding:0 14px;font-size:11px;font-weight:900;text-transform:uppercase;cursor:pointer;}
+.toggle-wrap{
+    display:flex;
+    align-items:center;
+    height:44px;
+}
+.toggle-switch{
+    position:relative;
+    display:inline-block;
+    width:54px;
+    height:30px;
+}
+.toggle-switch input{
+    opacity:0;
+    width:0;
+    height:0;
+}
+.toggle-slider{
+    position:absolute;
+    inset:0;
+    cursor:pointer;
+    background:var(--slate-200);
+    border:2px solid var(--slate-300);
+    border-radius:999px;
+    transition:.2s ease;
+}
+.toggle-slider:before{
+    content:"";
+    position:absolute;
+    width:22px;
+    height:22px;
+    left:2px;
+    top:2px;
+    background:#fff;
+    border-radius:50%;
+    box-shadow:0 2px 6px rgba(15,23,42,0.18);
+    transition:.2s ease;
+}
+.toggle-switch input:checked + .toggle-slider{
+    background:var(--blue-50);
+    border-color:var(--blue);
+}
+.toggle-switch input:checked + .toggle-slider:before{
+    transform:translateX(24px);
+    background:var(--blue);
+}
+.toggle-switch input:focus + .toggle-slider{
+    box-shadow:0 0 0 3px rgba(59,130,246,0.12);
+}
 .action-btn.blue{background:var(--blue);color:#fff;border-color:var(--blue-2);}
 .action-btn.white{background:#fff;color:var(--slate-700);border-color:var(--slate-300);}
 .action-btn.red{background:var(--red-50);color:var(--red);border-color:#fecaca;}
@@ -847,12 +895,14 @@ function renderSchedulePlanner(sequence){
                         <label class="mini-label">Crew</label>
                         <input type="number" min="0" class="field" value="${row.crew}" onchange="updateScheduleRow('${row.id}','crew',this.value)" />
                     </div>
-                    <div>
+                                      <div>
                         <label class="mini-label">Night Out</label>
-                        <select class="field" onchange="updateScheduleRow('${row.id}','nightsOut',this.value)">
-                            <option value="false" ${row.nightsOut ? "" : "selected"}>No</option>
-                            <option value="true" ${row.nightsOut ? "selected" : ""}>Yes</option>
-                        </select>
+                        <div class="toggle-wrap">
+                            <label class="toggle-switch">
+                                <input type="checkbox" ${row.nightsOut ? "checked" : ""} onchange="updateScheduleRow('${row.id}','nightsOut', this.checked ? 'true' : 'false')" />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
                     </div>
                     <div>
                         <button class="action-btn red" onclick="deleteScheduleRow('${row.id}')">Delete</button>
