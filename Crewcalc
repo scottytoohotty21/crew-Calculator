@@ -54,7 +54,8 @@ button,input,select,textarea{font:inherit;}
     grid-template-columns:1fr 1fr 1fr 1fr;
     grid-template-areas:
         "costs margin additional customer"
-        "sequence sequence save customer";
+        "sequence sequence save customer"
+        "sequence sequence quote customer";
     gap:8px;
     align-items:start;
 }
@@ -80,6 +81,35 @@ button,input,select,textarea{font:inherit;}
     justify-content:center;
     padding-top:4px;
     padding-bottom:1mm;
+}
+.summary-quote-card{
+    grid-area:quote;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding-top:0;
+    padding-bottom:1mm;
+}
+.summary-quote-card .action-btn{
+    height:48px;
+    width:100%;
+    font-size:13px;
+    border-radius:14px;
+}
+.action-btn.quote{
+    background:#16a34a;
+    border-color:#15803d;
+    color:#fff;
+    box-shadow:0 8px 18px rgba(22,163,74,0.22);
+}
+.action-btn.quote:hover{
+    filter:brightness(1.03);
+}
+.action-btn.quote:hover{
+    filter:brightness(1.03);
+}
+.action-btn.quote:hover{
+    filter:brightness(1.03);
 }
 .summary-save-card .action-btn{
     height:36px;
@@ -293,7 +323,16 @@ button,input,select,textarea{font:inherit;}
 }
 .action-btn.blue{background:var(--blue);color:#fff;border-color:var(--blue-2);}
 .action-btn.white{background:#fff;color:var(--slate-700);border-color:var(--slate-300);}
-.action-btn.red{background:var(--red-50);color:var(--red);border-color:#fecaca;}
+.action-btn.quote{
+    color:#fff;
+    box-shadow:0 8px 18px rgba(15,23,42,0.16);
+}
+.action-btn.quote:hover{
+    filter:brightness(1.03);
+}
+.action-btn.quote:hover{
+    filter:brightness(1.03);
+}
 .toolbar{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;}
 .footer-note{margin-top:12px;font-size:10px;font-weight:800;text-transform:uppercase;color:var(--slate-400);line-height:1.45;}
 textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
@@ -303,14 +342,15 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
         position:sticky;
         top:8px;
     }
-    .summary-bar-grid{
-        grid-template-columns:1fr 1fr;
-        grid-template-areas:
-            "costs margin"
-            "additional customer"
-            "sequence sequence"
-            "save save";
-    }
+ .summary-bar-grid{
+    grid-template-columns:1fr 1fr;
+    grid-template-areas:
+        "costs margin"
+        "additional customer"
+        "sequence sequence"
+        "save save"
+        "quote quote";
+}
 }
 @media (max-width:900px){
     .bottom-layout{grid-template-columns:1fr;}
@@ -318,16 +358,17 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
 }
 @media (max-width:760px){
     .summary-grid,.grid-2,.summary-grid-top{grid-template-columns:1fr;}
-    .summary-bar-grid{
-        grid-template-columns:1fr;
-        grid-template-areas:
-            "costs"
-            "margin"
-            "additional"
-            "customer"
-            "sequence"
-            "save";
-    }
+   .summary-bar-grid{
+    grid-template-columns:1fr;
+    grid-template-areas:
+        "costs"
+        "margin"
+        "additional"
+        "customer"
+        "sequence"
+        "save"
+        "quote";
+}
     .topbar{align-items:flex-start;flex-direction:column;}
     .summary-strip{
         position:static;
@@ -382,6 +423,9 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
                 <div class="summary-card summary-card-compact summary-save-card">
                     <button type="button" class="action-btn blue" id="savePricingBtn" style="width:100%;">Save Pricing</button>
                 </div>
+                <div class="summary-card summary-card-compact summary-quote-card">
+    <button type="button" class="action-btn quote" id="createQuoteBtn">Create Quote</button>
+</div>
             </div>
         </div>
     </div>
@@ -1367,6 +1411,9 @@ document.getElementById("sequenceSelect").addEventListener("change", (e) => {
     renderAll();
 });
 document.getElementById("savePricingBtn").addEventListener("click", savePricingSet);
+document.getElementById("createQuoteBtn").addEventListener("click", () => {
+    alert("Create Quote is ready to be wired into the quote output.");
+});
 document.getElementById("quoteNotesInput").addEventListener("input", (e) => updateQuoteNotes(e.target.value));
 
 renderAll();
