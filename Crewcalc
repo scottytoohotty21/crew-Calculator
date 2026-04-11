@@ -726,7 +726,7 @@ function normalisePricingLines(sequence){
     lines.forEach(line => {
         if (MANDATORY_LABELS.includes(line.label)){
             mandatory.push(line);
-        } else if (line.label || line.customLabel || Number(line.qty || 0) || Number(line.unitCost || 0)){
+        } else {
             extras.push(line);
         }
     });
