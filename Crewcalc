@@ -405,33 +405,43 @@
         </div>
 
         <div class="section">
-          <div class="section-title">Sequence Type</div>
-          <div class="grid-2">
-            <div>
-              <label class="mini-label">Scenario Label</label>
-              <input id="scenarioLabel" type="text" class="field" value="Domestic Test" oninput="renderLab()" />
-            </div>
-            <div>
-              <label class="mini-label">Sequence Type</label>
-              <select id="sequenceType" class="field" onchange="handleSequenceTypeChange()">
-                <option value="domestic">Domestic</option>
-                <option value="into-store">Into Store</option>
-                <option value="ex-store">Ex Store</option>
-              </select>
-            </div>
-            <div>
-              <label class="mini-label">Loading Variant</label>
-              <select id="loadingVariant" class="field" onchange="renderLab()">
-                <option value="standard">Standard</option>
-                <option value="slow">Slow</option>
-              </select>
-            </div>
-            <div>
-              <label class="mini-label">Working Day Max (Hours)</label>
-              <input id="workingDayHours" type="number" min="1" class="field" value="10" oninput="renderLab()" />
-            </div>
-          </div>
-        </div>
+  <div class="section-title">Sequence Type</div>
+  <div class="grid-2">
+    <div>
+      <label class="mini-label">Scenario Label</label>
+      <input id="scenarioLabel" type="text" class="field" value="Domestic Test" oninput="renderLab()" />
+    </div>
+    <div>
+      <label class="mini-label">Sequence Example</label>
+      <select id="sequenceExample" class="field" onchange="handleSequenceExampleChange()">
+        <option value="direct-no-pack">Direct No Pack</option>
+        <option value="direct-full-pack">Direct Full Pack</option>
+        <option value="into-store-no-pack">Into Store No Pack</option>
+        <option value="into-store-full-pack">Into Store Full Pack</option>
+        <option value="ex-store">Ex Store</option>
+      </select>
+    </div>
+    <div>
+      <label class="mini-label">Base Sequence Type</label>
+      <input id="sequenceTypeDisplay" type="text" class="field" value="domestic" readonly />
+    </div>
+    <div>
+      <label class="mini-label">Pack Mode</label>
+      <input id="packModeDisplay" type="text" class="field" value="none" readonly />
+    </div>
+    <div>
+      <label class="mini-label">Loading Variant</label>
+      <select id="loadingVariant" class="field" onchange="renderLab()">
+        <option value="standard">Standard</option>
+        <option value="slow">Slow</option>
+      </select>
+    </div>
+    <div>
+      <label class="mini-label">Working Day Max (Hours)</label>
+      <input id="workingDayHours" type="number" min="1" step="0.5" class="field" value="9.5" oninput="renderLab()" />
+    </div>
+  </div>
+</div>
 
         <div class="section">
           <div class="section-title">Travel Times</div>
@@ -621,6 +631,11 @@
             <div class="summary-value" id="summaryTotalDayHours">0.00</div>
             <div class="summary-sub">Work + travel + buffer</div>
           </div>
+          <div class="summary-card">
+  <div class="summary-label">Overtime Hrs</div>
+  <div class="summary-value" id="summaryOvertimeHours">0.00</div>
+  <div class="summary-sub">Above standard 9.5 hour day</div>
+</div>
         </div>
 
         <div class="document-block" style="margin-top:12px;">
@@ -931,6 +946,51 @@
       }).join("");
     }
 
+function getSequenceExampleConfig(exampleValue){
+  const map = {
+    "direct-no-pack": {
+      sequenceType: "domestic",
+      packMode: "none",
+      label: "Direct No Pack"
+    },
+    "direct-full-pack": {
+      sequenceType: "domestic",
+      packMode: "full",
+      label: "Direct Full Pack"
+    },
+    "into-store-no-pack": {
+      sequenceType: "into-store",
+      packMode: "none",
+      label: "Into Store No Pack"
+    },
+    "into-store-full-pack": {
+      sequenceType: "into-store",
+      packMode: "full",
+      label: "Into Store Full Pack"
+    },
+    "ex-store": {
+      sequenceType: "ex-store",
+      packMode: "none",
+      label: "Ex Store"
+    }
+  };
+
+  return map[exampleValue] || map["direct-no-pack"];
+}
+
+function handleSequenceExampleChange(){
+  const exampleValue = getText("sequenceExample");
+  const config = getSequenceExampleConfig(exampleValue);
+
+  setInputValue("sequenceTypeDisplay", config.sequenceType);
+  setInputValue("packModeDisplay", config.packMode);
+
+  if (config.sequenceType === "into-store"){
+    setInputValue("travelCollectionToDelivery", 0);
+  }
+
+  renderLab();
+}
     function getPackModeLabel(packOption){
       if (packOption === "none") return "No";
       if (packOption === "cg") return "CG";
@@ -944,11 +1004,14 @@
     }
 
     function buildState(){
-      const sequenceType = getText("sequenceType") || "domestic";
+     const sequenceExample = getText("sequenceExample") || "direct-no-pack";
+const exampleConfig = getSequenceExampleConfig(sequenceExample);
+const sequenceType = exampleConfig.sequenceType;
+const packMode = exampleConfig.packMode;
 
-      const travelDepotToCollection = getNum("travelDepotToCollection");
-      const travelCollectionToDelivery = getNum("travelCollectionToDelivery");
-      const travelDeliveryToDepot = getNum("travelDeliveryToDepot");
+const travelDepotToCollection = getNum("travelDepotToCollection");
+const travelCollectionToDelivery = getNum("travelCollectionToDelivery");
+const travelDeliveryToDepot = getNum("travelDeliveryToDepot");
 
       return {
         label: getText("scenarioLabel"),
@@ -961,7 +1024,8 @@
         loftVol: getNum("loftVol"),
         unloadRate: getNum("unloadRate") || 132,
 
-        packOption: getText("packMode") || "none",
+       sequenceExample: sequenceExample,
+packOption: packMode,
         qty: {
           ap: getNum("qty_ap"),
           cg: getNum("qty_cg"),
@@ -1194,21 +1258,25 @@
     }
 
     function calcTotalDayHours(packing, loadHours, unloadHours, special, travel, state){
-      const bufferHours = round2((Number(state.dayBufferMinutes || 0)) / 60);
-      const total =
-        Number(packing.packHours || 0) +
-        Number(loadHours || 0) +
-        Number(unloadHours || 0) +
-        Number(special.loadSideHours || 0) +
-        Number(special.unloadSideHours || 0) +
-        Number(travel.totalHours || 0) +
-        bufferHours;
+  const bufferHours = round2((Number(state.dayBufferMinutes || 0)) / 60);
 
-      return {
-        totalHours: round2(total),
-        bufferHours: bufferHours
-      };
-    }
+  const total =
+    Number(packing.packHours || 0) +
+    Number(loadHours || 0) +
+    Number(unloadHours || 0) +
+    Number(special.loadSideHours || 0) +
+    Number(special.unloadSideHours || 0) +
+    Number(travel.totalHours || 0) +
+    bufferHours;
+
+  const overtimeHours = Math.max(0, total - Number(state.workingDayHours || 0));
+
+  return {
+    totalHours: round2(total),
+    bufferHours: bufferHours,
+    overtimeHours: round2(overtimeHours)
+  };
+}
 
     function assessScenario(state, results){
       const reasons = [];
@@ -1241,15 +1309,15 @@
       }
 
       if (results.totalDay.totalHours > state.workingDayHours + 1){
-        red = true;
-        reasons.push("Total day exceeds working day by more than 1 hour");
-      } else if (results.totalDay.totalHours > state.workingDayHours){
-        amber = true;
-        warnings.push("Total day likely needs overtime");
-      } else if (results.totalDay.totalHours > state.workingDayHours - 0.75){
-        amber = true;
-        warnings.push("Total day is tight against normal hours");
-      }
+  red = true;
+  reasons.push("Total day exceeds the standard working day by more than 1 hour");
+} else if (results.totalDay.totalHours > state.workingDayHours){
+  amber = true;
+  warnings.push("Schedule requires overtime above the standard 9.5 hour day");
+} else if (results.totalDay.totalHours > state.workingDayHours - 0.5){
+  amber = true;
+  warnings.push("Schedule is very tight against the standard 9.5 hour day");
+}
 
       if (state.loadingVariant === "slow"){
         amber = true;
@@ -1370,14 +1438,8 @@
     }
 
     function handleSequenceTypeChange(){
-      const sequenceType = getText("sequenceType");
-
-      if (sequenceType === "into-store"){
-        setInputValue("travelCollectionToDelivery", 0);
-      }
-
-      renderLab();
-    }
+  handleSequenceExampleChange();
+}
 
     function renderLab(){
       renderPlannerRows();
@@ -1409,22 +1471,23 @@
       const assessment = assessScenario(state, results);
 
       document.getElementById("summaryMode").textContent = getPackModeLabel(state.packOption);
-      document.getElementById("summaryTotalVolume").textContent = totalVolume;
-      document.getElementById("summaryPackHours").textContent = packing.packHours.toFixed(2);
-      document.getElementById("summarySpecialHours").textContent = special.specialHours.toFixed(2);
-      document.getElementById("summaryLoadHours").textContent = loadHours.toFixed(2);
-      document.getElementById("summaryUnloadHours").textContent = unloadHours.toFixed(2);
-      document.getElementById("summaryTravelHours").textContent = travel.totalHours.toFixed(2);
-      document.getElementById("summaryTotalDayHours").textContent = totalDay.totalHours.toFixed(2);
+document.getElementById("summaryTotalVolume").textContent = totalVolume;
+document.getElementById("summaryPackHours").textContent = packing.packHours.toFixed(2);
+document.getElementById("summarySpecialHours").textContent = special.specialHours.toFixed(2);
+document.getElementById("summaryLoadHours").textContent = loadHours.toFixed(2);
+document.getElementById("summaryUnloadHours").textContent = unloadHours.toFixed(2);
+document.getElementById("summaryTravelHours").textContent = travel.totalHours.toFixed(2);
+document.getElementById("summaryTotalDayHours").textContent = totalDay.totalHours.toFixed(2);
+document.getElementById("summaryOvertimeHours").textContent = totalDay.overtimeHours.toFixed(2);
 
       renderAssessment(assessment);
 
       const sequenceLogicText =
-        state.sequenceType === "domestic"
-          ? "Domestic loading uses a split rule: first 4 hours at 125 cuft per man-hour, then 54 cuft for the second 4-hour block."
-          : state.sequenceType === "into-store"
-            ? "Into store loading uses 66 cuft per man-hour and removes unloading and collection-to-delivery travel."
-            : "Ex store loading uses 125 cuft per man-hour.";
+  state.sequenceType === "domestic"
+    ? "Direct / domestic loading uses a split rule: first 4 hours at 125 cuft per man-hour, then 54 cuft for the second 4-hour block."
+    : state.sequenceType === "into-store"
+      ? "Into store loading uses 66 cuft per man-hour and removes unloading and collection-to-delivery travel."
+      : "Ex store loading uses 125 cuft per man-hour.";
 
       const variantText =
         state.loadingVariant === "slow"
@@ -1433,7 +1496,7 @@
 
       renderLines("logicText", [
         "Scenario: " + (state.label || "Unnamed scenario"),
-        "Sequence type: " + state.sequenceType,
+       "Sequence example: " + getSequenceExampleConfig(state.sequenceExample).label,
         sequenceLogicText,
         variantText,
         "Travel used: depot to collection " + state.travel.depotToCollection + " mins, collection to delivery " + state.travel.collectionToDelivery + " mins, delivery to depot " + state.travel.deliveryToDepot + " mins.",
@@ -1455,12 +1518,13 @@
       ]);
 
       renderLines("plannerCapacityText", [
-        "Pack capacity: " + capacity.pack.toFixed(2) + " man-hours.",
-        "Load capacity: " + capacity.load.toFixed(2) + " man-hours.",
-        "Unload capacity: " + capacity.unload.toFixed(2) + " man-hours.",
-        "Total day incl. travel and buffer: " + totalDay.totalHours.toFixed(2) + " hrs.",
-        "Normal day limit: " + Number(state.workingDayHours || 0).toFixed(2) + " hrs."
-      ]);
+  "Pack capacity: " + capacity.pack.toFixed(2) + " man-hours.",
+  "Load capacity: " + capacity.load.toFixed(2) + " man-hours.",
+  "Unload capacity: " + capacity.unload.toFixed(2) + " man-hours.",
+  "Total day incl. travel and buffer: " + totalDay.totalHours.toFixed(2) + " hrs.",
+  "Normal day limit: " + Number(state.workingDayHours || 0).toFixed(2) + " hrs.",
+  "Overtime required: " + totalDay.overtimeHours.toFixed(2) + " hrs."
+]);
 
       renderValidation(results, assessment);
     }
@@ -1468,9 +1532,11 @@
     function loadPreset(name){
       if (name === "blank"){
         setInputValue("scenarioLabel", "Blank Test");
-        setInputValue("sequenceType", "domestic");
+        setInputValue("sequenceExample", "direct-no-pack");
+setInputValue("sequenceTypeDisplay", "domestic");
+setInputValue("packModeDisplay", "none");
         setInputValue("loadingVariant", "standard");
-        setInputValue("workingDayHours", 10);
+        setInputValue("workingDayHours", 9.5);
         setInputValue("travelDepotToCollection", 0);
         setInputValue("travelCollectionToDelivery", 0);
         setInputValue("travelDeliveryToDepot", 0);
@@ -1502,9 +1568,11 @@
 
       if (name === "domestic"){
         setInputValue("scenarioLabel", "Domestic Baseline");
-        setInputValue("sequenceType", "domestic");
-        setInputValue("loadingVariant", "standard");
-        setInputValue("workingDayHours", 10);
+setInputValue("sequenceExample", "direct-no-pack");
+setInputValue("sequenceTypeDisplay", "domestic");
+setInputValue("packModeDisplay", "none");
+setInputValue("loadingVariant", "standard");
+setInputValue("workingDayHours", 9.5);
         setInputValue("travelDepotToCollection", 30);
         setInputValue("travelCollectionToDelivery", 45);
         setInputValue("travelDeliveryToDepot", 35);
@@ -1557,9 +1625,11 @@
 
       if (name === "intoStore"){
         setInputValue("scenarioLabel", "Into Store Trial");
-        setInputValue("sequenceType", "into-store");
+        setInputValue("sequenceExample", "into-store-no-pack");
+setInputValue("sequenceTypeDisplay", "into-store");
+setInputValue("packModeDisplay", "none");
         setInputValue("loadingVariant", "standard");
-        setInputValue("workingDayHours", 10);
+        setInputValue("workingDayHours", 9.5);
         setInputValue("travelDepotToCollection", 35);
         setInputValue("travelCollectionToDelivery", 0);
         setInputValue("travelDeliveryToDepot", 45);
@@ -1603,9 +1673,11 @@
 
       if (name === "exStore"){
         setInputValue("scenarioLabel", "Ex Store Trial");
-        setInputValue("sequenceType", "ex-store");
+        setInputValue("sequenceExample", "ex-store");
+setInputValue("sequenceTypeDisplay", "ex-store");
+setInputValue("packModeDisplay", "none");
         setInputValue("loadingVariant", "standard");
-        setInputValue("workingDayHours", 10);
+        setInputValue("workingDayHours", 9.5);
         setInputValue("travelDepotToCollection", 25);
         setInputValue("travelCollectionToDelivery", 40);
         setInputValue("travelDeliveryToDepot", 35);
@@ -1659,9 +1731,11 @@
 
       if (name === "tightDomestic"){
         setInputValue("scenarioLabel", "Tight Domestic Example");
-        setInputValue("sequenceType", "domestic");
+        setInputValue("sequenceExample", "direct-full-pack");
+setInputValue("sequenceTypeDisplay", "domestic");
+setInputValue("packModeDisplay", "full");
         setInputValue("loadingVariant", "slow");
-        setInputValue("workingDayHours", 10);
+        setInputValue("workingDayHours", 9.5);
         setInputValue("travelDepotToCollection", 45);
         setInputValue("travelCollectionToDelivery", 70);
         setInputValue("travelDeliveryToDepot", 50);
@@ -1715,8 +1789,10 @@
     plannerRows = getDefaultPlannerRows();
     setInputValue("scenarioLabel", "Domestic Baseline");
     setInputValue("sequenceType", "domestic");
+setInputValue("loadingVariant", "standard");
+setInputValue("workingDayHours", 9.5);
     setInputValue("loadingVariant", "standard");
-    setInputValue("workingDayHours", 10);
+    setInputValue("workingDayHours", 9.5);
     setInputValue("travelDepotToCollection", 30);
     setInputValue("travelCollectionToDelivery", 45);
     setInputValue("travelDeliveryToDepot", 35);
