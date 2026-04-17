@@ -1,1422 +1,1206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Photon Summary & Pricing Lab</title>
-<style>
-:root{
-    --bg:#f1f5f9;
-    --card:#ffffff;
-    --navy:#0f172a;
-    --navy-2:#1e293b;
-    --blue:#3b82f6;
-    --blue-2:#2563eb;
-    --blue-50:#eff6ff;
-    --red:#dc2626;
-    --red-50:#fef2f2;
-    --slate-50:#f8fafc;
-    --slate-100:#f1f5f9;
-    --slate-200:#e2e8f0;
-    --slate-300:#cbd5e1;
-    --slate-400:#94a3b8;
-    --slate-500:#64748b;
-    --slate-700:#334155;
-    --shadow:0 10px 30px rgba(15,23,42,0.08);
-}
-*{box-sizing:border-box;}
-body{
-    margin:0;
-    padding:18px;
-    background:var(--bg);
-    font-family:Inter,Segoe UI,Arial,sans-serif;
-    color:var(--navy);
-}
-button,input,select,textarea{font:inherit;}
-.shell{max-width:1380px;margin:0 auto;}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px;}
-.brand{display:flex;align-items:center;gap:12px;}
-.logo-circle{width:34px;height:34px;border-radius:999px;background:var(--navy);border:2px solid #ef4444;display:flex;align-items:center;justify-content:center;}
-.logo-inner{width:10px;height:10px;border-radius:999px;background:#ef4444;box-shadow:0 0 10px rgba(239,68,68,0.6);}
-.brand-title{font-size:28px;font-weight:900;line-height:1;text-transform:uppercase;letter-spacing:-0.05em;margin:0;}
-.brand-sub{font-size:10px;font-weight:900;color:var(--blue);text-transform:uppercase;letter-spacing:.22em;margin-top:4px;}
-.status-pill{border:1px solid var(--slate-300);background:var(--card);border-radius:999px;padding:8px 12px;font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-500);white-space:nowrap;}
-.layout{display:grid;gap:16px;align-items:start;}
-.summary-strip{
-    position:sticky;
-    top:12px;
-    z-index:30;
-}
-.summary-strip .panel-body{padding:10px 14px;}
-.summary-grid-top{grid-template-columns:repeat(4,minmax(0,1fr));}
-.summary-bar-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr 1fr;
-    grid-template-areas:
-        "costs margin additional customer"
-        "sequence sequence save customer"
-        "sequence sequence quote customer";
-    gap:8px;
-    align-items:start;
-}
-.summary-card-compact{
-    min-height:auto;
-    padding:5px 12px 1mm 12px;
-}
-.summary-card-compact .summary-value{
-    font-size:22px;
-}
-.summary-card-tall{
-    grid-area:customer;
-}
-.summary-sequence-card{
-    grid-area:sequence;
-    padding-top:4px;
-    padding-bottom:1mm;
-}
-.summary-save-card{
-    grid-area:save;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding-top:4px;
-    padding-bottom:1mm;
-}
-.summary-quote-card{
-    grid-area:quote;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding-top:0;
-    padding-bottom:1mm;
-}
-.summary-quote-card .action-btn{
-    height:48px;
-    width:100%;
-    font-size:13px;
-    border-radius:14px;
-}
-.action-btn.quote{
-    background:#16a34a;
-    border-color:#15803d;
-    color:#fff;
-    box-shadow:0 8px 18px rgba(22,163,74,0.22);
-}
-.action-btn.quote:hover{
-    filter:brightness(1.03);
-}
-.action-btn.quote:hover{
-    filter:brightness(1.03);
-}
-.action-btn.quote:hover{
-    filter:brightness(1.03);
-}
-.summary-save-card .action-btn{
-    height:36px;
-}
-.schedule-panel{margin-top:0;}
-.bottom-layout{
-    display:grid;
-    grid-template-columns:minmax(0,.48fr) minmax(0,.52fr);
-    gap:16px;
-    align-items:start;
-}
-.stack{display:grid;gap:16px;}
-.panel{background:var(--card);border:1px solid var(--slate-200);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;}
-.panel-head{background:var(--navy);padding:14px 16px;border-bottom:1px solid var(--navy-2);}
-.panel-title{color:#fff;font-size:12px;font-weight:900;text-transform:uppercase;}
-.panel-subtitle{color:#93c5fd;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:4px;}
-.panel-body{padding:16px;}
-.section-block{border:1px solid var(--slate-200);border-radius:16px;padding:14px;background:var(--slate-50);}
-.section-block + .section-block{margin-top:14px;}
-.section-title{font-size:11px;font-weight:900;text-transform:uppercase;color:var(--navy);margin-bottom:12px;}
-.mini-label{display:block;font-size:10px;font-weight:900;color:var(--slate-500);text-transform:uppercase;margin-bottom:6px;letter-spacing:.02em;}
-.field{width:100%;border:1.5px solid var(--slate-300);border-radius:10px;padding:9px 12px;font-size:14px;font-weight:700;outline:none;background:#fff;color:var(--navy);}
-.field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.08);}
-.field.readonly{background:var(--slate-50);color:var(--slate-700);}
-.field.editable-detail{
-    background:var(--blue-50);
-    border-color:#bfdbfe;
-    color:var(--navy);
-}
-.field.editable-detail:focus{
-    border-color:var(--blue);
-    box-shadow:0 0 0 3px rgba(59,130,246,0.12);
-}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:stretch;}
-.summary-card{
-    background:#fff;
-    border:1px solid var(--slate-200);
-    border-radius:16px;
-    padding:16px;
-    min-height:auto;
-}
-.summary-label{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-400);margin-bottom:8px;line-height:1.35;}
-.summary-value{font-size:28px;font-weight:900;line-height:1;color:var(--navy);}
-.summary-sub{font-size:10px;font-weight:800;text-transform:uppercase;color:var(--slate-500);margin-top:1mm;line-height:1.2;}
-.document-block{background:#fff;border:1px solid var(--slate-200);border-radius:14px;padding:14px;}
-.document-section + .document-section{margin-top:14px;padding-top:12px;border-top:1px solid var(--slate-200);}
-.document-heading{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-400);margin-bottom:8px;letter-spacing:.04em;}
-.document-lines{display:grid;gap:6px;}
-.document-line{font-size:12px;font-weight:700;color:var(--slate-700);line-height:1.45;}
-.document-empty{font-size:12px;font-weight:700;color:var(--slate-500);line-height:1.45;font-style:italic;}
-.note-card{background:var(--blue-50);border:1px solid #bfdbfe;color:#1d4ed8;border-radius:14px;padding:12px 14px;font-size:11px;font-weight:800;text-transform:uppercase;line-height:1.45;}
-.schedule-grid,.pricing-grid{display:grid;gap:12px;}
-.schedule-row{
-    display:grid;
-    grid-template-columns:minmax(90px,.9fr) minmax(130px,1fr) minmax(180px,1.4fr) 92px 92px 92px 110px 84px;
-    gap:10px;
-    align-items:end;
-    border:1px solid var(--slate-200);
-    border-radius:16px;
-    padding:12px;
-    background:#fff;
-}
-.schedule-resource-cell{
-    background:var(--blue-50);
-    border:1px solid #bfdbfe;
-    border-radius:12px;
-    padding:10px;
-}
-.schedule-resource-cell .mini-label{
-    color:var(--blue-2);
-}
-.pricing-row{
-    display:grid;
-    grid-template-columns:1.35fr 1.8fr .7fr .85fr .85fr;
-    gap:10px;
-    align-items:end;
-    border:1px solid var(--slate-200);
-    border-radius:16px;
-    padding:12px;
-    background:#fff;
-}
-.core-extra-row{
-    display:grid;
-    grid-template-columns:1.2fr 1.5fr .7fr .85fr .85fr 84px;
-    gap:10px;
-    align-items:end;
-    border:1px solid var(--slate-200);
-    border-radius:16px;
-    padding:12px;
-    background:#fff;
-}
-.additional-cost-row{
-    display:grid;
-    grid-template-columns:1.15fr 1.45fr .7fr .8fr .8fr 84px;
-    gap:10px;
-    align-items:end;
-    border:1px solid var(--slate-200);
-    border-radius:16px;
-    padding:12px;
-    background:#fff;
-}
-.additional-cost-row-operational{
-    border-left:4px solid #3b82f6;
-}
-.additional-cost-row-specialist{
-    border-left:4px solid #0f172a;
-}
-.scope-grid{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:12px;
-}
-.scope-pill{
-    background:#fff;
-    border:1px solid var(--slate-200);
-    border-radius:14px;
-    padding:12px;
-}
-.scope-pill-label{
-    font-size:10px;
-    font-weight:900;
-    text-transform:uppercase;
-    color:var(--slate-400);
-    margin-bottom:8px;
-}
-.scope-pill-value{
-    font-size:18px;
-    font-weight:900;
-    color:var(--navy);
-    line-height:1.2;
-}
-.commercial-summary-grid{
-    display:grid;
-    grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:12px;
-}
-.commercial-summary-card{
-    background:#fff;
-    border:1px solid var(--slate-200);
-    border-radius:16px;
-    padding:14px;
-}
-.commercial-summary-label{
-    font-size:10px;
-    font-weight:900;
-    text-transform:uppercase;
-    color:var(--slate-400);
-    margin-bottom:8px;
-}
-.commercial-summary-value{
-    font-size:24px;
-    font-weight:900;
-    color:var(--navy);
-    line-height:1;
-}
-@media (max-width:760px){
-    .scope-grid,
-    .commercial-summary-grid{
-        grid-template-columns:1fr;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photon Schedule Lab</title>
+  <style>
+    :root{
+      --card:#ffffff;
+      --navy:#0f172a;
+      --navy-2:#1e293b;
+      --blue:#3b82f6;
+      --blue-50:#eff6ff;
+      --slate-50:#f8fafc;
+      --slate-100:#f1f5f9;
+      --slate-200:#e2e8f0;
+      --slate-300:#cbd5e1;
+      --slate-400:#94a3b8;
+      --slate-500:#64748b;
+      --slate-700:#334155;
+      --green-50:#f0fdf4;
+      --green-200:#bbf7d0;
+      --green-800:#166534;
+      --amber-50:#fff7ed;
+      --amber-200:#fed7aa;
+      --amber-800:#c2410c;
+      --red-50:#fef2f2;
+      --red-200:#fecaca;
+      --red-800:#b91c1c;
+      --shadow:0 10px 30px rgba(15,23,42,0.08);
     }
-}
-.action-btn{height:44px;border-radius:10px;border:1px solid transparent;padding:0 14px;font-size:11px;font-weight:900;text-transform:uppercase;cursor:pointer;}
-.toggle-wrap{
-    display:flex;
-    align-items:center;
-    height:44px;
-}
-.toggle-switch{
-    position:relative;
-    display:inline-block;
-    width:54px;
-    height:30px;
-}
-.toggle-switch input{
-    opacity:0;
-    width:0;
-    height:0;
-}
-.toggle-slider{
-    position:absolute;
-    inset:0;
-    cursor:pointer;
-    background:var(--slate-200);
-    border:2px solid var(--slate-300);
-    border-radius:999px;
-    transition:.2s ease;
-}
-.toggle-slider:before{
-    content:"";
-    position:absolute;
-    width:22px;
-    height:22px;
-    left:2px;
-    top:2px;
-    background:#fff;
-    border-radius:50%;
-    box-shadow:0 2px 6px rgba(15,23,42,0.18);
-    transition:.2s ease;
-}
-.toggle-switch input:checked + .toggle-slider{
-    background:var(--blue-50);
-    border-color:var(--blue);
-}
-.toggle-switch input:checked + .toggle-slider:before{
-    transform:translateX(24px);
-    background:var(--blue);
-}
-.toggle-switch input:focus + .toggle-slider{
-    box-shadow:0 0 0 3px rgba(59,130,246,0.12);
-}
-.action-btn.blue{background:var(--blue);color:#fff;border-color:var(--blue-2);}
-.action-btn.white{background:#fff;color:var(--slate-700);border-color:var(--slate-300);}
-.action-btn.quote{
-    color:#fff;
-    box-shadow:0 8px 18px rgba(15,23,42,0.16);
-}
-.action-btn.quote:hover{
-    filter:brightness(1.03);
-}
-.action-btn.quote:hover{
-    filter:brightness(1.03);
-}
-.toolbar{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;}
-.footer-note{margin-top:12px;font-size:10px;font-weight:800;text-transform:uppercase;color:var(--slate-400);line-height:1.45;}
-textarea.field{min-height:92px;resize:vertical;line-height:1.45;}
-@media (max-width:980px){
-    .pricing-row,.schedule-row{grid-template-columns:1fr 1fr;}
-    .summary-strip{
-        position:sticky;
-        top:8px;
+
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:Inter,Arial,sans-serif;
+      background:var(--slate-100);
+      color:var(--navy);
+      padding:16px;
     }
- .summary-bar-grid{
-    grid-template-columns:1fr 1fr;
-    grid-template-areas:
-        "costs margin"
-        "additional customer"
-        "sequence sequence"
-        "save save"
-        "quote quote";
-}
-}
-@media (max-width:900px){
-    .bottom-layout{grid-template-columns:1fr;}
-    .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-}
-@media (max-width:760px){
-    .summary-grid,.grid-2,.summary-grid-top{grid-template-columns:1fr;}
-   .summary-bar-grid{
-    grid-template-columns:1fr;
-    grid-template-areas:
-        "costs"
-        "margin"
-        "additional"
-        "customer"
-        "sequence"
-        "save"
-        "quote";
-}
-    .topbar{align-items:flex-start;flex-direction:column;}
-    .summary-strip{
-        position:static;
+
+    .topbar{
+      background:var(--navy);
+      border:1px solid var(--navy-2);
+      border-radius:18px;
+      padding:16px 18px;
+      margin-bottom:16px;
     }
-}
-</style>
+
+    .title{
+      color:#fff;
+      font-size:22px;
+      font-weight:900;
+      text-transform:uppercase;
+      line-height:1;
+    }
+
+    .subtitle{
+      color:#93c5fd;
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      margin-top:6px;
+      line-height:1.45;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:420px minmax(0,1fr);
+      gap:16px;
+      align-items:start;
+    }
+
+    .panel{
+      background:var(--card);
+      border:1px solid var(--slate-200);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .panel-head{
+      background:var(--navy);
+      padding:14px 16px;
+      border-bottom:1px solid var(--navy-2);
+    }
+
+    .panel-title{
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+      text-transform:uppercase;
+    }
+
+    .panel-subtitle{
+      color:#93c5fd;
+      font-size:10px;
+      font-weight:800;
+      text-transform:uppercase;
+      margin-top:4px;
+    }
+
+    .panel-body{padding:16px;}
+
+    .section{
+      border:1px solid var(--slate-200);
+      border-radius:16px;
+      padding:14px;
+      background:var(--slate-50);
+    }
+
+    .section + .section{margin-top:14px;}
+
+    .section-title{
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      color:var(--navy);
+      margin-bottom:12px;
+    }
+
+    .mini-label{
+      display:block;
+      font-size:10px;
+      font-weight:900;
+      text-transform:uppercase;
+      color:var(--slate-400);
+      margin-bottom:6px;
+      line-height:1.35;
+    }
+
+    .field{
+      width:100%;
+      border:1.5px solid var(--slate-300);
+      border-radius:10px;
+      padding:11px 12px;
+      font-size:14px;
+      font-weight:700;
+      outline:none;
+      background:#fff;
+      color:var(--navy);
+    }
+
+    .field:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 3px rgba(59,130,246,0.08);
+    }
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+    .summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+
+    .summary-card{
+      background:#fff;
+      border:1px solid var(--slate-200);
+      border-radius:16px;
+      padding:16px;
+      min-height:118px;
+    }
+
+    .summary-label{
+      font-size:10px;
+      font-weight:900;
+      text-transform:uppercase;
+      color:var(--slate-400);
+      margin-bottom:8px;
+      line-height:1.35;
+    }
+
+    .summary-value{
+      font-size:28px;
+      font-weight:900;
+      color:var(--navy);
+      line-height:1;
+    }
+
+    .summary-sub{
+      font-size:10px;
+      font-weight:800;
+      text-transform:uppercase;
+      color:var(--slate-500);
+      margin-top:8px;
+      line-height:1.35;
+    }
+
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;}
+
+    .action-btn{
+      height:42px;
+      border-radius:10px;
+      border:1px solid var(--slate-300);
+      background:#fff;
+      color:var(--slate-700);
+      padding:0 14px;
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+
+    .action-btn.primary{
+      background:var(--blue);
+      border-color:#2563eb;
+      color:#fff;
+    }
+
+    .document-block{
+      background:#fff;
+      border:1px solid var(--slate-200);
+      border-radius:16px;
+      padding:14px;
+    }
+
+    .document-block + .document-block{margin-top:12px;}
+
+    .document-heading{
+      font-size:10px;
+      font-weight:900;
+      text-transform:uppercase;
+      color:var(--slate-400);
+      margin-bottom:8px;
+    }
+
+    .document-lines{display:grid;gap:6px;}
+
+    .document-line{
+      font-size:11px;
+      font-weight:800;
+      color:var(--slate-700);
+      line-height:1.5;
+    }
+
+    .validation-list{display:grid;gap:8px;margin-top:12px;}
+    .validation-item{border-radius:12px;padding:10px 12px;font-size:11px;font-weight:800;text-transform:uppercase;line-height:1.4;}
+    .validation-ok{background:var(--green-50);border:1px solid var(--green-200);color:var(--green-800);}
+    .validation-warn{background:var(--amber-50);border:1px solid var(--amber-200);color:var(--amber-800);}
+    .validation-error{background:var(--red-50);border:1px solid var(--red-200);color:var(--red-800);}
+
+    .planner-shell{border:1px solid var(--slate-200);border-radius:16px;background:var(--slate-50);padding:14px;}
+    .planner-row{border:1px solid var(--slate-200);border-radius:14px;background:#fff;padding:12px;}
+    .planner-row + .planner-row{margin-top:10px;}
+    .planner-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;}
+    .planner-title{font-size:11px;font-weight:900;text-transform:uppercase;color:var(--navy);}
+    .planner-grid{display:grid;grid-template-columns:1.2fr 1fr .7fr .7fr .7fr;gap:10px;}
+    .planner-debug{margin-top:10px;padding-top:10px;border-top:1px solid var(--slate-200);font-size:10px;font-weight:800;text-transform:uppercase;color:var(--slate-400);line-height:1.45;}
+
+    .note-card{
+      background:var(--blue-50);
+      border:1px solid #bfdbfe;
+      color:#1d4ed8;
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      line-height:1.45;
+    }
+
+    @media (max-width: 980px){
+      .layout{grid-template-columns:1fr;}
+      .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    }
+
+    @media (max-width: 700px){
+      .summary-grid,.grid-2,.grid-3,.planner-grid{grid-template-columns:1fr;}
+    }
+  </style>
 </head>
 <body>
-<div class="shell">
-    <div class="topbar">
-        <div class="brand">
-            <div class="logo-circle"><div class="logo-inner"></div></div>
+  <div class="topbar">
+    <div class="title">Photon Schedule Lab</div>
+    <div class="subtitle">Standalone calculator sandbox for testing schedule logic outside the main app</div>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Inputs</div>
+        <div class="panel-subtitle">Use presets, tweak values, test logic safely</div>
+      </div>
+      <div class="panel-body">
+        <div class="section">
+          <div class="section-title">Scenario Presets</div>
+          <div class="toolbar">
+            <button type="button" class="action-btn" onclick="loadPreset('domestic')">Domestic</button>
+            <button type="button" class="action-btn" onclick="loadPreset('storein')">Into Store</button>
+            <button type="button" class="action-btn" onclick="loadPreset('storeout')">Ex Store</button>
+            <button type="button" class="action-btn" onclick="loadPreset('fullpack')">Full Pack</button>
+            <button type="button" class="action-btn primary" onclick="loadPreset('blank')">Blank</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Move Setup</div>
+          <div class="grid-2">
             <div>
-                <div class="brand-title">Photon</div>
-                <div class="brand-sub">Summary & Pricing Lab</div>
+              <label class="mini-label">Scenario Label</label>
+              <input id="scenarioLabel" type="text" class="field" value="Domestic Baseline" oninput="renderLab()" />
             </div>
+            <div>
+              <label class="mini-label">Sequence Type</label>
+              <select id="sequenceType" class="field" onchange="renderLab()">
+                <option value="domestic">Domestic</option>
+                <option value="into-store">Into Store</option>
+                <option value="ex-store">Ex Store</option>
+                <option value="direct-store">Direct / Store</option>
+              </select>
+            </div>
+            <div>
+              <label class="mini-label">Packing Mode</label>
+              <select id="packMode" class="field" onchange="renderLab()">
+                <option value="none">No Packing</option>
+                <option value="cg">CG Packing</option>
+                <option value="full">Full Packing</option>
+              </select>
+            </div>
+            <div>
+              <label class="mini-label">Store Load Variant</label>
+              <select id="storeLoadVariant" class="field" onchange="renderLab()">
+                <option value="standard">Standard</option>
+                <option value="slower">Slower Store Handling</option>
+                <option value="faster">Faster Store Handling</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div class="status-pill">Standalone Prototype · Safe Summary Layer</div>
+
+        <div class="section">
+          <div class="section-title">Volume Inputs</div>
+          <div class="grid-2">
+            <div>
+              <label class="mini-label">Furniture Volume (CUFT)</label>
+              <input id="furnitureVol" type="number" min="0" class="field" value="600" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Loft Effects Volume (CUFT)</label>
+              <input id="loftVol" type="number" min="0" class="field" value="0" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Loading Rate (CUFT / Man-Hour)</label>
+              <input id="loadRate" type="number" min="1" class="field" value="125" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Unloading Rate (CUFT / Man-Hour)</label>
+              <input id="unloadRate" type="number" min="1" class="field" value="132" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Transit Hours</label>
+              <input id="transitHours" type="number" min="0" class="field" value="0" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Transit Minutes</label>
+              <input id="transitMinutes" type="number" min="0" max="59" class="field" value="30" oninput="renderLab()" />
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Box Totals</div>
+          <div class="grid-3">
+            <div>
+              <label class="mini-label">AP</label>
+              <input id="qty_ap" type="number" min="0" class="field" value="20" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">CG</label>
+              <input id="qty_cg" type="number" min="0" class="field" value="6" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Books</label>
+              <input id="qty_books" type="number" min="0" class="field" value="12" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Linen</label>
+              <input id="qty_linen" type="number" min="0" class="field" value="8" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">WR</label>
+              <input id="qty_wr" type="number" min="0" class="field" value="4" oninput="renderLab()" />
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Special Labour</div>
+          <div class="grid-3">
+            <div>
+              <label class="mini-label">Beds</label>
+              <input id="svc_beds" type="number" min="0" class="field" value="2" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Bunk Beds</label>
+              <input id="svc_bunk" type="number" min="0" class="field" value="0" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Custom Minutes (Each Side)</label>
+              <input id="svc_custom_minutes" type="number" min="0" class="field" value="0" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Custom Note</label>
+              <input id="svc_custom_note" type="text" class="field" value="" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Upright Pianos</label>
+              <input id="svc_upright" type="number" min="0" class="field" value="0" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Baby / Grand Pianos</label>
+              <input id="svc_grand" type="number" min="0" class="field" value="0" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Grandfather Clocks</label>
+              <input id="svc_clock" type="number" min="0" class="field" value="0" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Appliances</label>
+              <input id="svc_appliance" type="number" min="0" class="field" value="2" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Crating</label>
+              <input id="svc_crate" type="number" min="0" class="field" value="0" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Dismantles</label>
+              <input id="svc_dismantle" type="number" min="0" class="field" value="0" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Export Wrap Volume (CUFT)</label>
+              <input id="exportWrapVol" type="number" min="0" class="field" value="0" oninput="renderLab()" />
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Manual Planner</div>
+          <div class="planner-shell">
+            <div class="toolbar" style="margin-bottom:12px;">
+              <button type="button" class="action-btn" onclick="addPlannerRow()">Add Planner Day</button>
+              <button type="button" class="action-btn" onclick="resetPlannerRows()">Reset Planner</button>
+            </div>
+            <div id="plannerRows"></div>
+          </div>
+        </div>
+
+        <div class="note-card">
+          Use this file to experiment with store logic, load-rate variations and validation rules before copying final calculator functions back into Photon.
+        </div>
+      </div>
     </div>
 
-                <div class="summary-strip panel">
-        <div class="panel-body">
-            <div class="summary-bar-grid">
-                                <div class="summary-card summary-card-compact" style="grid-area:costs;">
-                    <div class="summary-label">Total Costs</div>
-                    <div class="summary-value" id="totalCosts">0.00</div>
-                </div>
-
-                                <div class="summary-card summary-card-compact" style="grid-area:margin;">
-                    <div class="summary-label">Gross Margin</div>
-                    <div class="summary-value" id="grossMarginDisplay">0.00</div>
-                    <div class="summary-sub" id="grossMarginSub">Customer price minus total costs</div>
-                </div>
-
-                                <div class="summary-card summary-card-compact" style="grid-area:additional;">
-                    <div class="summary-label">Additional Costs Total</div>
-                    <div class="summary-value" id="additionalCostsTotalDisplay">0.00</div>
-                </div>
-
-                <div class="summary-card summary-card-compact summary-card-tall">
-                    <label class="mini-label">Enter Quote Price</label>
-                    <input id="customerPriceInput" type="number" min="0" step="0.01" class="field editable-detail" value="0" onchange="renderPricing(getSelectedSequence())" />
-                    <div style="height:4px"></div>
-                    <div class="summary-value" id="customerPriceDisplay">0.00</div>
-                </div>
-
-                <div class="summary-card summary-card-compact summary-sequence-card">
-                    <label class="mini-label">Selected Sequence</label>
-                    <select id="sequenceSelect" class="field"></select>
-                </div>
-
-                <div class="summary-card summary-card-compact summary-save-card">
-                    <button type="button" class="action-btn blue" id="savePricingBtn" style="width:100%;">Save Pricing</button>
-                </div>
-                <div class="summary-card summary-card-compact summary-quote-card">
-    <button type="button" class="action-btn quote" id="createQuoteBtn">Create Quote</button>
-</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="schedule-panel panel">
-        <div class="panel-head">
-            <div class="panel-title">Schedule Planner</div>
-            <div class="panel-subtitle">Manual AM / PM planning block that can later be lifted from the calculator</div>
-        </div>
-        <div class="panel-body">
-            <div class="note-card">
-                This is a quick planner version. Use it to add day rows manually, then let the vans / crew totals feed directly into pricing below.
-            </div>
-            <div id="schedulePlanner"></div>
-            <div class="toolbar">
-                <button type="button" class="action-btn white" id="addScheduleRowBtn">Add Schedule Row</button>
-                <button type="button" class="action-btn white" id="copySchedulePlanBtn">Copy Plan from Schedule Tab</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="bottom-layout">
-        <div class="stack">
-            <div class="panel">
-                <div class="panel-head">
-                    <div class="panel-title">Scope Snapshot</div>
-                    <div class="panel-subtitle">Compact read-only commercial scope only</div>
-                </div>
-                <div class="panel-body">
-                    <div id="scopeSnapshotCard"></div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-head">
-                    <div class="panel-title">Quotation Notes / Assumptions</div>
-                    <div class="panel-subtitle">Customer-facing wording, assumptions and exclusions only</div>
-                </div>
-                <div class="panel-body">
-                    <label class="mini-label">Quote Notes</label>
-                    <textarea id="quoteNotesInput" class="field" placeholder="Example: Price assumes clear access, standard carry distances, and excludes specialist trades unless listed below."></textarea>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-head">
-                    <div class="panel-title">Commercial Summary</div>
-                    <div class="panel-subtitle">Cost base, sell price and gross margin</div>
-                </div>
-                <div class="panel-body">
-    <div id="commercialSummaryCard"></div>
-    <div style="height:16px"></div>
-    <div id="additionalCostsBreakdownCard"></div>
-</div>
-            </div>
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Live Results</div>
+        <div class="panel-subtitle">Mirror the main app, then adjust logic here first</div>
+      </div>
+      <div class="panel-body">
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-label">Packing Mode</div>
+            <div class="summary-value" id="summaryMode">—</div>
+            <div class="summary-sub">No packing, CG, or full</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Total Volume</div>
+            <div class="summary-value" id="summaryTotalVolume">0</div>
+            <div class="summary-sub">Furniture + box volume</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Packing Man Hrs</div>
+            <div class="summary-value" id="summaryPackHours">0.00</div>
+            <div class="summary-sub">Cartons only</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Packing Man Days</div>
+            <div class="summary-value" id="summaryPackDays">0.0</div>
+            <div class="summary-sub">Based on 8 hours</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Special Labour Hrs</div>
+            <div class="summary-value" id="summarySpecialHours">0.00</div>
+            <div class="summary-sub">Load + unload side</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Loading Man Hrs</div>
+            <div class="summary-value" id="summaryLoadHours">0.00</div>
+            <div class="summary-sub">Volume + load specials</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Loading Man Days</div>
+            <div class="summary-value" id="summaryLoadDays">0.0</div>
+            <div class="summary-sub">Based on 8 hours</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Load Completion Crew</div>
+            <div class="summary-value" id="summaryLoadCompletion">0.0</div>
+            <div class="summary-sub">Crew for 4-hour load window</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Unloading Man Hrs</div>
+            <div class="summary-value" id="summaryUnloadHours">0.00</div>
+            <div class="summary-sub">Volume + unload specials</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Unloading Man Days</div>
+            <div class="summary-value" id="summaryUnloadDays">0.0</div>
+            <div class="summary-sub">Based on 8 hours</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Unload Completion Crew</div>
+            <div class="summary-value" id="summaryUnloadCompletion">0.0</div>
+            <div class="summary-sub">Crew for 4-hour unload window</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Store Variant</div>
+            <div class="summary-value" id="summaryStoreVariant">—</div>
+            <div class="summary-sub">Use this to test rule changes</div>
+          </div>
         </div>
 
-        <div class="stack">
-            <div class="panel">
-                <div class="panel-head">
-                    <div class="panel-title">Core Costing</div>
-                    <div class="panel-subtitle">Fixed operational rows that drive cost base</div>
-                </div>
-               <div class="panel-body">
-    <div class="pricing-grid" id="pricingGrid"></div>
-    <div class="toolbar">
-        <button type="button" class="action-btn white" onclick="addPricingLine()">Add Core Cost Row</button>
-    </div>
-    <div class="footer-note">Core costing should stay focused on move cost base. Use Optional Additional Cost Services for quote extras.</div>
-</div>
-            </div>
-
-            <div class="panel">
-    <div class="panel-head">
-        <div class="panel-title">Third-Party / Specialist Costs</div>
-        <div class="panel-subtitle">Optional Additional Cost Services</div>
-    </div>
-    <div class="panel-body">
-        <div class="pricing-grid" id="additionalCostsGrid"></div>
-        <div class="toolbar">
-            <button type="button" class="action-btn white" onclick="addAdditionalCostLine()">Add Optional Service</button>
+        <div class="document-block" style="margin-top:12px;">
+          <div class="document-heading">Current Logic Summary</div>
+          <div class="document-lines" id="logicText"></div>
         </div>
-    </div>
-</div>
-        </div>
-    </div>
 
-<script>
-const prototypeState = {
-    selectedSequenceId: "seq_1",
-    manualExcluded: [],
-    manualExcludedNotes: "",
-    sequences: [
-        {
-            id: "seq_1",
-            label: "Sequence 1",
-            moveType: "DOMESTIC LOCAL",
-            packingType: "FULL PACKING",
-            inventory: [
-                { name: "3 Seater Sofa", volume: 180, cartons: null, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
-                { name: "Frame Bed", volume: 55, cartons: null, actionFlags: { dismantle:true, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
-                { name: "Dining Table", volume: 75, cartons: null, actionFlags: { dismantle:true, exportWrap:true, crate:false, disconnect:false, handyman:false, damage:false, noted:true, excluded:false } },
-                { name: "Grandfather Clock", volume: 25, cartons: null, actionFlags: { dismantle:false, exportWrap:false, crate:true, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
-                { name: "Dishwasher", volume: 20, cartons: null, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:true, handyman:false, damage:false, noted:false, excluded:false } },
-                { name: "Wall Shelving", volume: 10, cartons: null, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:true, damage:false, noted:false, excluded:true } },
-                { name: "China & Glass Cartons", volume: 0, cartons: { type: "CG", qty: 16 }, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
-                { name: "All Purpose Cartons", volume: 0, cartons: { type: "AP", qty: 24 }, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
-                { name: "Book Cartons", volume: 0, cartons: { type: "BOOKS", qty: 8 }, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } }
-            ],
-            calculator: {
-                totalManHours: 31.4,
-                totalManDays: 3.9,
-                loadingTotals: 13.2,
-                unloadingTotals: 9.1,
-                packingTotals: 5.8,
-                specialLabourTotals: 3.3,
-                disconnectCount: 1,
-                handymanCount: 1,
-                totalVolume: 710,
-                cartonTotals: { AP: 24, CG: 16, BOOKS: 8, LINEN: 0, WR: 0 },
-                exportWrapQty: 75
-            }
-        },
-        {
-            id: "seq_2",
-            label: "Sequence 2",
-            moveType: "EXPORT",
-            packingType: "EXPORT WRAP",
-            inventory: [
-                { name: "King Mattress", volume: 60, cartons: null, actionFlags: { dismantle:false, exportWrap:true, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
-                { name: "Bunk Bed", volume: 85, cartons: null, actionFlags: { dismantle:true, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
-                { name: "Baby Grand Piano", volume: 110, cartons: null, actionFlags: { dismantle:false, exportWrap:false, crate:true, disconnect:false, handyman:false, damage:true, noted:true, excluded:false } },
-                { name: "Utility Shelf", volume: 18, cartons: null, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:true } },
-                { name: "Wardrobe Cartons", volume: 0, cartons: { type: "WR", qty: 6 }, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } },
-                { name: "Linen Cartons", volume: 0, cartons: { type: "LINEN", qty: 12 }, actionFlags: { dismantle:false, exportWrap:false, crate:false, disconnect:false, handyman:false, damage:false, noted:false, excluded:false } }
-            ],
-            calculator: {
-                totalManHours: 42.6,
-                totalManDays: 5.3,
-                loadingTotals: 15.9,
-                unloadingTotals: 11.7,
-                packingTotals: 6.5,
-                specialLabourTotals: 8.5,
-                disconnectCount: 0,
-                handymanCount: 0,
-                totalVolume: 273,
-                cartonTotals: { AP: 0, CG: 0, BOOKS: 0, LINEN: 12, WR: 6 },
-                exportWrapQty: 120
-            }
-        }
-    ]
-};
-
-const CARTON_TYPES = ["AP", "CG", "BOOKS", "LINEN", "WR"];
-const PRICING_DEFAULTS = [
-    { label: "Vans", qty: 1, unitCost: 120 },
-    { label: "Crew", qty: 0, unitCost: 200 },
-    { label: "Mileage", qty: 0, unitCost: 0.45 },
-    { label: "Consumables", qty: 0, unitCost: 0 },
-    { label: "Cartons", qty: 48, unitCost: 2.5 },
-    { label: "Export Wrap", qty: 0, unitCost: 0.30 },
-    { label: "Nights Out", qty: 0, unitCost: 40 }
-];
-
-const MANDATORY_LABELS = ["Vans", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
-const OPTIONAL_CHOICES = ["Custom", "Handyman", "Parking Admin", "Hoist / Crane", "Ferry", "Crating", "Shuttle Surcharge"];
-const ADDITIONAL_SERVICE_CHOICES = ["Custom", "Handyman", "Parking Admin", "Hoist / Crane", "Ferry", "Crating", "Shuttle Surcharge", "Electrician", "Plumber", "Cleaner", "Decorator", "Specialist Contractor"];
-const TASK_OPTIONS = ["Custom", "Pack", "Load", "Unload", "Pack and Load", "Load and Deliver", "Load and Travel", "Deliver and Crew Return"];
-const DAY_PARTS = ["AM", "PM", "Full Day"];
-const RESPONSIBILITY_FIELDS = [
-    { key: "dismantle", label: "Dismantling" },
-    { key: "exportWrap", label: "Export Wrapping" },
-    { key: "crate", label: "Crates" },
-    { key: "disconnect", label: "Disconnect" },
-    { key: "handyman", label: "Handyman" },
-    { key: "damage", label: "Damage" },
-    { key: "noted", label: "Notes" }
-];
-
-let pricingSaved = false;
-let pricingBySequence = {};
-let additionalCostsBySequence = {};
-let responsibilityNotesBySequence = {};
-let scheduleBySequence = {};
-let quoteNotesBySequence = {};
-
-function round1(value){ return Math.round((Number(value || 0) + Number.EPSILON) * 10) / 10; }
-function round2(value){ return Math.round((Number(value || 0) + Number.EPSILON) * 100) / 100; }
-function money(value){ return Number(value || 0).toFixed(2); }
-function createId(){ return `line_${Date.now()}_${Math.random().toString(36).slice(2,7)}`; }
-function escapeHtml(value){ return String(value == null ? "" : value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
-function escapeAttr(value){ return String(value == null ? "" : value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
-
-function getSelectedSequence(){
-    return prototypeState.sequences.find(seq => seq.id === prototypeState.selectedSequenceId) || prototypeState.sequences[0];
-}
-
-function summariseInventory(sequence){
-    const lines = sequence.inventory || [];
-    const listedInventoryLines = lines.length;
-    const totalFurnitureVolume = round2(lines.reduce((sum, line) => sum + (line.cartons ? 0 : Number(line.volume || 0)), 0));
-    const cartonTotals = CARTON_TYPES.reduce((acc, type) => {
-        acc[type] = lines.reduce((sum, line) => sum + ((line.cartons && line.cartons.type === type) ? Number(line.cartons.qty || 0) : 0), 0);
-        return acc;
-    }, {});
-    const cartonGrandTotal = Object.values(cartonTotals).reduce((sum, qty) => sum + qty, 0);
-
-    const actions = { dismantle: [], exportWrap: [], crate: [], disconnect: [], handyman: [], damage: [], noted: [], excluded: [] };
-    lines.forEach(line => {
-        const flags = line.actionFlags || {};
-        if (flags.dismantle) actions.dismantle.push(line.name);
-        if (flags.exportWrap) actions.exportWrap.push(line.name);
-        if (flags.crate) actions.crate.push(line.name);
-        if (flags.disconnect) actions.disconnect.push(line.name);
-        if (flags.handyman) actions.handyman.push(line.name);
-        if (flags.damage) actions.damage.push(line.name);
-        if (flags.noted) actions.noted.push(line.name);
-        if (flags.excluded) actions.excluded.push(line.name);
-    });
-
-    return { listedInventoryLines, totalFurnitureVolume, cartonTotals, cartonGrandTotal, actions };
-}
-function buildDocumentLines(arr, emptyText){
-    if (!arr.length) return `<div class="document-empty">${escapeHtml(emptyText)}</div>`;
-    return `<div class="document-lines">${arr.map(item => `<div class="document-line">• ${escapeHtml(item)}</div>`).join("")}</div>`;
-}
-
-function getResponsibilityNotes(sequence, inventorySummary){
-    if (!responsibilityNotesBySequence[sequence.id]){
-        const actions = inventorySummary.actions || {};
-        responsibilityNotesBySequence[sequence.id] = RESPONSIBILITY_FIELDS.reduce((acc, field) => {
-            acc[field.key] = (actions[field.key] || []).join("\n");
-            return acc;
-        }, {});
-    }
-    return responsibilityNotesBySequence[sequence.id];
-}
-
-function updateResponsibilityNote(fieldKey, value){
-    const sequence = getSelectedSequence();
-    const current = responsibilityNotesBySequence[sequence.id] || {};
-    responsibilityNotesBySequence[sequence.id] = {
-        ...current,
-        [fieldKey]: value
-    };
-}
-
-function getQuoteNotes(sequence){
-    if (typeof quoteNotesBySequence[sequence.id] !== "string"){
-        quoteNotesBySequence[sequence.id] = "";
-    }
-    return quoteNotesBySequence[sequence.id];
-}
-
-function updateQuoteNotes(value){
-    const sequence = getSelectedSequence();
-    quoteNotesBySequence[sequence.id] = value;
-    pricingSaved = false;
-}
-
-function getScopeSnapshot(sequence, inventorySummary){
-    const calc = sequence.calculator || {};
-    const excludedItemsCount = (inventorySummary.actions.excluded || []).length + (prototypeState.manualExcluded || []).length;
-    const flaggedSpecialsCount =
-        (inventorySummary.actions.crate || []).length +
-        (inventorySummary.actions.damage || []).length +
-        (inventorySummary.actions.disconnect || []).length +
-        (inventorySummary.actions.handyman || []).length;
-
-    const signatureStatus = flaggedSpecialsCount > 0 || excludedItemsCount > 0 ? "Review Required" : "Clear";
-
-    return {
-        moveType: sequence.moveType || "Not set",
-        packingType: sequence.packingType || "Not set",
-        includedVolume: round2(calc.totalVolume || inventorySummary.totalFurnitureVolume || 0),
-        cartonsTotal: Object.values(calc.cartonTotals || {}).reduce((sum, qty) => sum + Number(qty || 0), 0),
-        exportWrapQty: Number(calc.exportWrapQty || 0),
-        flaggedSpecialsCount,
-        excludedItemsCount,
-        signatureStatus
-    };
-}
-
-function renderScopeSnapshot(sequence, inventorySummary){
-    const snap = getScopeSnapshot(sequence, inventorySummary);
-
-    document.getElementById("scopeSnapshotCard").innerHTML = `
-        <div class="scope-grid">
-            <div class="scope-pill">
-                <div class="scope-pill-label">Move Type</div>
-                <div class="scope-pill-value">${escapeHtml(snap.moveType)}</div>
-            </div>
-            <div class="scope-pill">
-                <div class="scope-pill-label">Packing Type</div>
-                <div class="scope-pill-value">${escapeHtml(snap.packingType)}</div>
-            </div>
-            <div class="scope-pill">
-                <div class="scope-pill-label">Included Volume</div>
-                <div class="scope-pill-value">${escapeHtml(String(snap.includedVolume))}</div>
-            </div>
-            <div class="scope-pill">
-                <div class="scope-pill-label">Cartons Total</div>
-                <div class="scope-pill-value">${escapeHtml(String(snap.cartonsTotal))}</div>
-            </div>
-            <div class="scope-pill">
-                <div class="scope-pill-label">Export Wrap Qty</div>
-                <div class="scope-pill-value">${escapeHtml(String(snap.exportWrapQty))}</div>
-            </div>
-            <div class="scope-pill">
-                <div class="scope-pill-label">Flagged Specials</div>
-                <div class="scope-pill-value">${escapeHtml(String(snap.flaggedSpecialsCount))}</div>
-            </div>
-            <div class="scope-pill">
-                <div class="scope-pill-label">Excluded Items</div>
-                <div class="scope-pill-value">${escapeHtml(String(snap.excludedItemsCount))}</div>
-            </div>
-            <div class="scope-pill">
-                <div class="scope-pill-label">Signature Status</div>
-                <div class="scope-pill-value">${escapeHtml(snap.signatureStatus)}</div>
-            </div>
-        </div>
-    `;
-}
-
-function renderAdditionalCostsBreakdown(sequence){
-    const lines = getAdditionalCostLines(sequence).filter(line => line.label && line.label !== "");
-    const target = document.getElementById("additionalCostsBreakdownCard");
-    if (!target) return;
-
-    if (!lines.length){
-        target.innerHTML = `
-            <div class="document-block">
-                <div class="document-heading">Optional Additional Cost Services</div>
-                <div class="document-empty">No optional services added</div>
-            </div>
-        `;
-        return;
-    }
-
-    target.innerHTML = `
         <div class="document-block">
-            <div class="document-heading">Optional Additional Cost Services</div>
-            <div class="document-lines">
-                ${lines.map(line => `
-                   <div class="document-line">• ${escapeHtml(line.customLabel || (line.label === "Custom" ? "Custom" : line.label || ""))} — ${money(additionalLineTotal(line))}</div>
-                `).join("")}
-            </div>
+          <div class="document-heading">Special Labour Breakdown</div>
+          <div class="document-lines" id="specialText"></div>
         </div>
-    `;
-}
-function renderCommercialSummary(sequence){
-    const totals = getCommercialTotals(sequence);
 
-    document.getElementById("commercialSummaryCard").innerHTML = `
-        <div class="commercial-summary-grid">
-            <div class="commercial-summary-card">
-                <div class="commercial-summary-label">Total Cost Base</div>
-                <div class="commercial-summary-value">${money(totals.totalCostBase)}</div>
-            </div>
-            <div class="commercial-summary-card">
-                <div class="commercial-summary-label">Sell Price</div>
-                <div class="commercial-summary-value">${money(totals.customerPrice)}</div>
-            </div>
-            <div class="commercial-summary-card">
-                <div class="commercial-summary-label">Gross Margin £</div>
-                <div class="commercial-summary-value">${money(totals.grossMargin)}</div>
-            </div>
-            <div class="commercial-summary-card">
-                <div class="commercial-summary-label">Gross Margin %</div>
-                <div class="commercial-summary-value">${money(totals.grossMarginPct)}%</div>
-            </div>
+        <div class="document-block">
+          <div class="document-heading">Scenario Notes</div>
+          <div class="document-lines" id="scenarioNotes"></div>
         </div>
-    `;
-}
 
-function getScheduleRows(sequence){
-    if (!scheduleBySequence[sequence.id]){
-        scheduleBySequence[sequence.id] = [
-           { id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Pack and Load", customTask: "", vans: 1, crew: 2, nightsOut: false }
-        ];
+        <div class="validation-list" id="validationList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const BOX_VOLUMES = { ap:4, cg:4, books:2, linen:5, wr:10 };
+    const BOX_RATES = { ap:10, cg:4, books:15, linen:10, wr:8 };
+    const MORNING_LOAD_RATE = 125;
+    const AFTERNOON_LOAD_RATE_AFTER_AM = 55;
+
+    let plannerRows = [];
+
+    function round2(value){
+      return Math.round((Number(value || 0) + Number.EPSILON) * 100) / 100;
     }
-    return scheduleBySequence[sequence.id];
-}
 
-function calcScheduleTotals(sequence){
-    const rows = getScheduleRows(sequence);
-    const days = {};
+    function round1(value){
+      return Math.round((Number(value || 0) + Number.EPSILON) * 10) / 10;
+    }
 
-    rows.forEach(row => {
-        const dayKey = String(row.dayLabel || "").trim().toLowerCase() || `row_${row.id}`;
+    function plannerId(){
+      return 'plan_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+    }
 
-        if (!days[dayKey]){
-            days[dayKey] = {
-                vans: 0,
-                crew: 0,
-                nightsOutCrew: 0
-            };
+    function defaultPlannerRows(){
+      return [
+        { id: plannerId(), dayPart: 'Full Day', task: 'Load', men: 3, vans: 1, hours: 8, nightsOut: false }
+      ];
+    }
+
+    function getNum(id){
+      const el = document.getElementById(id);
+      const value = parseFloat(el ? el.value : 0);
+      return Number.isFinite(value) ? value : 0;
+    }
+
+    function getText(id){
+      const el = document.getElementById(id);
+      return el ? String(el.value || '').trim() : '';
+    }
+
+    function getPackModeLabel(packOption){
+      if (packOption === 'none') return 'No';
+      if (packOption === 'cg') return 'CG';
+      return 'Full';
+    }
+
+    function getIncludedKeys(packOption){
+      if (packOption === 'none') return [];
+      if (packOption === 'cg') return ['cg'];
+      return ['ap','cg','books','linen','wr'];
+    }
+
+    function getStoreLoadMultiplier(sequenceType, variant){
+      if (sequenceType !== 'into-store' && sequenceType !== 'ex-store' && sequenceType !== 'direct-store') {
+        return 1;
+      }
+      if (variant === 'slower') return 0.8;
+      if (variant === 'faster') return 1.15;
+      return 1;
+    }
+
+    function getState(){
+      return {
+        label: getText('scenarioLabel'),
+        sequenceType: getText('sequenceType') || 'domestic',
+        storeLoadVariant: getText('storeLoadVariant') || 'standard',
+        packOption: getText('packMode') || 'none',
+        furnitureVol: getNum('furnitureVol'),
+        loftVol: getNum('loftVol'),
+        loadRate: getNum('loadRate') || 125,
+        unloadRate: getNum('unloadRate') || 132,
+        transitHours: getNum('transitHours'),
+        transitMinutes: getNum('transitMinutes'),
+        qty: {
+          ap: getNum('qty_ap'),
+          cg: getNum('qty_cg'),
+          books: getNum('qty_books'),
+          linen: getNum('qty_linen'),
+          wr: getNum('qty_wr')
+        },
+        boxVolumes: BOX_VOLUMES,
+        special: {
+          beds: getNum('svc_beds'),
+          bunk: getNum('svc_bunk'),
+          customMinutes: getNum('svc_custom_minutes'),
+          customNote: getText('svc_custom_note'),
+          upright: getNum('svc_upright'),
+          grand: getNum('svc_grand'),
+          clock: getNum('svc_clock'),
+          appliance: getNum('svc_appliance'),
+          crate: getNum('svc_crate'),
+          dismantle: getNum('svc_dismantle')
+        },
+        exportWrapVol: getNum('exportWrapVol'),
+        plannerRows: plannerRows.slice()
+      };
+    }
+
+    function calcPacking(state){
+      const includedKeys = getIncludedKeys(state.packOption);
+      const packHours = Object.keys(BOX_RATES).reduce((sum, key) => {
+        const qty = state.qty[key] || 0;
+        if (!includedKeys.includes(key)) return sum;
+        return sum + (qty / BOX_RATES[key]);
+      }, 0);
+      return {
+        packHours: round2(packHours),
+        packDays: round1(packHours / 8)
+      };
+    }
+
+    function calcBoxVolume(state){
+      return Object.keys(state.qty).reduce((sum, key) => {
+        return sum + ((state.qty[key] || 0) * (state.boxVolumes[key] || 0));
+      }, 0);
+    }
+
+    function calcSpecialLabour(state){
+      const includedBeds = 2;
+      const includedExportWrapVol = 50;
+      const extraBeds = Math.max(0, state.special.beds - includedBeds);
+      const extraExportWrapVol = Math.max(0, state.exportWrapVol - includedExportWrapVol);
+      const transitTotalMinutes = (state.transitHours * 60) + state.transitMinutes;
+      const extraTransitMinutes = Math.max(0, transitTotalMinutes - 30);
+
+      const loadMinutes =
+        (extraBeds * 15) +
+        (state.special.dismantle * 15) +
+        (state.special.bunk * 30) +
+        (state.special.customMinutes > 0 ? state.special.customMinutes : 0) +
+        (state.special.upright * 25) +
+        (state.special.grand * 60) +
+        (state.special.clock * 30) +
+        (state.special.appliance * 30) +
+        (state.special.crate * 15) +
+        ((state.loftVol / 100) * 20) +
+        ((extraExportWrapVol / 100) * 25);
+
+      const unloadMinutes =
+        (extraBeds * 15) +
+        (state.special.bunk * 30) +
+        (state.special.customMinutes > 0 ? state.special.customMinutes : 0) +
+        (state.special.upright * 25) +
+        (state.special.grand * 60) +
+        (state.special.clock * 30) +
+        (state.special.appliance * 30) +
+        (state.special.crate * 15) +
+        extraTransitMinutes;
+
+      return {
+        specialHours: round2((loadMinutes + unloadMinutes) / 60),
+        loadSideHours: round2(loadMinutes / 60),
+        unloadSideHours: round2(unloadMinutes / 60),
+        extraTransitHours: round2(extraTransitMinutes / 60),
+        breakdown: {
+          beds: round2((extraBeds * 30) / 60),
+          dismantle: round2((state.special.dismantle * 15) / 60),
+          bunk: round2((state.special.bunk * 60) / 60),
+          custom: round2(((state.special.customMinutes > 0 ? state.special.customMinutes * 2 : 0)) / 60),
+          upright: round2((state.special.upright * 50) / 60),
+          grand: round2((state.special.grand * 120) / 60),
+          clock: round2((state.special.clock * 60) / 60),
+          appliance: round2((state.special.appliance * 60) / 60),
+          crate: round2((state.special.crate * 30) / 60),
+          loft: round2(((state.loftVol / 100) * 20) / 60),
+          exportWrap: round2(((extraExportWrapVol / 100) * 25) / 60),
+          transit: round2(extraTransitMinutes / 60),
+          includedBeds,
+          includedExportWrapVol
         }
+      };
+    }
 
-        const rowVans = Number(row.vans || 0);
-        const rowCrew = Number(row.crew || 0);
+    function calcLoading(totalVolume, loadRate, loadSideSpecialHours, state){
+      const multiplier = getStoreLoadMultiplier(state.sequenceType, state.storeLoadVariant);
+      const effectiveRate = round2(loadRate * multiplier);
+      const volumeHours = totalVolume / effectiveRate;
+      const totalHours = volumeHours + loadSideSpecialHours;
+      return {
+        effectiveRate,
+        hours: round2(totalHours),
+        days: round1(totalHours / 8),
+        completionCrew: round1(totalHours / 4),
+        volumeHours: round2(volumeHours)
+      };
+    }
 
-        days[dayKey].vans = Math.max(days[dayKey].vans, rowVans);
-        days[dayKey].crew = Math.max(days[dayKey].crew, rowCrew);
+    function calcUnloading(totalVolume, unloadRate, unloadSideSpecialHours, state){
+      const multiplier = state.sequenceType === 'ex-store' ? getStoreLoadMultiplier(state.sequenceType, state.storeLoadVariant) : 1;
+      const effectiveRate = round2(unloadRate * multiplier);
+      const volumeHours = totalVolume / effectiveRate;
+      const totalHours = volumeHours + unloadSideSpecialHours;
+      return {
+        effectiveRate,
+        hours: round2(totalHours),
+        days: round1(totalHours / 8),
+        completionCrew: round1(totalHours / 4),
+        volumeHours: round2(volumeHours)
+      };
+    }
 
-        if (row.nightsOut){
-            days[dayKey].nightsOutCrew = Math.max(days[dayKey].nightsOutCrew, rowCrew);
-        }
-    });
+    function calcScheduleValidation(packing, loading, unloading, special, state){
+      const required = {
+        Pack: packing.packHours,
+        Load: loading.hours,
+        Unload: unloading.hours
+      };
 
-    return Object.values(days).reduce((acc, day) => {
-        acc.vans += day.vans;
-        acc.crew += day.crew;
-        acc.nightsOut += day.nightsOutCrew;
-        acc.rows += 1;
-        return acc;
-    }, { vans: 0, crew: 0, nightsOut: 0, rows: 0 });
-}
+      const allocated = { Pack: 0, Load: 0, Unload: 0 };
+      let sharedPackLoadPool = 0;
+      let sharedLoadUnloadPool = 0;
 
-function syncPricingFromSchedule(sequence){
-    const totals = calcScheduleTotals(sequence);
-    if (!pricingBySequence[sequence.id]) return;
-    pricingBySequence[sequence.id] = pricingBySequence[sequence.id].map(line => {
-        if (line.label === "Vans") return { ...line, qty: totals.vans };
-        if (line.label === "Crew") return { ...line, qty: totals.crew };
-        if (line.label === "Nights Out") return { ...line, qty: totals.nightsOut };
-        return line;
-    });
-}
+      const groups = {};
+      state.plannerRows.forEach(function(day){
+        const key = day.groupId || day.id;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(day);
+      });
 
-function normalisePricingLines(sequence){
-    if (!pricingBySequence[sequence.id]) return;
+      Object.values(groups).forEach(function(rows){
+        const hasAmLoadish = rows.some(day => day.dayPart === 'AM' && ['Load','Pack and Load','Load and Deliver','Load and Travel'].includes(day.task));
 
-    const lines = pricingBySequence[sequence.id];
-    const mandatory = [];
-    const extras = [];
+        rows.forEach(function(day){
+          const men = Number(day.men || 0);
+          const hours = Number(day.hours || 0);
+          const capacity = men * hours;
 
-    lines.forEach(line => {
-        if (MANDATORY_LABELS.includes(line.label)){
-            mandatory.push(line);
-        } else {
-            extras.push(line);
-        }
-    });
-
-    pricingBySequence[sequence.id] = [...mandatory, ...extras];
-}
-
-function getPricingLines(sequence){
-    if (!pricingBySequence[sequence.id]){
-        const calc = sequence.calculator || {};
-        pricingBySequence[sequence.id] = PRICING_DEFAULTS.map(item => {
-            let qty = item.qty;
-            if (item.label === "Cartons") qty = Object.values(calc.cartonTotals || {}).reduce((sum, val) => sum + Number(val || 0), 0);
-            if (item.label === "Export Wrap") qty = Number(calc.exportWrapQty || 0);
-            return {
-                id: createId(),
-                label: item.label,
-                customLabel: "",
-                qty,
-                unitCost: item.unitCost
-            };
+          switch(day.task){
+            case 'Pack':
+              allocated.Pack += capacity;
+              break;
+            case 'Unload':
+            case 'Deliver and Crew Return':
+              allocated.Unload += capacity;
+              break;
+            case 'Pack and Load':
+              if (day.dayPart === 'AM') {
+                sharedPackLoadPool += capacity;
+              } else if (day.dayPart === 'PM' && hasAmLoadish) {
+                const pmLoadHours = round2((men * hours * AFTERNOON_LOAD_RATE_AFTER_AM) / state.loadRate);
+                sharedPackLoadPool += pmLoadHours;
+              } else {
+                sharedPackLoadPool += capacity;
+              }
+              break;
+            case 'Load and Deliver':
+              if (day.dayPart === 'AM') {
+                sharedLoadUnloadPool += capacity;
+              } else if (day.dayPart === 'PM' && hasAmLoadish) {
+                const pmLoadHours = round2((men * hours * AFTERNOON_LOAD_RATE_AFTER_AM) / state.loadRate);
+                sharedLoadUnloadPool += pmLoadHours + Math.max(0, capacity - pmLoadHours);
+              } else {
+                sharedLoadUnloadPool += capacity;
+              }
+              break;
+            case 'Load':
+            case 'Load and Travel': {
+              let loadHoursEquivalent = capacity;
+              if (day.dayPart === 'PM' && hasAmLoadish) {
+                const pmVolume = men * hours * AFTERNOON_LOAD_RATE_AFTER_AM;
+                loadHoursEquivalent = round2(pmVolume / state.loadRate);
+              }
+              allocated.Load += loadHoursEquivalent;
+              break;
+            }
+          }
         });
+      });
+
+      const packNeedAfterDirect = Math.max(0, required.Pack - allocated.Pack);
+      const packLoadPoolToPack = Math.min(sharedPackLoadPool, packNeedAfterDirect);
+      allocated.Pack += packLoadPoolToPack;
+      allocated.Load += Math.max(0, sharedPackLoadPool - packLoadPoolToPack);
+
+      const loadNeedAfterPackPool = Math.max(0, required.Load - allocated.Load);
+      const loadUnloadPoolToLoad = Math.min(sharedLoadUnloadPool, loadNeedAfterPackPool);
+      allocated.Load += loadUnloadPoolToLoad;
+      allocated.Unload += Math.max(0, sharedLoadUnloadPool - loadUnloadPoolToLoad);
+
+      const results = [];
+      ['Pack','Load','Unload'].forEach(function(task){
+        const req = required[task] || 0;
+        const cap = allocated[task] || 0;
+        const diff = round2(cap - req);
+
+        if (req === 0 && cap === 0) {
+          results.push({ type:'ok', text:'✓ ' + task + ' not required and none allocated.' });
+          return;
+        }
+        if (cap + 0.01 < req) {
+          results.push({ type:'error', text:'✕ ' + task + ' short by ' + Math.abs(diff).toFixed(2) + ' man-hours.' });
+          return;
+        }
+        if (diff > 0.5) {
+          results.push({ type:'warn', text:'! ' + task + ' has ' + diff.toFixed(2) + ' spare man-hours allocated.' });
+          return;
+        }
+        results.push({ type:'ok', text:'✓ ' + task + ' capacity matches requirement.' });
+      });
+
+      results.push({
+        type: special.extraTransitHours > 0 ? 'warn' : 'ok',
+        text: special.extraTransitHours > 0
+          ? '! Transit beyond the first 30 minutes adds ' + special.extraTransitHours.toFixed(2) + ' hours to the unload side.'
+          : '✓ Transit is within the first 30 minutes included allowance.'
+      });
+
+      results.push({
+        type:'ok',
+        text:'✓ Store variant currently changes effective rates only in this lab. Adjust here before moving rules into Photon.'
+      });
+
+      return results;
     }
 
-    syncPricingFromSchedule(sequence);
-    normalisePricingLines(sequence);
-    return pricingBySequence[sequence.id];
-}
+    function renderPlannerRows(){
+      const wrap = document.getElementById('plannerRows');
+      if (!wrap) return;
 
-function lineTotal(line){
-    return Number(line.qty || 0) * Number(line.unitCost || 0);
-}
-
-function calcTotalCosts(sequence){
-    return getPricingLines(sequence).reduce((sum, line) => sum + lineTotal(line), 0);
-}
-
-function renderSequenceSelect(){
-    const select = document.getElementById("sequenceSelect");
-    select.innerHTML = prototypeState.sequences.map(seq => `<option value="${seq.id}" ${seq.id === prototypeState.selectedSequenceId ? "selected" : ""}>${escapeHtml(seq.label)}</option>`).join("");
-    select.value = prototypeState.selectedSequenceId;
-}
-
-function normaliseDayLabel(value){
-    return String(value || "").trim().toLowerCase();
-}
-
-function getDayNumberFromLabel(label){
-    const match = String(label || "").match(/day\s*(\d+)/i);
-    return match ? Number(match[1]) : null;
-}
-
-function getNextScheduleDayLabel(rows){
-    const dayNumbers = rows
-        .map(row => getDayNumberFromLabel(row.dayLabel))
-        .filter(num => Number.isFinite(num));
-
-    const nextDayNumber = dayNumbers.length ? Math.max(...dayNumbers) + 1 : 1;
-    return `Day ${nextDayNumber}`;
-}
-function addScheduleRow(){
-    const sequence = getSelectedSequence();
-    const rows = getScheduleRows(sequence);
-    const lastRow = rows[rows.length - 1];
-
-    let newRow;
-
-    if (!lastRow){
-        newRow = {
-            id: createId(),
-            dayLabel: "Day 1",
-            dayPart: "AM",
-            task: "Load",
-            customTask: "",
-            vans: 1,
-            crew: 2,
-            nightsOut: false
-        };
-    } else if (lastRow.dayPart === "AM"){
-        newRow = {
-            id: createId(),
-            dayLabel: lastRow.dayLabel || "Day 1",
-            dayPart: "PM",
-            task: lastRow.task || "Load",
-            customTask: "",
-            vans: Number(lastRow.vans || 0),
-            crew: Number(lastRow.crew || 0),
-            nightsOut: false
-        };
-    } else {
-        newRow = {
-            id: createId(),
-            dayLabel: getNextScheduleDayLabel(rows),
-            dayPart: "AM",
-            task: "Load",
-            customTask: "",
-            vans: 1,
-            crew: 2,
-            nightsOut: false
-        };
+      wrap.innerHTML = plannerRows.map(function(row, index){
+        return `
+          <div class="planner-row">
+            <div class="planner-head">
+              <div class="planner-title">Planner Row ${index + 1}</div>
+              ${plannerRows.length > 1 ? `<button type="button" class="action-btn" onclick="removePlannerRow('${row.id}')">Delete</button>` : ''}
+            </div>
+            <div class="planner-grid">
+              <div>
+                <label class="mini-label">Task</label>
+                <select class="field" onchange="updatePlannerRow('${row.id}','task',this.value)">
+                  ${['Pack','Load','Unload','Pack and Load','Load and Deliver','Load and Travel','Deliver and Crew Return'].map(function(opt){
+                    return `<option value="${opt}" ${row.task === opt ? 'selected' : ''}>${opt}</option>`;
+                  }).join('')}
+                </select>
+              </div>
+              <div>
+                <label class="mini-label">Day Part</label>
+                <select class="field" onchange="updatePlannerRow('${row.id}','dayPart',this.value)">
+                  ${['Full Day','AM','PM'].map(function(opt){
+                    return `<option value="${opt}" ${row.dayPart === opt ? 'selected' : ''}>${opt}</option>`;
+                  }).join('')}
+                </select>
+              </div>
+              <div>
+                <label class="mini-label">Men</label>
+                <input type="number" min="0" class="field" value="${Number(row.men || 0)}" oninput="updatePlannerRow('${row.id}','men',this.value)" />
+              </div>
+              <div>
+                <label class="mini-label">Vans</label>
+                <input type="number" min="0" class="field" value="${Number(row.vans || 0)}" oninput="updatePlannerRow('${row.id}','vans',this.value)" />
+              </div>
+              <div>
+                <label class="mini-label">Night Out</label>
+                <select class="field" onchange="updatePlannerRow('${row.id}','nightsOut',this.value)">
+                  <option value="false" ${!row.nightsOut ? 'selected' : ''}>No</option>
+                  <option value="true" ${row.nightsOut ? 'selected' : ''}>Yes</option>
+                </select>
+              </div>
+            </div>
+            <div class="planner-debug">${row.hours} hrs · ${Number(row.men || 0)} men · ${Number(row.vans || 0)} vans · ${Number(row.hours || 0) * Number(row.men || 0)} man-hours</div>
+          </div>
+        `;
+      }).join('');
     }
 
-    rows.push(newRow);
-    pricingSaved = false;
-    syncPricingFromSchedule(sequence);
-    renderAll();
-}
-function copyPlanFromScheduleTab(){
-    alert("Schedule tab copy is not wired into this standalone prototype yet.");
-}
-
-function updateScheduleRow(id, field, value){
-    const sequence = getSelectedSequence();
-    const rows = getScheduleRows(sequence);
-
-    let updatedRows = rows.map(row => {
+    function updatePlannerRow(id, field, value){
+      plannerRows = plannerRows.map(function(row){
         if (row.id !== id) return row;
-        if (["vans","crew"].includes(field)) return { ...row, [field]: Number(value || 0) };
-        if (field === "nightsOut") return { ...row, nightsOut: value === "true" };
+
+        if (field === 'men' || field === 'vans') {
+          return { ...row, [field]: Math.max(0, Number(value) || 0) };
+        }
+
+        if (field === 'nightsOut') {
+          return { ...row, nightsOut: String(value) === 'true' };
+        }
+
+        if (field === 'dayPart') {
+          return { ...row, dayPart: value, hours: value === 'Full Day' ? 8 : 4 };
+        }
+
         return { ...row, [field]: value };
-    });
+      });
 
-    const changedRow = updatedRows.find(row => row.id === id);
-
-    if (changedRow && changedRow.dayPart === "Full Day"){
-        const changedDayKey = normaliseDayLabel(changedRow.dayLabel) || changedRow.id;
-        updatedRows = updatedRows.filter(row => {
-            if (row.id === id) return true;
-            return normaliseDayLabel(row.dayLabel) !== changedDayKey;
-        });
+      renderLab();
     }
 
-    scheduleBySequence[sequence.id] = updatedRows;
+    function addPlannerRow(){
+      plannerRows.push({
+        id: plannerId(),
+        groupId: plannerId(),
+        dayPart: 'Full Day',
+        task: 'Load',
+        men: 2,
+        vans: 1,
+        hours: 8,
+        nightsOut: false
+      });
+      renderLab();
+    }
 
-    pricingSaved = false;
-    syncPricingFromSchedule(sequence);
+    function removePlannerRow(id){
+      plannerRows = plannerRows.filter(function(row){ return row.id !== id; });
+      if (!plannerRows.length) plannerRows = defaultPlannerRows();
+      renderLab();
+    }
 
-    if (["task","dayPart","dayLabel"].includes(field)){
-        renderAll();
+    function resetPlannerRows(){
+      plannerRows = defaultPlannerRows();
+      renderLab();
+    }
+
+    function renderValidation(items){
+      const el = document.getElementById('validationList');
+      if (!el) return;
+      el.innerHTML = items.map(function(item){
+        return `<div class="validation-item validation-${item.type}">${item.text}</div>`;
+      }).join('');
+    }
+
+    function renderDocumentLines(id, lines){
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = (lines || []).map(function(line){
+        return `<div class="document-line">${line}</div>`;
+      }).join('');
+    }
+
+    function renderLab(){
+      renderPlannerRows();
+
+      const state = getState();
+      const packing = calcPacking(state);
+      const boxVolume = round2(calcBoxVolume(state));
+      const totalVolume = round2(state.furnitureVol + boxVolume);
+      const special = calcSpecialLabour(state);
+      const loading = calcLoading(totalVolume, state.loadRate, special.loadSideHours, state);
+      const unloading = calcUnloading(totalVolume, state.unloadRate, special.unloadSideHours, state);
+      const validation = calcScheduleValidation(packing, loading, unloading, special, state);
+
+      document.getElementById('summaryMode').textContent = getPackModeLabel(state.packOption);
+      document.getElementById('summaryTotalVolume').textContent = totalVolume;
+      document.getElementById('summaryPackHours').textContent = packing.packHours.toFixed(2);
+      document.getElementById('summaryPackDays').textContent = packing.packDays.toFixed(1);
+      document.getElementById('summarySpecialHours').textContent = special.specialHours.toFixed(2);
+      document.getElementById('summaryLoadHours').textContent = loading.hours.toFixed(2);
+      document.getElementById('summaryLoadDays').textContent = loading.days.toFixed(1);
+      document.getElementById('summaryLoadCompletion').textContent = loading.completionCrew.toFixed(1);
+      document.getElementById('summaryUnloadHours').textContent = unloading.hours.toFixed(2);
+      document.getElementById('summaryUnloadDays').textContent = unloading.days.toFixed(1);
+      document.getElementById('summaryUnloadCompletion').textContent = unloading.completionCrew.toFixed(1);
+      document.getElementById('summaryStoreVariant').textContent = state.storeLoadVariant;
+
+      renderDocumentLines('logicText', [
+        'Scenario: ' + (state.label || 'Unnamed scenario'),
+        'Sequence type: ' + state.sequenceType,
+        'Packing logic: ' + (state.packOption === 'none' ? 'No packing counted.' : state.packOption === 'cg' ? 'CG cartons only count towards packing labour.' : 'All carton types count towards packing labour.'),
+        'Loading effective rate: ' + loading.effectiveRate + ' cuft per man-hour.',
+        'Unloading effective rate: ' + unloading.effectiveRate + ' cuft per man-hour.',
+        'This lab lets you test store rate behaviour before replacing Photon calculator functions.'
+      ]);
+
+      renderDocumentLines('specialText', [
+        'Beds: ' + special.breakdown.beds.toFixed(2) + ' hrs extra after first ' + special.breakdown.includedBeds + ' included.',
+        'Dismantles: ' + special.breakdown.dismantle.toFixed(2) + ' hrs.',
+        'Bunk beds: ' + special.breakdown.bunk.toFixed(2) + ' hrs.',
+        (state.special.customNote || 'Custom item') + ': ' + special.breakdown.custom.toFixed(2) + ' hrs.',
+        'Upright pianos: ' + special.breakdown.upright.toFixed(2) + ' hrs.',
+        'Baby / grand pianos: ' + special.breakdown.grand.toFixed(2) + ' hrs.',
+        'Grandfather clocks: ' + special.breakdown.clock.toFixed(2) + ' hrs.',
+        'Appliances: ' + special.breakdown.appliance.toFixed(2) + ' hrs.',
+        'Crating: ' + special.breakdown.crate.toFixed(2) + ' hrs.',
+        'Loft effects: ' + special.breakdown.loft.toFixed(2) + ' hrs.',
+        'Export wrap: ' + special.breakdown.exportWrap.toFixed(2) + ' hrs extra after first ' + special.breakdown.includedExportWrapVol + ' cuft included.',
+        'Transit: ' + special.breakdown.transit.toFixed(2) + ' hrs beyond first 30 minutes included.'
+      ]);
+
+      renderDocumentLines('scenarioNotes', [
+        'Planner rows here are only for calculator testing.',
+        'Use them to check whether schedule capacity still matches the model after you adjust store logic.',
+        'When the rules feel right, move the final calculation functions back into Photon.'
+      ]);
+
+      renderValidation(validation);
+    }
+
+    function setInputValue(id, value){
+      const el = document.getElementById(id);
+      if (el) el.value = value;
+    }
+
+    function loadPreset(name){
+      if (name === 'blank') {
+        setInputValue('scenarioLabel', 'Blank Test');
+        setInputValue('sequenceType', 'domestic');
+        setInputValue('packMode', 'none');
+        setInputValue('storeLoadVariant', 'standard');
+        setInputValue('furnitureVol', 0);
+        setInputValue('loftVol', 0);
+        setInputValue('loadRate', 125);
+        setInputValue('unloadRate', 132);
+        setInputValue('transitHours', 0);
+        setInputValue('transitMinutes', 30);
+        setInputValue('qty_ap', 0);
+        setInputValue('qty_cg', 0);
+        setInputValue('qty_books', 0);
+        setInputValue('qty_linen', 0);
+        setInputValue('qty_wr', 0);
+        setInputValue('svc_beds', 0);
+        setInputValue('svc_bunk', 0);
+        setInputValue('svc_custom_minutes', 0);
+        setInputValue('svc_custom_note', '');
+        setInputValue('svc_upright', 0);
+        setInputValue('svc_grand', 0);
+        setInputValue('svc_clock', 0);
+        setInputValue('svc_appliance', 0);
+        setInputValue('svc_crate', 0);
+        setInputValue('svc_dismantle', 0);
+        setInputValue('exportWrapVol', 0);
+        plannerRows = defaultPlannerRows();
+        renderLab();
         return;
-    }
+      }
 
-    renderPricing(sequence);
-}
-
-function deleteScheduleRow(id){
-    const sequence = getSelectedSequence();
-    let rows = getScheduleRows(sequence).filter(row => row.id !== id);
-    if (!rows.length) rows = [{ id: createId(), dayLabel: "Day 1", dayPart: "AM", task: "Load", customTask: "", vans: 1, crew: 2, nightsOut: false }];
-    scheduleBySequence[sequence.id] = rows;
-    pricingSaved = false;
-    syncPricingFromSchedule(sequence);
-    renderAll();
-}
-
-function renderSchedulePlanner(sequence){
-    const rows = getScheduleRows(sequence);
-    document.getElementById("schedulePlanner").innerHTML = `
-        <div class="schedule-grid">
-            ${rows.map((row) => `
-                <div class="schedule-row">
-                    <div>
-                        <label class="mini-label">Day</label>
-                                                <input class="field" value="${escapeAttr(row.dayLabel)}" oninput="updateScheduleRow('${row.id}','dayLabel',this.value)" />
-                    </div>
-                    <div>
-                        <label class="mini-label">Task</label>
-                        <select class="field" onchange="updateScheduleRow('${row.id}','task',this.value)">
-                            ${TASK_OPTIONS.map(opt => `<option value="${opt}" ${opt===row.task?"selected":""}>${opt}</option>`).join("")}
-                        </select>
-                    </div>
-                    <div>
-                       <label class="mini-label">Task Detail</label>
-                                                <input class="field editable-detail" value="${escapeAttr(row.customTask || (row.task === "Custom" ? "" : row.task || ""))}" oninput="updateScheduleRow('${row.id}','customTask',this.value)" placeholder="Optional task detail" />
-                    </div>
-                    <div>
-                        <label class="mini-label">AM / PM</label>
-                        <select class="field" onchange="updateScheduleRow('${row.id}','dayPart',this.value)">
-                            ${DAY_PARTS.map(opt => `<option value="${opt}" ${opt===row.dayPart?"selected":""}>${opt}</option>`).join("")}
-                        </select>
-                    </div>
-                                       <div class="schedule-resource-cell">
-                        <label class="mini-label">Vans</label>
-                        <input type="number" min="0" class="field" value="${row.vans}" oninput="updateScheduleRow('${row.id}','vans',this.value)" />
-                    </div>
-                    <div class="schedule-resource-cell">
-                        <label class="mini-label">Crew</label>
-                        <input type="number" min="0" class="field" value="${row.crew}" onchange="updateScheduleRow('${row.id}','crew',this.value)" />
-                    </div>
-                    <div class="schedule-resource-cell">
-                        <label class="mini-label">Night Out</label>
-                        <div class="toggle-wrap">
-                            <label class="toggle-switch">
-                                <input type="checkbox" ${row.nightsOut ? "checked" : ""} onchange="updateScheduleRow('${row.id}','nightsOut', this.checked ? 'true' : 'false')" />
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="action-btn red" onclick="deleteScheduleRow('${row.id}')">Delete</button>
-                    </div>
-                </div>
-            `).join("")}
-        </div>
-    `;
-}
-
-function addPricingLine(){
-    const sequence = getSelectedSequence();
-    const lines = getPricingLines(sequence);
-
-    pricingBySequence[sequence.id] = [
-        ...lines,
-        {
-            id: createId(),
-            label: "",
-            customLabel: "",
-            qty: 0,
-            unitCost: 0
-        }
-    ];
-
-    pricingSaved = false;
-    renderPricing(sequence);
-}
-
-function deletePricingLine(id){
-    const sequence = getSelectedSequence();
-    pricingBySequence[sequence.id] = getPricingLines(sequence).filter(line => line.id !== id);
-    pricingSaved = false;
-    renderPricing(sequence);
-}
-function getCostChoices(){
-    return ADDITIONAL_SERVICE_CHOICES;
-}
-
-function ensureSingleBlankAdditionalCost(sequence){
-    if (!additionalCostsBySequence[sequence.id]){
-        additionalCostsBySequence[sequence.id] = [
-            {
-                id: createId(),
-                label: "",
-                customLabel: "",
-                qty: 0,
-                unitCost: 0
-            }
+      if (name === 'domestic') {
+        setInputValue('scenarioLabel', 'Domestic Baseline');
+        setInputValue('sequenceType', 'domestic');
+        setInputValue('packMode', 'cg');
+        setInputValue('storeLoadVariant', 'standard');
+        setInputValue('furnitureVol', 600);
+        setInputValue('loftVol', 50);
+        setInputValue('loadRate', 125);
+        setInputValue('unloadRate', 132);
+        setInputValue('transitHours', 0);
+        setInputValue('transitMinutes', 30);
+        setInputValue('qty_ap', 20);
+        setInputValue('qty_cg', 6);
+        setInputValue('qty_books', 12);
+        setInputValue('qty_linen', 8);
+        setInputValue('qty_wr', 4);
+        setInputValue('svc_beds', 2);
+        setInputValue('svc_bunk', 0);
+        setInputValue('svc_custom_minutes', 0);
+        setInputValue('svc_custom_note', '');
+        setInputValue('svc_upright', 0);
+        setInputValue('svc_grand', 0);
+        setInputValue('svc_clock', 0);
+        setInputValue('svc_appliance', 2);
+        setInputValue('svc_crate', 0);
+        setInputValue('svc_dismantle', 1);
+        setInputValue('exportWrapVol', 0);
+        plannerRows = [
+          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Pack', men: 2, vans: 0, hours: 8, nightsOut: false },
+          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Load', men: 3, vans: 1, hours: 8, nightsOut: false }
         ];
-    }
+        renderLab();
+        return;
+      }
 
-    if (!additionalCostsBySequence[sequence.id].length){
-        additionalCostsBySequence[sequence.id].push({
-            id: createId(),
-            label: "",
-            customLabel: "",
-            qty: 0,
-            unitCost: 0
-        });
-    }
-}
-
-function getAdditionalCostLines(sequence){
-    ensureSingleBlankAdditionalCost(sequence);
-    return additionalCostsBySequence[sequence.id];
-}
-
-function addAdditionalCostLine(){
-    const sequence = getSelectedSequence();
-    const lines = getAdditionalCostLines(sequence);
-
-    additionalCostsBySequence[sequence.id] = [
-        ...lines,
-        {
-            id: createId(),
-            label: "",
-            customLabel: "",
-            qty: 0,
-            unitCost: 0
-        }
-    ];
-
-    pricingSaved = false;
-    renderPricing(sequence);
-}
-
-function deleteAdditionalCostLine(id){
-    const sequence = getSelectedSequence();
-    let lines = getAdditionalCostLines(sequence).filter(line => line.id !== id);
-
-    if (!lines.length){
-        lines = [
-            {
-                id: createId(),
-                label: "",
-                customLabel: "",
-                qty: 0,
-                unitCost: 0
-            }
+      if (name === 'storein') {
+        setInputValue('scenarioLabel', 'Into Store Trial');
+        setInputValue('sequenceType', 'into-store');
+        setInputValue('packMode', 'none');
+        setInputValue('storeLoadVariant', 'slower');
+        setInputValue('furnitureVol', 850);
+        setInputValue('loftVol', 0);
+        setInputValue('loadRate', 125);
+        setInputValue('unloadRate', 132);
+        setInputValue('transitHours', 1);
+        setInputValue('transitMinutes', 15);
+        setInputValue('qty_ap', 0);
+        setInputValue('qty_cg', 0);
+        setInputValue('qty_books', 0);
+        setInputValue('qty_linen', 0);
+        setInputValue('qty_wr', 0);
+        setInputValue('svc_beds', 0);
+        setInputValue('svc_bunk', 0);
+        setInputValue('svc_custom_minutes', 0);
+        setInputValue('svc_custom_note', 'Store handling test');
+        setInputValue('svc_upright', 0);
+        setInputValue('svc_grand', 0);
+        setInputValue('svc_clock', 0);
+        setInputValue('svc_appliance', 0);
+        setInputValue('svc_crate', 0);
+        setInputValue('svc_dismantle', 0);
+        setInputValue('exportWrapVol', 0);
+        plannerRows = [
+          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Load and Travel', men: 3, vans: 1, hours: 8, nightsOut: true },
+          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Unload', men: 3, vans: 1, hours: 8, nightsOut: false }
         ];
-    }
-
-    additionalCostsBySequence[sequence.id] = lines;
-    pricingSaved = false;
-    renderPricing(sequence);
-}
-
-function updateAdditionalCostLine(id, field, value){
-    const sequence = getSelectedSequence();
-    const lines = getAdditionalCostLines(sequence);
-
-    additionalCostsBySequence[sequence.id] = lines.map(line => {
-        if (line.id !== id) return line;
-        if (field === "qty" || field === "unitCost"){
-            return { ...line, [field]: Number(value || 0) };
-        }
-        return { ...line, [field]: value };
-    });
-
-    pricingSaved = false;
-
-    if (field === "label"){
-        renderPricing(sequence);
+        renderLab();
         return;
-    }
+      }
 
-    renderAdditionalCosts(sequence);
-    updateCommercialDisplays(sequence);
-}
-
-function additionalLineTotal(line){
-    return Number(line.qty || 0) * Number(line.unitCost || 0);
-}
-
-function calcAdditionalCostsTotal(sequence){
-    return getAdditionalCostLines(sequence).reduce((sum, line) => {
-        if (!line.label) return sum;
-        return sum + additionalLineTotal(line);
-    }, 0);
-}
-
-function getCommercialTotals(sequence){
-    const coreCosts = getPricingLines(sequence).reduce((sum, line) => sum + lineTotal(line), 0);
-    const additionalCosts = calcAdditionalCostsTotal(sequence);
-    const totalCostBase = coreCosts;
-    const customerPrice = Number(document.getElementById("customerPriceInput")?.value || 0);
-    const grossMargin = customerPrice - totalCostBase;
-    const grossMarginPct = customerPrice > 0 ? ((grossMargin / customerPrice) * 100) : 0;
-
-    return {
-        coreCosts,
-        additionalCosts,
-        totalCostBase,
-        customerPrice,
-        grossMargin,
-        grossMarginPct
-    };
-}
-
-function updateCommercialDisplays(sequence){
-    const totals = getCommercialTotals(sequence);
-
-    document.getElementById("totalCosts").textContent = money(totals.totalCostBase);
-    document.getElementById("additionalCostsTotalDisplay").textContent = money(totals.additionalCosts);
-    document.getElementById("customerPriceDisplay").textContent = money(totals.customerPrice);
-    document.getElementById("grossMarginDisplay").textContent = money(totals.grossMargin);
-    document.getElementById("grossMarginSub").textContent = totals.customerPrice > 0
-        ? `${money(totals.grossMarginPct)}% margin on sell price${pricingSaved ? " · saved" : " · unsaved changes"}`
-        : `Customer price minus total costs${pricingSaved ? " · saved" : " · unsaved changes"}`;
-
-    renderCommercialSummary(sequence);
-    renderAdditionalCostsBreakdown(sequence);
-}
-
-function renderAdditionalCosts(sequence){
-    const lines = getAdditionalCostLines(sequence);
-    const grid = document.getElementById("additionalCostsGrid");
-    const choices = getCostChoices();
-
-    grid.innerHTML = `
-        ${lines.map((line) => `
-            <div class="additional-cost-row additional-cost-row-operational" data-additional-cost-id="${line.id}">
-                <div>
-                    <label class="mini-label">Select Optional Service</label>
-                    <select class="field" onchange="updateAdditionalCostLine('${line.id}','label',this.value)">
-                        <option value="" ${line.label === "" ? "selected" : ""}>Select optional service</option>
-                        ${choices.map(opt => `<option value="${opt}" ${opt === line.label ? "selected" : ""}>${opt}</option>`).join("")}
-                    </select>
-                </div>
-                <div>
-                    <label class="mini-label">Label Detail</label>
-                    <input class="field editable-detail" value="${escapeAttr(line.customLabel || (line.label === "Custom" ? "" : line.label || ""))}" onchange="updateAdditionalCostLine('${line.id}','customLabel',this.value)" placeholder="Optional label detail" />
-                </div>
-                <div>
-                    <label class="mini-label">Qty</label>
-                    <input type="number" min="0" step="0.01" class="field" value="${line.qty}" onchange="updateAdditionalCostLine('${line.id}','qty',this.value)" />
-                </div>
-                <div>
-                    <label class="mini-label">Unit Cost</label>
-                    <input type="number" min="0" step="0.01" class="field" value="${line.unitCost}" onchange="updateAdditionalCostLine('${line.id}','unitCost',this.value)" />
-                </div>
-                <div>
-                    <label class="mini-label">Line Total</label>
-                    <input class="field readonly" readonly value="${money(additionalLineTotal(line))}" />
-                </div>
-                <div>
-                    <label class="mini-label">&nbsp;</label>
-                    <button type="button" class="action-btn red" onclick="deleteAdditionalCostLine('${line.id}')">Delete</button>
-                </div>
-            </div>
-        `).join("")}
-    `;
-}
-
-function updatePricingLine(id, field, value){
-    const sequence = getSelectedSequence();
-    const lines = getPricingLines(sequence);
-
-    pricingBySequence[sequence.id] = lines.map(line => {
-        if (line.id !== id) return line;
-        if (field === "qty" || field === "unitCost"){
-            return { ...line, [field]: Number(value || 0) };
-        }
-        return { ...line, [field]: value };
-    });
-
-    normalisePricingLines(sequence);
-    pricingSaved = false;
-
-    if (field === "label"){
-        renderPricing(sequence);
+      if (name === 'storeout') {
+        setInputValue('scenarioLabel', 'Ex Store Trial');
+        setInputValue('sequenceType', 'ex-store');
+        setInputValue('packMode', 'none');
+        setInputValue('storeLoadVariant', 'standard');
+        setInputValue('furnitureVol', 700);
+        setInputValue('loftVol', 0);
+        setInputValue('loadRate', 125);
+        setInputValue('unloadRate', 132);
+        setInputValue('transitHours', 0);
+        setInputValue('transitMinutes', 45);
+        setInputValue('qty_ap', 0);
+        setInputValue('qty_cg', 0);
+        setInputValue('qty_books', 0);
+        setInputValue('qty_linen', 0);
+        setInputValue('qty_wr', 0);
+        setInputValue('svc_beds', 0);
+        setInputValue('svc_bunk', 0);
+        setInputValue('svc_custom_minutes', 0);
+        setInputValue('svc_custom_note', 'Ex store timing test');
+        setInputValue('svc_upright', 0);
+        setInputValue('svc_grand', 0);
+        setInputValue('svc_clock', 0);
+        setInputValue('svc_appliance', 0);
+        setInputValue('svc_crate', 0);
+        setInputValue('svc_dismantle', 0);
+        setInputValue('exportWrapVol', 0);
+        plannerRows = [
+          { id: plannerId(), groupId: plannerId(), dayPart: 'AM', task: 'Load', men: 3, vans: 1, hours: 4, nightsOut: false },
+          { id: plannerId(), groupId: plannerId(), dayPart: 'PM', task: 'Load and Deliver', men: 3, vans: 1, hours: 4, nightsOut: false }
+        ];
+        renderLab();
         return;
+      }
+
+      if (name === 'fullpack') {
+        setInputValue('scenarioLabel', 'Full Pack Trial');
+        setInputValue('sequenceType', 'domestic');
+        setInputValue('packMode', 'full');
+        setInputValue('storeLoadVariant', 'standard');
+        setInputValue('furnitureVol', 950);
+        setInputValue('loftVol', 100);
+        setInputValue('loadRate', 125);
+        setInputValue('unloadRate', 132);
+        setInputValue('transitHours', 1);
+        setInputValue('transitMinutes', 0);
+        setInputValue('qty_ap', 40);
+        setInputValue('qty_cg', 12);
+        setInputValue('qty_books', 20);
+        setInputValue('qty_linen', 14);
+        setInputValue('qty_wr', 8);
+        setInputValue('svc_beds', 4);
+        setInputValue('svc_bunk', 1);
+        setInputValue('svc_custom_minutes', 20);
+        setInputValue('svc_custom_note', 'Large mirror item');
+        setInputValue('svc_upright', 1);
+        setInputValue('svc_grand', 0);
+        setInputValue('svc_clock', 1);
+        setInputValue('svc_appliance', 3);
+        setInputValue('svc_crate', 2);
+        setInputValue('svc_dismantle', 3);
+        setInputValue('exportWrapVol', 120);
+        plannerRows = [
+          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Pack', men: 3, vans: 0, hours: 8, nightsOut: false },
+          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Pack and Load', men: 4, vans: 2, hours: 8, nightsOut: false },
+          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Unload', men: 4, vans: 2, hours: 8, nightsOut: false }
+        ];
+        renderLab();
+      }
     }
 
-    const updatedLine = pricingBySequence[sequence.id].find(line => line.id === id);
-    if (!updatedLine) return;
-
-    const row = document.querySelector(`[data-pricing-id="${id}"]`);
-    if (row){
-        const totalField = row.querySelector('[data-role="line-total"]');
-        if (totalField){
-            totalField.value = money(lineTotal(updatedLine));
-        }
-    }
-
-     updateCommercialDisplays(sequence);
-}
-
-function savePricingSet(){
-    pricingSaved = true;
-    renderPricing(getSelectedSequence());
-    updateCommercialDisplays(getSelectedSequence());
-}
-
-function renderPricing(sequence = getSelectedSequence()){
-    const lines = getPricingLines(sequence);
-
-        const mandatoryLines = lines.filter(line => MANDATORY_LABELS.includes(line.label));
-    const extraLines = lines.filter(line => !MANDATORY_LABELS.includes(line.label));
-
-    const extrasToRender = extraLines;
-
-    const grid = document.getElementById("pricingGrid");
-    grid.innerHTML = `
-                ${mandatoryLines.map((line) => `
-                        <div class="pricing-row" data-pricing-id="${line.id}">
-                <div>
-                                        <label class="mini-label">&nbsp;</label>
-                    <input class="field readonly" readonly value="${escapeAttr(line.label)}" />
-                </div>
-                <div></div>
-                <div>
-                    <label class="mini-label">Qty</label>
-                                        <input type="number" min="0" step="0.01" class="field" value="${line.qty}" onchange="updatePricingLine('${line.id}','qty',this.value)" />
-                </div>
-                <div>
-                    <label class="mini-label">Unit Cost</label>
-                                        <input type="number" min="0" step="0.01" class="field" value="${line.unitCost}" onchange="updatePricingLine('${line.id}','unitCost',this.value)" />
-                </div>
-                <div>
-                    <label class="mini-label">Line Total</label>
-                                        <input class="field readonly" readonly data-role="line-total" value="${money(lineTotal(line))}" />
-                </div>
-            </div>
-        `).join("")}
-
-        ${extrasToRender.map((line) => `
-                        <div class="core-extra-row" data-pricing-id="${line.id}">
-                <div>
-                    <label class="mini-label">Select Core Cost</label>
-                    <select class="field" onchange="updatePricingLine('${line.id}','label',this.value)">
-                        <option value="" ${line.label === "" ? "selected" : ""}>Select core cost</option>
-                        ${OPTIONAL_CHOICES.map(opt => `<option value="${opt}" ${opt === line.label ? "selected" : ""}>${opt}</option>`).join("")}
-                    </select>
-                </div>
-                <div>
-                    <label class="mini-label">Label Detail</label>
-<input class="field editable-detail" value="${escapeAttr(line.customLabel || (line.label === "Custom" ? "" : line.label || ""))}" oninput="updatePricingLine('${line.id}','customLabel',this.value)" placeholder="Optional label detail" />
-                </div>
-                <div>
-                    <label class="mini-label">Qty</label>
-                    <input type="number" min="0" step="0.01" class="field" value="${line.qty}" oninput="updatePricingLine('${line.id}','qty',this.value)" />
-                </div>
-                <div>
-                    <label class="mini-label">Unit Cost</label>
-                    <input type="number" min="0" step="0.01" class="field" value="${line.unitCost}" oninput="updatePricingLine('${line.id}','unitCost',this.value)" />
-                </div>
-                <div>
-                    <label class="mini-label">Line Total</label>
-                    <input class="field readonly" readonly data-role="line-total" value="${money(lineTotal(line))}" />
-                </div>
-                <div>
-                    <label class="mini-label">&nbsp;</label>
-                    <button type="button" class="action-btn red" onclick="deletePricingLine('${line.id}')">Delete</button>
-                </div>
-            </div>
-        `).join("")}
-    `;
-
-    updateCommercialDisplays(sequence);
-
-    renderAdditionalCosts(sequence);
-}
-
-function renderAll(){
-    renderSequenceSelect();
-    const sequence = getSelectedSequence();
-    const inventorySummary = summariseInventory(sequence);
-
-    renderSchedulePlanner(sequence);
-    renderScopeSnapshot(sequence, inventorySummary);
-    renderPricing(sequence);
-    renderAdditionalCosts(sequence);
-    renderCommercialSummary(sequence);
-    document.getElementById("quoteNotesInput").value = getQuoteNotes(sequence);
-    updateCommercialDisplays(sequence);
-}
-
-document.getElementById("addScheduleRowBtn").addEventListener("click", addScheduleRow);
-document.getElementById("copySchedulePlanBtn").addEventListener("click", copyPlanFromScheduleTab);
-document.getElementById("sequenceSelect").addEventListener("change", (e) => {
-    prototypeState.selectedSequenceId = e.target.value;
-    pricingSaved = false;
-    renderAll();
-});
-document.getElementById("savePricingBtn").addEventListener("click", savePricingSet);
-document.getElementById("createQuoteBtn").addEventListener("click", () => {
-    alert("Create Quote is ready to be wired into the quote output.");
-});
-document.getElementById("quoteNotesInput").addEventListener("input", (e) => updateQuoteNotes(e.target.value));
-
-renderAll();
-</script>
+    plannerRows = defaultPlannerRows();
+    loadPreset('domestic');
+  </script>
 </body>
 </html>
