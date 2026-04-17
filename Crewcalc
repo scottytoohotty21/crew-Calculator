@@ -30,10 +30,11 @@
       --shadow:0 10px 30px rgba(15,23,42,0.08);
     }
 
-    *{box-sizing:border-box;}
+    * { box-sizing:border-box; }
+
     body{
       margin:0;
-      font-family:Inter,Arial,sans-serif;
+      font-family:Inter, Arial, sans-serif;
       background:var(--slate-100);
       color:var(--navy);
       padding:16px;
@@ -66,7 +67,7 @@
 
     .layout{
       display:grid;
-      grid-template-columns:420px minmax(0,1fr);
+      grid-template-columns:430px minmax(0,1fr);
       gap:16px;
       align-items:start;
     }
@@ -100,7 +101,7 @@
       margin-top:4px;
     }
 
-    .panel-body{padding:16px;}
+    .panel-body{ padding:16px; }
 
     .section{
       border:1px solid var(--slate-200);
@@ -109,7 +110,7 @@
       background:var(--slate-50);
     }
 
-    .section + .section{margin-top:14px;}
+    .section + .section{ margin-top:14px; }
 
     .section-title{
       font-size:11px;
@@ -146,9 +147,9 @@
       box-shadow:0 0 0 3px rgba(59,130,246,0.08);
     }
 
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-    .summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+    .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .grid-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+    .summary-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
 
     .summary-card{
       background:#fff;
@@ -183,7 +184,11 @@
       line-height:1.35;
     }
 
-    .toolbar{display:flex;gap:10px;flex-wrap:wrap;}
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
 
     .action-btn{
       height:42px;
@@ -204,6 +209,12 @@
       color:#fff;
     }
 
+    .action-btn.delete{
+      background:var(--red-50);
+      border-color:var(--red-200);
+      color:var(--red-800);
+    }
+
     .document-block{
       background:#fff;
       border:1px solid var(--slate-200);
@@ -211,7 +222,7 @@
       padding:14px;
     }
 
-    .document-block + .document-block{margin-top:12px;}
+    .document-block + .document-block{ margin-top:12px; }
 
     .document-heading{
       font-size:10px;
@@ -221,7 +232,7 @@
       margin-bottom:8px;
     }
 
-    .document-lines{display:grid;gap:6px;}
+    .document-lines{ display:grid; gap:6px; }
 
     .document-line{
       font-size:11px;
@@ -230,19 +241,116 @@
       line-height:1.5;
     }
 
-    .validation-list{display:grid;gap:8px;margin-top:12px;}
-    .validation-item{border-radius:12px;padding:10px 12px;font-size:11px;font-weight:800;text-transform:uppercase;line-height:1.4;}
-    .validation-ok{background:var(--green-50);border:1px solid var(--green-200);color:var(--green-800);}
-    .validation-warn{background:var(--amber-50);border:1px solid var(--amber-200);color:var(--amber-800);}
-    .validation-error{background:var(--red-50);border:1px solid var(--red-200);color:var(--red-800);}
+    .validation-list{
+      display:grid;
+      gap:8px;
+      margin-top:12px;
+    }
 
-    .planner-shell{border:1px solid var(--slate-200);border-radius:16px;background:var(--slate-50);padding:14px;}
-    .planner-row{border:1px solid var(--slate-200);border-radius:14px;background:#fff;padding:12px;}
-    .planner-row + .planner-row{margin-top:10px;}
-    .planner-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;}
-    .planner-title{font-size:11px;font-weight:900;text-transform:uppercase;color:var(--navy);}
-    .planner-grid{display:grid;grid-template-columns:1.2fr 1fr .7fr .7fr .7fr;gap:10px;}
-    .planner-debug{margin-top:10px;padding-top:10px;border-top:1px solid var(--slate-200);font-size:10px;font-weight:800;text-transform:uppercase;color:var(--slate-400);line-height:1.45;}
+    .validation-item{
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      line-height:1.4;
+    }
+
+    .validation-ok{
+      background:var(--green-50);
+      border:1px solid var(--green-200);
+      color:var(--green-800);
+    }
+
+    .validation-warn{
+      background:var(--amber-50);
+      border:1px solid var(--amber-200);
+      color:var(--amber-800);
+    }
+
+    .validation-error{
+      background:var(--red-50);
+      border:1px solid var(--red-200);
+      color:var(--red-800);
+    }
+
+    .status-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      text-transform:uppercase;
+      line-height:1;
+    }
+
+    .status-green{
+      background:var(--green-50);
+      border:1px solid var(--green-200);
+      color:var(--green-800);
+    }
+
+    .status-amber{
+      background:var(--amber-50);
+      border:1px solid var(--amber-200);
+      color:var(--amber-800);
+    }
+
+    .status-red{
+      background:var(--red-50);
+      border:1px solid var(--red-200);
+      color:var(--red-800);
+    }
+
+    .planner-shell{
+      border:1px solid var(--slate-200);
+      border-radius:16px;
+      background:var(--slate-50);
+      padding:14px;
+    }
+
+    .planner-row{
+      border:1px solid var(--slate-200);
+      border-radius:14px;
+      background:#fff;
+      padding:12px;
+    }
+
+    .planner-row + .planner-row{ margin-top:10px; }
+
+    .planner-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .planner-title{
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      color:var(--navy);
+    }
+
+    .planner-grid{
+      display:grid;
+      grid-template-columns:1.2fr 1fr .75fr .75fr;
+      gap:10px;
+    }
+
+    .planner-debug{
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px solid var(--slate-200);
+      font-size:10px;
+      font-weight:800;
+      text-transform:uppercase;
+      color:var(--slate-400);
+      line-height:1.45;
+    }
 
     .note-card{
       background:var(--blue-50);
@@ -256,71 +364,89 @@
       line-height:1.45;
     }
 
-    @media (max-width: 980px){
-      .layout{grid-template-columns:1fr;}
-      .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    @media (max-width:980px){
+      .layout{ grid-template-columns:1fr; }
+      .summary-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
     }
 
-    @media (max-width: 700px){
-      .summary-grid,.grid-2,.grid-3,.planner-grid{grid-template-columns:1fr;}
+    @media (max-width:700px){
+      .summary-grid,
+      .grid-2,
+      .grid-3,
+      .planner-grid{
+        grid-template-columns:1fr;
+      }
     }
   </style>
 </head>
 <body>
   <div class="topbar">
     <div class="title">Photon Schedule Lab</div>
-    <div class="subtitle">Standalone calculator sandbox for testing schedule logic outside the main app</div>
+    <div class="subtitle">Standalone sandbox for schedule rules before moving them back into Photon</div>
   </div>
 
   <div class="layout">
     <div class="panel">
       <div class="panel-head">
         <div class="panel-title">Inputs</div>
-        <div class="panel-subtitle">Use presets, tweak values, test logic safely</div>
+        <div class="panel-subtitle">Sequence rules, planner, travel time and labour assumptions</div>
       </div>
       <div class="panel-body">
+
         <div class="section">
           <div class="section-title">Scenario Presets</div>
           <div class="toolbar">
             <button type="button" class="action-btn" onclick="loadPreset('domestic')">Domestic</button>
-            <button type="button" class="action-btn" onclick="loadPreset('storein')">Into Store</button>
-            <button type="button" class="action-btn" onclick="loadPreset('storeout')">Ex Store</button>
-            <button type="button" class="action-btn" onclick="loadPreset('fullpack')">Full Pack</button>
+            <button type="button" class="action-btn" onclick="loadPreset('intoStore')">Into Store</button>
+            <button type="button" class="action-btn" onclick="loadPreset('exStore')">Ex Store</button>
+            <button type="button" class="action-btn" onclick="loadPreset('tightDomestic')">Tight Domestic</button>
             <button type="button" class="action-btn primary" onclick="loadPreset('blank')">Blank</button>
           </div>
         </div>
 
         <div class="section">
-          <div class="section-title">Move Setup</div>
+          <div class="section-title">Sequence Type</div>
           <div class="grid-2">
             <div>
               <label class="mini-label">Scenario Label</label>
-              <input id="scenarioLabel" type="text" class="field" value="Domestic Baseline" oninput="renderLab()" />
+              <input id="scenarioLabel" type="text" class="field" value="Domestic Test" oninput="renderLab()" />
             </div>
             <div>
               <label class="mini-label">Sequence Type</label>
-              <select id="sequenceType" class="field" onchange="renderLab()">
+              <select id="sequenceType" class="field" onchange="handleSequenceTypeChange()">
                 <option value="domestic">Domestic</option>
                 <option value="into-store">Into Store</option>
                 <option value="ex-store">Ex Store</option>
-                <option value="direct-store">Direct / Store</option>
               </select>
             </div>
             <div>
-              <label class="mini-label">Packing Mode</label>
-              <select id="packMode" class="field" onchange="renderLab()">
-                <option value="none">No Packing</option>
-                <option value="cg">CG Packing</option>
-                <option value="full">Full Packing</option>
-              </select>
-            </div>
-            <div>
-              <label class="mini-label">Store Load Variant</label>
-              <select id="storeLoadVariant" class="field" onchange="renderLab()">
+              <label class="mini-label">Loading Variant</label>
+              <select id="loadingVariant" class="field" onchange="renderLab()">
                 <option value="standard">Standard</option>
-                <option value="slower">Slower Store Handling</option>
-                <option value="faster">Faster Store Handling</option>
+                <option value="slow">Slow</option>
               </select>
+            </div>
+            <div>
+              <label class="mini-label">Working Day Max (Hours)</label>
+              <input id="workingDayHours" type="number" min="1" class="field" value="10" oninput="renderLab()" />
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Travel Times</div>
+          <div class="grid-3">
+            <div>
+              <label class="mini-label">Depot → Collection (mins)</label>
+              <input id="travelDepotToCollection" type="number" min="0" class="field" value="30" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Collection → Delivery (mins)</label>
+              <input id="travelCollectionToDelivery" type="number" min="0" class="field" value="45" oninput="renderLab()" />
+            </div>
+            <div>
+              <label class="mini-label">Delivery → Depot (mins)</label>
+              <input id="travelDeliveryToDepot" type="number" min="0" class="field" value="35" oninput="renderLab()" />
             </div>
           </div>
         </div>
@@ -337,20 +463,12 @@
               <input id="loftVol" type="number" min="0" class="field" value="0" oninput="renderLab()" />
             </div>
             <div>
-              <label class="mini-label">Loading Rate (CUFT / Man-Hour)</label>
-              <input id="loadRate" type="number" min="1" class="field" value="125" oninput="renderLab()" />
-            </div>
-            <div>
               <label class="mini-label">Unloading Rate (CUFT / Man-Hour)</label>
               <input id="unloadRate" type="number" min="1" class="field" value="132" oninput="renderLab()" />
             </div>
             <div>
-              <label class="mini-label">Transit Hours</label>
-              <input id="transitHours" type="number" min="0" class="field" value="0" oninput="renderLab()" />
-            </div>
-            <div>
-              <label class="mini-label">Transit Minutes</label>
-              <input id="transitMinutes" type="number" min="0" max="59" class="field" value="30" oninput="renderLab()" />
+              <label class="mini-label">Transit Buffer (mins after job)</label>
+              <input id="dayBufferMinutes" type="number" min="0" class="field" value="30" oninput="renderLab()" />
             </div>
           </div>
         </div>
@@ -393,7 +511,7 @@
               <input id="svc_bunk" type="number" min="0" class="field" value="0" oninput="renderLab()" />
             </div>
             <div>
-              <label class="mini-label">Custom Minutes (Each Side)</label>
+              <label class="mini-label">Custom Minutes (each side)</label>
               <input id="svc_custom_minutes" type="number" min="0" class="field" value="0" oninput="renderLab()" />
             </div>
             <div>
@@ -435,7 +553,7 @@
           <div class="section-title">Manual Planner</div>
           <div class="planner-shell">
             <div class="toolbar" style="margin-bottom:12px;">
-              <button type="button" class="action-btn" onclick="addPlannerRow()">Add Planner Day</button>
+              <button type="button" class="action-btn" onclick="addScheduleDay()">Add Day</button>
               <button type="button" class="action-btn" onclick="resetPlannerRows()">Reset Planner</button>
             </div>
             <div id="plannerRows"></div>
@@ -443,22 +561,30 @@
         </div>
 
         <div class="note-card">
-          Use this file to experiment with store logic, load-rate variations and validation rules before copying final calculator functions back into Photon.
+          This lab is for schedule rules only. Keep changing the logic here until the results feel right, then move the final functions back into Photon.
         </div>
+
       </div>
     </div>
 
     <div class="panel">
       <div class="panel-head">
         <div class="panel-title">Live Results</div>
-        <div class="panel-subtitle">Mirror the main app, then adjust logic here first</div>
+        <div class="panel-subtitle">Sequence rules, time fit, and explainable traffic-light output</div>
       </div>
       <div class="panel-body">
+
+        <div class="document-block" style="margin-bottom:12px;">
+          <div class="document-heading">Assessment</div>
+          <div id="assessmentStatus"></div>
+          <div class="document-lines" id="assessmentReasons" style="margin-top:12px;"></div>
+        </div>
+
         <div class="summary-grid">
           <div class="summary-card">
             <div class="summary-label">Packing Mode</div>
             <div class="summary-value" id="summaryMode">—</div>
-            <div class="summary-sub">No packing, CG, or full</div>
+            <div class="summary-sub">No packing / CG / full</div>
           </div>
           <div class="summary-card">
             <div class="summary-label">Total Volume</div>
@@ -471,54 +597,34 @@
             <div class="summary-sub">Cartons only</div>
           </div>
           <div class="summary-card">
-            <div class="summary-label">Packing Man Days</div>
-            <div class="summary-value" id="summaryPackDays">0.0</div>
-            <div class="summary-sub">Based on 8 hours</div>
-          </div>
-          <div class="summary-card">
             <div class="summary-label">Special Labour Hrs</div>
             <div class="summary-value" id="summarySpecialHours">0.00</div>
             <div class="summary-sub">Load + unload side</div>
           </div>
           <div class="summary-card">
-            <div class="summary-label">Loading Man Hrs</div>
+            <div class="summary-label">Load Man Hrs</div>
             <div class="summary-value" id="summaryLoadHours">0.00</div>
-            <div class="summary-sub">Volume + load specials</div>
+            <div class="summary-sub">Based on sequence type</div>
           </div>
           <div class="summary-card">
-            <div class="summary-label">Loading Man Days</div>
-            <div class="summary-value" id="summaryLoadDays">0.0</div>
-            <div class="summary-sub">Based on 8 hours</div>
-          </div>
-          <div class="summary-card">
-            <div class="summary-label">Load Completion Crew</div>
-            <div class="summary-value" id="summaryLoadCompletion">0.0</div>
-            <div class="summary-sub">Crew for 4-hour load window</div>
-          </div>
-          <div class="summary-card">
-            <div class="summary-label">Unloading Man Hrs</div>
+            <div class="summary-label">Unload Man Hrs</div>
             <div class="summary-value" id="summaryUnloadHours">0.00</div>
-            <div class="summary-sub">Volume + unload specials</div>
+            <div class="summary-sub">Zero for into store</div>
           </div>
           <div class="summary-card">
-            <div class="summary-label">Unloading Man Days</div>
-            <div class="summary-value" id="summaryUnloadDays">0.0</div>
-            <div class="summary-sub">Based on 8 hours</div>
+            <div class="summary-label">Travel Hrs</div>
+            <div class="summary-value" id="summaryTravelHours">0.00</div>
+            <div class="summary-sub">Depot / collection / delivery / depot</div>
           </div>
           <div class="summary-card">
-            <div class="summary-label">Unload Completion Crew</div>
-            <div class="summary-value" id="summaryUnloadCompletion">0.0</div>
-            <div class="summary-sub">Crew for 4-hour unload window</div>
-          </div>
-          <div class="summary-card">
-            <div class="summary-label">Store Variant</div>
-            <div class="summary-value" id="summaryStoreVariant">—</div>
-            <div class="summary-sub">Use this to test rule changes</div>
+            <div class="summary-label">Total Day Hrs</div>
+            <div class="summary-value" id="summaryTotalDayHours">0.00</div>
+            <div class="summary-sub">Work + travel + buffer</div>
           </div>
         </div>
 
         <div class="document-block" style="margin-top:12px;">
-          <div class="document-heading">Current Logic Summary</div>
+          <div class="document-heading">Logic Summary</div>
           <div class="document-lines" id="logicText"></div>
         </div>
 
@@ -528,22 +634,49 @@
         </div>
 
         <div class="document-block">
-          <div class="document-heading">Scenario Notes</div>
-          <div class="document-lines" id="scenarioNotes"></div>
+          <div class="document-heading">Planner Capacity Check</div>
+          <div class="document-lines" id="plannerCapacityText"></div>
         </div>
 
         <div class="validation-list" id="validationList"></div>
+
       </div>
     </div>
   </div>
 
   <script>
-    const BOX_VOLUMES = { ap:4, cg:4, books:2, linen:5, wr:10 };
-    const BOX_RATES = { ap:10, cg:4, books:15, linen:10, wr:8 };
-    const MORNING_LOAD_RATE = 125;
-    const AFTERNOON_LOAD_RATE_AFTER_AM = 55;
+    const BOX_VOLUMES = {
+      ap: 4,
+      cg: 4,
+      books: 2,
+      linen: 5,
+      wr: 10
+    };
+
+    const BOX_RATES = {
+      ap: 10,
+      cg: 4,
+      books: 15,
+      linen: 10,
+      wr: 8
+    };
+
+    const DAY_PARTS = ["Full Day", "AM", "PM"];
+    const TASK_OPTIONS = [
+      "Pack",
+      "Load",
+      "Unload",
+      "Pack and Load",
+      "Load and Deliver",
+      "Load and Travel",
+      "Deliver and Crew Return"
+    ];
 
     let plannerRows = [];
+
+    function createId(){
+      return "row_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7);
+    }
 
     function round2(value){
       return Math.round((Number(value || 0) + Number.EPSILON) * 100) / 100;
@@ -551,16 +684,6 @@
 
     function round1(value){
       return Math.round((Number(value || 0) + Number.EPSILON) * 10) / 10;
-    }
-
-    function plannerId(){
-      return 'plan_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
-    }
-
-    function defaultPlannerRows(){
-      return [
-        { id: plannerId(), dayPart: 'Full Day', task: 'Load', men: 3, vans: 1, hours: 8, nightsOut: false }
-      ];
     }
 
     function getNum(id){
@@ -571,74 +694,315 @@
 
     function getText(id){
       const el = document.getElementById(id);
-      return el ? String(el.value || '').trim() : '';
+      return el ? String(el.value || "").trim() : "";
+    }
+
+    function setInputValue(id, value){
+      const el = document.getElementById(id);
+      if (el) el.value = value;
+    }
+
+    function getDefaultPlannerRows(){
+      return [
+        {
+          id: createId(),
+          groupId: createId(),
+          dayPart: "Full Day",
+          task: "Load",
+          men: 3,
+          vans: 1,
+          hours: 8
+        }
+      ];
+    }
+
+    function resetPlannerRows(){
+      plannerRows = getDefaultPlannerRows();
+      renderLab();
+    }
+
+    function addScheduleDay(){
+      const groupId = createId();
+      plannerRows.push({
+        id: createId(),
+        groupId: groupId,
+        dayPart: "Full Day",
+        task: "Load",
+        men: 2,
+        vans: 1,
+        hours: 8
+      });
+      renderLab();
+    }
+
+    function removeScheduleDay(rowId){
+      const row = plannerRows.find(function(item){
+        return item.id === rowId;
+      });
+
+      if (!row) return;
+
+      plannerRows = plannerRows.filter(function(item){
+        return item.groupId !== row.groupId;
+      });
+
+      if (!plannerRows.length){
+        plannerRows = getDefaultPlannerRows();
+      }
+
+      renderLab();
+    }
+
+    function ensurePmPair(row){
+      const pairExists = plannerRows.some(function(item){
+        return item.groupId === row.groupId && item.dayPart === "PM";
+      });
+
+      if (!pairExists){
+        plannerRows.push({
+          id: createId(),
+          groupId: row.groupId,
+          dayPart: "PM",
+          task: "Unload",
+          men: row.men,
+          vans: row.vans,
+          hours: 4
+        });
+      }
+    }
+
+    function normalizeGroup(groupId){
+      const rows = plannerRows.filter(function(item){
+        return item.groupId === groupId;
+      });
+
+      const hasAm = rows.some(function(item){ return item.dayPart === "AM"; });
+      const hasPm = rows.some(function(item){ return item.dayPart === "PM"; });
+      const hasFull = rows.some(function(item){ return item.dayPart === "Full Day"; });
+
+      if (hasAm && !hasPm){
+        const amRow = rows.find(function(item){ return item.dayPart === "AM"; });
+        if (amRow) ensurePmPair(amRow);
+      }
+
+      if (hasFull && rows.length > 1){
+        plannerRows = plannerRows.filter(function(item){
+          return !(item.groupId === groupId && item.dayPart !== "Full Day");
+        });
+      }
+    }
+
+    function updatePlannerRow(id, field, value){
+      plannerRows = plannerRows.map(function(row){
+        if (row.id !== id) return row;
+
+        if (field === "men" || field === "vans"){
+          return { ...row, [field]: Math.max(0, Number(value) || 0) };
+        }
+
+        if (field === "dayPart"){
+          const nextHours = value === "Full Day" ? 8 : 4;
+          return { ...row, dayPart: value, hours: nextHours };
+        }
+
+        return { ...row, [field]: value };
+      });
+
+      const row = plannerRows.find(function(item){ return item.id === id; });
+
+      if (row && field === "dayPart"){
+        if (value === "AM"){
+          const updated = plannerRows.find(function(item){ return item.id === id; });
+          updated.hours = 4;
+          updated.task = "Load";
+          ensurePmPair(updated);
+        }
+
+        if (value === "PM"){
+          const updated = plannerRows.find(function(item){ return item.id === id; });
+          updated.hours = 4;
+          updated.task = "Unload";
+
+          const hasAm = plannerRows.some(function(item){
+            return item.groupId === updated.groupId && item.dayPart === "AM";
+          });
+
+          if (!hasAm){
+            plannerRows.push({
+              id: createId(),
+              groupId: updated.groupId,
+              dayPart: "AM",
+              task: "Load",
+              men: updated.men,
+              vans: updated.vans,
+              hours: 4
+            });
+          }
+        }
+
+        if (value === "Full Day"){
+          plannerRows = plannerRows.filter(function(item){
+            return item.groupId !== row.groupId || item.id === row.id;
+          });
+
+          plannerRows = plannerRows.map(function(item){
+            if (item.id !== row.id) return item;
+            return {
+              ...item,
+              dayPart: "Full Day",
+              hours: 8,
+              task: item.task === "Unload" ? "Load and Deliver" : item.task
+            };
+          });
+        }
+
+        normalizeGroup(row.groupId);
+      }
+
+      renderLab();
+    }
+
+    function renderPlannerRows(){
+      const wrap = document.getElementById("plannerRows");
+      if (!wrap) return;
+
+      const groups = [];
+      const seen = new Set();
+
+      plannerRows.forEach(function(row){
+        if (!seen.has(row.groupId)){
+          seen.add(row.groupId);
+          groups.push(row.groupId);
+        }
+      });
+
+      wrap.innerHTML = groups.map(function(groupId, groupIndex){
+        const rows = plannerRows
+          .filter(function(row){ return row.groupId === groupId; })
+          .sort(function(a, b){
+            const order = { "Full Day": 0, "AM": 1, "PM": 2 };
+            return order[a.dayPart] - order[b.dayPart];
+          });
+
+        return rows.map(function(row, rowIndex){
+          return `
+            <div class="planner-row">
+              <div class="planner-head">
+                <div class="planner-title">Day ${groupIndex + 1}${rows.length > 1 ? ` · ${row.dayPart}` : ""}</div>
+                ${rowIndex === 0 && plannerRows.length > 1 ? `<button type="button" class="action-btn delete" onclick="removeScheduleDay('${row.id}')">Delete</button>` : ""}
+              </div>
+
+              <div class="planner-grid">
+                <div>
+                  <label class="mini-label">Task</label>
+                  <select class="field" onchange="updatePlannerRow('${row.id}','task',this.value)">
+                    ${TASK_OPTIONS.map(function(opt){
+                      return `<option value="${opt}" ${row.task === opt ? "selected" : ""}>${opt}</option>`;
+                    }).join("")}
+                  </select>
+                </div>
+
+                <div>
+                  <label class="mini-label">Day Part</label>
+                  <select class="field" onchange="updatePlannerRow('${row.id}','dayPart',this.value)">
+                    ${DAY_PARTS.map(function(opt){
+                      return `<option value="${opt}" ${row.dayPart === opt ? "selected" : ""}>${opt}</option>`;
+                    }).join("")}
+                  </select>
+                </div>
+
+                <div>
+                  <label class="mini-label">Men</label>
+                  <input type="number" min="0" class="field" value="${Number(row.men || 0)}" oninput="updatePlannerRow('${row.id}','men',this.value)" />
+                </div>
+
+                <div>
+                  <label class="mini-label">Vans</label>
+                  <input type="number" min="0" class="field" value="${Number(row.vans || 0)}" oninput="updatePlannerRow('${row.id}','vans',this.value)" />
+                </div>
+              </div>
+
+              <div class="planner-debug">
+                ${row.hours} hrs · ${Number(row.men || 0)} men · ${Number(row.vans || 0)} vans · ${Number(row.hours || 0) * Number(row.men || 0)} man-hours
+              </div>
+            </div>
+          `;
+        }).join("");
+      }).join("");
     }
 
     function getPackModeLabel(packOption){
-      if (packOption === 'none') return 'No';
-      if (packOption === 'cg') return 'CG';
-      return 'Full';
+      if (packOption === "none") return "No";
+      if (packOption === "cg") return "CG";
+      return "Full";
     }
 
     function getIncludedKeys(packOption){
-      if (packOption === 'none') return [];
-      if (packOption === 'cg') return ['cg'];
-      return ['ap','cg','books','linen','wr'];
+      if (packOption === "none") return [];
+      if (packOption === "cg") return ["cg"];
+      return ["ap", "cg", "books", "linen", "wr"];
     }
 
-    function getStoreLoadMultiplier(sequenceType, variant){
-      if (sequenceType !== 'into-store' && sequenceType !== 'ex-store' && sequenceType !== 'direct-store') {
-        return 1;
-      }
-      if (variant === 'slower') return 0.8;
-      if (variant === 'faster') return 1.15;
-      return 1;
-    }
+    function buildState(){
+      const sequenceType = getText("sequenceType") || "domestic";
 
-    function getState(){
+      const travelDepotToCollection = getNum("travelDepotToCollection");
+      const travelCollectionToDelivery = getNum("travelCollectionToDelivery");
+      const travelDeliveryToDepot = getNum("travelDeliveryToDepot");
+
       return {
-        label: getText('scenarioLabel'),
-        sequenceType: getText('sequenceType') || 'domestic',
-        storeLoadVariant: getText('storeLoadVariant') || 'standard',
-        packOption: getText('packMode') || 'none',
-        furnitureVol: getNum('furnitureVol'),
-        loftVol: getNum('loftVol'),
-        loadRate: getNum('loadRate') || 125,
-        unloadRate: getNum('unloadRate') || 132,
-        transitHours: getNum('transitHours'),
-        transitMinutes: getNum('transitMinutes'),
+        label: getText("scenarioLabel"),
+        sequenceType: sequenceType,
+        loadingVariant: getText("loadingVariant") || "standard",
+        workingDayHours: getNum("workingDayHours") || 10,
+        dayBufferMinutes: getNum("dayBufferMinutes") || 30,
+
+        furnitureVol: getNum("furnitureVol"),
+        loftVol: getNum("loftVol"),
+        unloadRate: getNum("unloadRate") || 132,
+
+        packOption: getText("packMode") || "none",
         qty: {
-          ap: getNum('qty_ap'),
-          cg: getNum('qty_cg'),
-          books: getNum('qty_books'),
-          linen: getNum('qty_linen'),
-          wr: getNum('qty_wr')
+          ap: getNum("qty_ap"),
+          cg: getNum("qty_cg"),
+          books: getNum("qty_books"),
+          linen: getNum("qty_linen"),
+          wr: getNum("qty_wr")
         },
-        boxVolumes: BOX_VOLUMES,
+
+        travel: {
+          depotToCollection: travelDepotToCollection,
+          collectionToDelivery: sequenceType === "into-store" ? 0 : travelCollectionToDelivery,
+          deliveryToDepot: travelDeliveryToDepot
+        },
+
         special: {
-          beds: getNum('svc_beds'),
-          bunk: getNum('svc_bunk'),
-          customMinutes: getNum('svc_custom_minutes'),
-          customNote: getText('svc_custom_note'),
-          upright: getNum('svc_upright'),
-          grand: getNum('svc_grand'),
-          clock: getNum('svc_clock'),
-          appliance: getNum('svc_appliance'),
-          crate: getNum('svc_crate'),
-          dismantle: getNum('svc_dismantle')
+          beds: getNum("svc_beds"),
+          bunk: getNum("svc_bunk"),
+          customMinutes: getNum("svc_custom_minutes"),
+          customNote: getText("svc_custom_note"),
+          upright: getNum("svc_upright"),
+          grand: getNum("svc_grand"),
+          clock: getNum("svc_clock"),
+          appliance: getNum("svc_appliance"),
+          crate: getNum("svc_crate"),
+          dismantle: getNum("svc_dismantle")
         },
-        exportWrapVol: getNum('exportWrapVol'),
+
+        exportWrapVol: getNum("exportWrapVol"),
         plannerRows: plannerRows.slice()
       };
     }
 
     function calcPacking(state){
       const includedKeys = getIncludedKeys(state.packOption);
-      const packHours = Object.keys(BOX_RATES).reduce((sum, key) => {
+
+      const packHours = Object.keys(BOX_RATES).reduce(function(sum, key){
         const qty = state.qty[key] || 0;
         if (!includedKeys.includes(key)) return sum;
         return sum + (qty / BOX_RATES[key]);
       }, 0);
+
       return {
         packHours: round2(packHours),
         packDays: round1(packHours / 8)
@@ -646,18 +1010,17 @@
     }
 
     function calcBoxVolume(state){
-      return Object.keys(state.qty).reduce((sum, key) => {
-        return sum + ((state.qty[key] || 0) * (state.boxVolumes[key] || 0));
+      return Object.keys(state.qty).reduce(function(sum, key){
+        return sum + ((state.qty[key] || 0) * (BOX_VOLUMES[key] || 0));
       }, 0);
     }
 
     function calcSpecialLabour(state){
       const includedBeds = 2;
       const includedExportWrapVol = 50;
+
       const extraBeds = Math.max(0, state.special.beds - includedBeds);
       const extraExportWrapVol = Math.max(0, state.exportWrapVol - includedExportWrapVol);
-      const transitTotalMinutes = (state.transitHours * 60) + state.transitMinutes;
-      const extraTransitMinutes = Math.max(0, transitTotalMinutes - 30);
 
       const loadMinutes =
         (extraBeds * 15) +
@@ -673,21 +1036,23 @@
         ((extraExportWrapVol / 100) * 25);
 
       const unloadMinutes =
-        (extraBeds * 15) +
-        (state.special.bunk * 30) +
-        (state.special.customMinutes > 0 ? state.special.customMinutes : 0) +
-        (state.special.upright * 25) +
-        (state.special.grand * 60) +
-        (state.special.clock * 30) +
-        (state.special.appliance * 30) +
-        (state.special.crate * 15) +
-        extraTransitMinutes;
+        state.sequenceType === "into-store"
+          ? 0
+          : (
+              (extraBeds * 15) +
+              (state.special.bunk * 30) +
+              (state.special.customMinutes > 0 ? state.special.customMinutes : 0) +
+              (state.special.upright * 25) +
+              (state.special.grand * 60) +
+              (state.special.clock * 30) +
+              (state.special.appliance * 30) +
+              (state.special.crate * 15)
+            );
 
       return {
         specialHours: round2((loadMinutes + unloadMinutes) / 60),
         loadSideHours: round2(loadMinutes / 60),
         unloadSideHours: round2(unloadMinutes / 60),
-        extraTransitHours: round2(extraTransitMinutes / 60),
         breakdown: {
           beds: round2((extraBeds * 30) / 60),
           dismantle: round2((state.special.dismantle * 15) / 60),
@@ -700,507 +1065,705 @@
           crate: round2((state.special.crate * 30) / 60),
           loft: round2(((state.loftVol / 100) * 20) / 60),
           exportWrap: round2(((extraExportWrapVol / 100) * 25) / 60),
-          transit: round2(extraTransitMinutes / 60),
-          includedBeds,
-          includedExportWrapVol
+          includedBeds: includedBeds,
+          includedExportWrapVol: includedExportWrapVol
         }
       };
     }
 
-    function calcLoading(totalVolume, loadRate, loadSideSpecialHours, state){
-      const multiplier = getStoreLoadMultiplier(state.sequenceType, state.storeLoadVariant);
-      const effectiveRate = round2(loadRate * multiplier);
-      const volumeHours = totalVolume / effectiveRate;
-      const totalHours = volumeHours + loadSideSpecialHours;
+    function getVariantMultiplier(state){
+      if (state.loadingVariant === "slow") return 0.8;
+      return 1;
+    }
+
+    function calcDomesticLoadHours(volume, men, variantMultiplier){
+      if (men <= 0 || volume <= 0) return 0;
+
+      const firstBandHours = 4 * men;
+      const firstBandVolume = firstBandHours * 125 * variantMultiplier;
+
+      if (volume <= firstBandVolume){
+        return volume / (125 * variantMultiplier);
+      }
+
+      const remainingVolume = volume - firstBandVolume;
+      const secondBandRate = 54 * variantMultiplier;
+
+      return firstBandHours + (remainingVolume / secondBandRate);
+    }
+
+    function calcSequenceLoadHours(state, totalVolume, men){
+      const variantMultiplier = getVariantMultiplier(state);
+
+      if (state.sequenceType === "domestic"){
+        return round2(calcDomesticLoadHours(totalVolume, men, variantMultiplier));
+      }
+
+      if (state.sequenceType === "into-store"){
+        const rate = 66 * variantMultiplier;
+        return round2(totalVolume / (rate * Math.max(1, men) / Math.max(1, men)));
+      }
+
+      if (state.sequenceType === "ex-store"){
+        const rate = 125 * variantMultiplier;
+        return round2(totalVolume / (rate * Math.max(1, men) / Math.max(1, men)));
+      }
+
+      return 0;
+    }
+
+    function calcCrewBasedLoadHours(state, totalVolume){
+      const totalMen = getPlannerEffectiveMenForTask(state.plannerRows, ["Load", "Pack and Load", "Load and Deliver", "Load and Travel"]);
+      if (totalMen <= 0) return 0;
+
+      if (state.sequenceType === "domestic"){
+        return round2(calcDomesticLoadHours(totalVolume, totalMen, getVariantMultiplier(state)));
+      }
+
+      const ratePerMan =
+        state.sequenceType === "into-store"
+          ? 66 * getVariantMultiplier(state)
+          : 125 * getVariantMultiplier(state);
+
+      return round2(totalVolume / (ratePerMan * totalMen));
+    }
+
+    function calcCrewBasedUnloadHours(state, totalVolume){
+      if (state.sequenceType === "into-store") return 0;
+
+      const totalMen = getPlannerEffectiveMenForTask(state.plannerRows, ["Unload", "Load and Deliver", "Deliver and Crew Return"]);
+      if (totalMen <= 0) return 0;
+
+      return round2(totalVolume / (state.unloadRate * totalMen));
+    }
+
+    function getPlannerEffectiveMenForTask(rows, taskNames){
+      const groupMap = {};
+
+      rows.forEach(function(row){
+        if (!taskNames.includes(row.task)) return;
+        if (!groupMap[row.groupId]) groupMap[row.groupId] = 0;
+        groupMap[row.groupId] = Math.max(groupMap[row.groupId], Number(row.men || 0));
+      });
+
+      return Object.values(groupMap).reduce(function(sum, value){
+        return sum + Number(value || 0);
+      }, 0);
+    }
+
+    function calcPlannerCapacityHours(rows){
+      let pack = 0;
+      let load = 0;
+      let unload = 0;
+
+      rows.forEach(function(row){
+        const capacity = Number(row.men || 0) * Number(row.hours || 0);
+
+        if (row.task === "Pack") pack += capacity;
+        if (row.task === "Load") load += capacity;
+        if (row.task === "Unload") unload += capacity;
+        if (row.task === "Pack and Load"){
+          pack += capacity / 2;
+          load += capacity / 2;
+        }
+        if (row.task === "Load and Deliver" || row.task === "Load and Travel"){
+          load += capacity;
+        }
+        if (row.task === "Deliver and Crew Return"){
+          unload += capacity;
+        }
+      });
+
       return {
-        effectiveRate,
-        hours: round2(totalHours),
-        days: round1(totalHours / 8),
-        completionCrew: round1(totalHours / 4),
-        volumeHours: round2(volumeHours)
+        pack: round2(pack),
+        load: round2(load),
+        unload: round2(unload)
       };
     }
 
-    function calcUnloading(totalVolume, unloadRate, unloadSideSpecialHours, state){
-      const multiplier = state.sequenceType === 'ex-store' ? getStoreLoadMultiplier(state.sequenceType, state.storeLoadVariant) : 1;
-      const effectiveRate = round2(unloadRate * multiplier);
-      const volumeHours = totalVolume / effectiveRate;
-      const totalHours = volumeHours + unloadSideSpecialHours;
+    function calcTravelHours(state){
+      const totalMinutes =
+        Number(state.travel.depotToCollection || 0) +
+        Number(state.travel.collectionToDelivery || 0) +
+        Number(state.travel.deliveryToDepot || 0);
+
       return {
-        effectiveRate,
-        hours: round2(totalHours),
-        days: round1(totalHours / 8),
-        completionCrew: round1(totalHours / 4),
-        volumeHours: round2(volumeHours)
+        totalMinutes: totalMinutes,
+        totalHours: round2(totalMinutes / 60)
       };
     }
 
-    function calcScheduleValidation(packing, loading, unloading, special, state){
-      const required = {
-        Pack: packing.packHours,
-        Load: loading.hours,
-        Unload: unloading.hours
+    function calcTotalDayHours(packing, loadHours, unloadHours, special, travel, state){
+      const bufferHours = round2((Number(state.dayBufferMinutes || 0)) / 60);
+      const total =
+        Number(packing.packHours || 0) +
+        Number(loadHours || 0) +
+        Number(unloadHours || 0) +
+        Number(special.loadSideHours || 0) +
+        Number(special.unloadSideHours || 0) +
+        Number(travel.totalHours || 0) +
+        bufferHours;
+
+      return {
+        totalHours: round2(total),
+        bufferHours: bufferHours
       };
-
-      const allocated = { Pack: 0, Load: 0, Unload: 0 };
-      let sharedPackLoadPool = 0;
-      let sharedLoadUnloadPool = 0;
-
-      const groups = {};
-      state.plannerRows.forEach(function(day){
-        const key = day.groupId || day.id;
-        if (!groups[key]) groups[key] = [];
-        groups[key].push(day);
-      });
-
-      Object.values(groups).forEach(function(rows){
-        const hasAmLoadish = rows.some(day => day.dayPart === 'AM' && ['Load','Pack and Load','Load and Deliver','Load and Travel'].includes(day.task));
-
-        rows.forEach(function(day){
-          const men = Number(day.men || 0);
-          const hours = Number(day.hours || 0);
-          const capacity = men * hours;
-
-          switch(day.task){
-            case 'Pack':
-              allocated.Pack += capacity;
-              break;
-            case 'Unload':
-            case 'Deliver and Crew Return':
-              allocated.Unload += capacity;
-              break;
-            case 'Pack and Load':
-              if (day.dayPart === 'AM') {
-                sharedPackLoadPool += capacity;
-              } else if (day.dayPart === 'PM' && hasAmLoadish) {
-                const pmLoadHours = round2((men * hours * AFTERNOON_LOAD_RATE_AFTER_AM) / state.loadRate);
-                sharedPackLoadPool += pmLoadHours;
-              } else {
-                sharedPackLoadPool += capacity;
-              }
-              break;
-            case 'Load and Deliver':
-              if (day.dayPart === 'AM') {
-                sharedLoadUnloadPool += capacity;
-              } else if (day.dayPart === 'PM' && hasAmLoadish) {
-                const pmLoadHours = round2((men * hours * AFTERNOON_LOAD_RATE_AFTER_AM) / state.loadRate);
-                sharedLoadUnloadPool += pmLoadHours + Math.max(0, capacity - pmLoadHours);
-              } else {
-                sharedLoadUnloadPool += capacity;
-              }
-              break;
-            case 'Load':
-            case 'Load and Travel': {
-              let loadHoursEquivalent = capacity;
-              if (day.dayPart === 'PM' && hasAmLoadish) {
-                const pmVolume = men * hours * AFTERNOON_LOAD_RATE_AFTER_AM;
-                loadHoursEquivalent = round2(pmVolume / state.loadRate);
-              }
-              allocated.Load += loadHoursEquivalent;
-              break;
-            }
-          }
-        });
-      });
-
-      const packNeedAfterDirect = Math.max(0, required.Pack - allocated.Pack);
-      const packLoadPoolToPack = Math.min(sharedPackLoadPool, packNeedAfterDirect);
-      allocated.Pack += packLoadPoolToPack;
-      allocated.Load += Math.max(0, sharedPackLoadPool - packLoadPoolToPack);
-
-      const loadNeedAfterPackPool = Math.max(0, required.Load - allocated.Load);
-      const loadUnloadPoolToLoad = Math.min(sharedLoadUnloadPool, loadNeedAfterPackPool);
-      allocated.Load += loadUnloadPoolToLoad;
-      allocated.Unload += Math.max(0, sharedLoadUnloadPool - loadUnloadPoolToLoad);
-
-      const results = [];
-      ['Pack','Load','Unload'].forEach(function(task){
-        const req = required[task] || 0;
-        const cap = allocated[task] || 0;
-        const diff = round2(cap - req);
-
-        if (req === 0 && cap === 0) {
-          results.push({ type:'ok', text:'✓ ' + task + ' not required and none allocated.' });
-          return;
-        }
-        if (cap + 0.01 < req) {
-          results.push({ type:'error', text:'✕ ' + task + ' short by ' + Math.abs(diff).toFixed(2) + ' man-hours.' });
-          return;
-        }
-        if (diff > 0.5) {
-          results.push({ type:'warn', text:'! ' + task + ' has ' + diff.toFixed(2) + ' spare man-hours allocated.' });
-          return;
-        }
-        results.push({ type:'ok', text:'✓ ' + task + ' capacity matches requirement.' });
-      });
-
-      results.push({
-        type: special.extraTransitHours > 0 ? 'warn' : 'ok',
-        text: special.extraTransitHours > 0
-          ? '! Transit beyond the first 30 minutes adds ' + special.extraTransitHours.toFixed(2) + ' hours to the unload side.'
-          : '✓ Transit is within the first 30 minutes included allowance.'
-      });
-
-      results.push({
-        type:'ok',
-        text:'✓ Store variant currently changes effective rates only in this lab. Adjust here before moving rules into Photon.'
-      });
-
-      return results;
     }
 
-    function renderPlannerRows(){
-      const wrap = document.getElementById('plannerRows');
+    function assessScenario(state, results){
+      const reasons = [];
+      const warnings = [];
+      let red = false;
+      let amber = false;
+
+      if (!state.sequenceType){
+        red = true;
+        reasons.push("Sequence type missing");
+      }
+
+      if (state.plannerRows.length === 0){
+        red = true;
+        reasons.push("No planner rows added");
+      }
+
+      const hasLoadCrew = getPlannerEffectiveMenForTask(state.plannerRows, ["Load", "Pack and Load", "Load and Deliver", "Load and Travel"]) > 0;
+      if (!hasLoadCrew){
+        red = true;
+        reasons.push("No crew allocated to loading");
+      }
+
+      if (state.sequenceType !== "into-store"){
+        const hasUnloadCrew = getPlannerEffectiveMenForTask(state.plannerRows, ["Unload", "Load and Deliver", "Deliver and Crew Return"]) > 0;
+        if (!hasUnloadCrew){
+          red = true;
+          reasons.push("No crew allocated to unloading / delivery side");
+        }
+      }
+
+      if (results.totalDay.totalHours > state.workingDayHours + 1){
+        red = true;
+        reasons.push("Total day exceeds working day by more than 1 hour");
+      } else if (results.totalDay.totalHours > state.workingDayHours){
+        amber = true;
+        warnings.push("Total day likely needs overtime");
+      } else if (results.totalDay.totalHours > state.workingDayHours - 0.75){
+        amber = true;
+        warnings.push("Total day is tight against normal hours");
+      }
+
+      if (state.loadingVariant === "slow"){
+        amber = true;
+        warnings.push("Slow loading variant applied");
+      }
+
+      if (state.sequenceType === "into-store"){
+        warnings.push("Into store skips unloading and delivery-leg travel");
+      }
+
+      if (results.loadHours > results.capacity.load + 0.01){
+        red = true;
+        reasons.push("Planned loading capacity is below calculated loading requirement");
+      } else if (results.loadHours > results.capacity.load - 1){
+        amber = true;
+        warnings.push("Loading capacity is tight");
+      }
+
+      if (state.sequenceType !== "into-store"){
+        if (results.unloadHours > results.capacity.unload + 0.01){
+          red = true;
+          reasons.push("Planned unloading capacity is below calculated unloading requirement");
+        } else if (results.unloadHours > results.capacity.unload - 1){
+          amber = true;
+          warnings.push("Unloading capacity is tight");
+        }
+      }
+
+      if (results.packing.packHours > results.capacity.pack + 0.01 && results.packing.packHours > 0){
+        amber = true;
+        warnings.push("Packing requirement exceeds pure pack capacity");
+      }
+
+      let status = "green";
+      let label = "🟢 Green — Within Normal Rules";
+
+      if (red){
+        status = "red";
+        label = "🔴 Red — Manual Review Required";
+      } else if (amber){
+        status = "amber";
+        label = "🟠 Amber — Workable but Tight";
+      }
+
+      const finalReasons = red ? reasons : warnings.length ? warnings : ["Schedule fits comfortably within current rules"];
+
+      return {
+        status,
+        label,
+        reasons: finalReasons
+      };
+    }
+
+    function renderAssessment(assessment){
+      const statusWrap = document.getElementById("assessmentStatus");
+      const reasonsWrap = document.getElementById("assessmentReasons");
+
+      if (!statusWrap || !reasonsWrap) return;
+
+      const className =
+        assessment.status === "red"
+          ? "status-chip status-red"
+          : assessment.status === "amber"
+            ? "status-chip status-amber"
+            : "status-chip status-green";
+
+      statusWrap.innerHTML = `<div class="${className}">${assessment.label}</div>`;
+
+      reasonsWrap.innerHTML = assessment.reasons.map(function(reason){
+        return `<div class="document-line">${reason}</div>`;
+      }).join("");
+    }
+
+    function renderValidation(results, assessment){
+      const wrap = document.getElementById("validationList");
       if (!wrap) return;
 
-      wrap.innerHTML = plannerRows.map(function(row, index){
-        return `
-          <div class="planner-row">
-            <div class="planner-head">
-              <div class="planner-title">Planner Row ${index + 1}</div>
-              ${plannerRows.length > 1 ? `<button type="button" class="action-btn" onclick="removePlannerRow('${row.id}')">Delete</button>` : ''}
-            </div>
-            <div class="planner-grid">
-              <div>
-                <label class="mini-label">Task</label>
-                <select class="field" onchange="updatePlannerRow('${row.id}','task',this.value)">
-                  ${['Pack','Load','Unload','Pack and Load','Load and Deliver','Load and Travel','Deliver and Crew Return'].map(function(opt){
-                    return `<option value="${opt}" ${row.task === opt ? 'selected' : ''}>${opt}</option>`;
-                  }).join('')}
-                </select>
-              </div>
-              <div>
-                <label class="mini-label">Day Part</label>
-                <select class="field" onchange="updatePlannerRow('${row.id}','dayPart',this.value)">
-                  ${['Full Day','AM','PM'].map(function(opt){
-                    return `<option value="${opt}" ${row.dayPart === opt ? 'selected' : ''}>${opt}</option>`;
-                  }).join('')}
-                </select>
-              </div>
-              <div>
-                <label class="mini-label">Men</label>
-                <input type="number" min="0" class="field" value="${Number(row.men || 0)}" oninput="updatePlannerRow('${row.id}','men',this.value)" />
-              </div>
-              <div>
-                <label class="mini-label">Vans</label>
-                <input type="number" min="0" class="field" value="${Number(row.vans || 0)}" oninput="updatePlannerRow('${row.id}','vans',this.value)" />
-              </div>
-              <div>
-                <label class="mini-label">Night Out</label>
-                <select class="field" onchange="updatePlannerRow('${row.id}','nightsOut',this.value)">
-                  <option value="false" ${!row.nightsOut ? 'selected' : ''}>No</option>
-                  <option value="true" ${row.nightsOut ? 'selected' : ''}>Yes</option>
-                </select>
-              </div>
-            </div>
-            <div class="planner-debug">${row.hours} hrs · ${Number(row.men || 0)} men · ${Number(row.vans || 0)} vans · ${Number(row.hours || 0) * Number(row.men || 0)} man-hours</div>
-          </div>
-        `;
-      }).join('');
-    }
+      const items = [];
 
-    function updatePlannerRow(id, field, value){
-      plannerRows = plannerRows.map(function(row){
-        if (row.id !== id) return row;
-
-        if (field === 'men' || field === 'vans') {
-          return { ...row, [field]: Math.max(0, Number(value) || 0) };
-        }
-
-        if (field === 'nightsOut') {
-          return { ...row, nightsOut: String(value) === 'true' };
-        }
-
-        if (field === 'dayPart') {
-          return { ...row, dayPart: value, hours: value === 'Full Day' ? 8 : 4 };
-        }
-
-        return { ...row, [field]: value };
+      items.push({
+        type: assessment.status === "red" ? "error" : assessment.status === "amber" ? "warn" : "ok",
+        text: assessment.label
       });
 
-      renderLab();
-    }
-
-    function addPlannerRow(){
-      plannerRows.push({
-        id: plannerId(),
-        groupId: plannerId(),
-        dayPart: 'Full Day',
-        task: 'Load',
-        men: 2,
-        vans: 1,
-        hours: 8,
-        nightsOut: false
+      items.push({
+        type: results.loadHours > results.capacity.load ? "error" : "ok",
+        text: "Load requirement: " + results.loadHours.toFixed(2) + " hrs · planned load capacity: " + results.capacity.load.toFixed(2) + " man-hours"
       });
-      renderLab();
-    }
 
-    function removePlannerRow(id){
-      plannerRows = plannerRows.filter(function(row){ return row.id !== id; });
-      if (!plannerRows.length) plannerRows = defaultPlannerRows();
-      renderLab();
-    }
+      if (results.state.sequenceType !== "into-store"){
+        items.push({
+          type: results.unloadHours > results.capacity.unload ? "error" : "ok",
+          text: "Unload requirement: " + results.unloadHours.toFixed(2) + " hrs · planned unload capacity: " + results.capacity.unload.toFixed(2) + " man-hours"
+        });
+      } else {
+        items.push({
+          type: "ok",
+          text: "Into store: unloading requirement removed"
+        });
+      }
 
-    function resetPlannerRows(){
-      plannerRows = defaultPlannerRows();
-      renderLab();
-    }
+      items.push({
+        type: results.totalDay.totalHours > results.state.workingDayHours ? "warn" : "ok",
+        text: "Total day: " + results.totalDay.totalHours.toFixed(2) + " hrs against max " + Number(results.state.workingDayHours || 0).toFixed(2) + " hrs"
+      });
 
-    function renderValidation(items){
-      const el = document.getElementById('validationList');
-      if (!el) return;
-      el.innerHTML = items.map(function(item){
+      wrap.innerHTML = items.map(function(item){
         return `<div class="validation-item validation-${item.type}">${item.text}</div>`;
-      }).join('');
+      }).join("");
     }
 
-    function renderDocumentLines(id, lines){
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.innerHTML = (lines || []).map(function(line){
+    function renderLines(id, lines){
+      const wrap = document.getElementById(id);
+      if (!wrap) return;
+      wrap.innerHTML = lines.map(function(line){
         return `<div class="document-line">${line}</div>`;
-      }).join('');
+      }).join("");
+    }
+
+    function handleSequenceTypeChange(){
+      const sequenceType = getText("sequenceType");
+
+      if (sequenceType === "into-store"){
+        setInputValue("travelCollectionToDelivery", 0);
+      }
+
+      renderLab();
     }
 
     function renderLab(){
       renderPlannerRows();
 
-      const state = getState();
+      const state = buildState();
       const packing = calcPacking(state);
       const boxVolume = round2(calcBoxVolume(state));
       const totalVolume = round2(state.furnitureVol + boxVolume);
       const special = calcSpecialLabour(state);
-      const loading = calcLoading(totalVolume, state.loadRate, special.loadSideHours, state);
-      const unloading = calcUnloading(totalVolume, state.unloadRate, special.unloadSideHours, state);
-      const validation = calcScheduleValidation(packing, loading, unloading, special, state);
+      const travel = calcTravelHours(state);
+      const loadHours = calcCrewBasedLoadHours(state, totalVolume);
+      const unloadHours = state.sequenceType === "into-store" ? 0 : calcCrewBasedUnloadHours(state, totalVolume);
+      const totalDay = calcTotalDayHours(packing, loadHours, unloadHours, special, travel, state);
+      const capacity = calcPlannerCapacityHours(state.plannerRows);
 
-      document.getElementById('summaryMode').textContent = getPackModeLabel(state.packOption);
-      document.getElementById('summaryTotalVolume').textContent = totalVolume;
-      document.getElementById('summaryPackHours').textContent = packing.packHours.toFixed(2);
-      document.getElementById('summaryPackDays').textContent = packing.packDays.toFixed(1);
-      document.getElementById('summarySpecialHours').textContent = special.specialHours.toFixed(2);
-      document.getElementById('summaryLoadHours').textContent = loading.hours.toFixed(2);
-      document.getElementById('summaryLoadDays').textContent = loading.days.toFixed(1);
-      document.getElementById('summaryLoadCompletion').textContent = loading.completionCrew.toFixed(1);
-      document.getElementById('summaryUnloadHours').textContent = unloading.hours.toFixed(2);
-      document.getElementById('summaryUnloadDays').textContent = unloading.days.toFixed(1);
-      document.getElementById('summaryUnloadCompletion').textContent = unloading.completionCrew.toFixed(1);
-      document.getElementById('summaryStoreVariant').textContent = state.storeLoadVariant;
+      const results = {
+        state,
+        packing,
+        boxVolume,
+        totalVolume,
+        special,
+        travel,
+        loadHours,
+        unloadHours,
+        totalDay,
+        capacity
+      };
 
-      renderDocumentLines('logicText', [
-        'Scenario: ' + (state.label || 'Unnamed scenario'),
-        'Sequence type: ' + state.sequenceType,
-        'Packing logic: ' + (state.packOption === 'none' ? 'No packing counted.' : state.packOption === 'cg' ? 'CG cartons only count towards packing labour.' : 'All carton types count towards packing labour.'),
-        'Loading effective rate: ' + loading.effectiveRate + ' cuft per man-hour.',
-        'Unloading effective rate: ' + unloading.effectiveRate + ' cuft per man-hour.',
-        'This lab lets you test store rate behaviour before replacing Photon calculator functions.'
+      const assessment = assessScenario(state, results);
+
+      document.getElementById("summaryMode").textContent = getPackModeLabel(state.packOption);
+      document.getElementById("summaryTotalVolume").textContent = totalVolume;
+      document.getElementById("summaryPackHours").textContent = packing.packHours.toFixed(2);
+      document.getElementById("summarySpecialHours").textContent = special.specialHours.toFixed(2);
+      document.getElementById("summaryLoadHours").textContent = loadHours.toFixed(2);
+      document.getElementById("summaryUnloadHours").textContent = unloadHours.toFixed(2);
+      document.getElementById("summaryTravelHours").textContent = travel.totalHours.toFixed(2);
+      document.getElementById("summaryTotalDayHours").textContent = totalDay.totalHours.toFixed(2);
+
+      renderAssessment(assessment);
+
+      const sequenceLogicText =
+        state.sequenceType === "domestic"
+          ? "Domestic loading uses a split rule: first 4 hours at 125 cuft per man-hour, then 54 cuft for the second 4-hour block."
+          : state.sequenceType === "into-store"
+            ? "Into store loading uses 66 cuft per man-hour and removes unloading and collection-to-delivery travel."
+            : "Ex store loading uses 125 cuft per man-hour.";
+
+      const variantText =
+        state.loadingVariant === "slow"
+          ? "Slow variant is applied as a reduction to loading productivity."
+          : "Standard variant uses base productivity.";
+
+      renderLines("logicText", [
+        "Scenario: " + (state.label || "Unnamed scenario"),
+        "Sequence type: " + state.sequenceType,
+        sequenceLogicText,
+        variantText,
+        "Travel used: depot to collection " + state.travel.depotToCollection + " mins, collection to delivery " + state.travel.collectionToDelivery + " mins, delivery to depot " + state.travel.deliveryToDepot + " mins.",
+        "Total volume = furniture + cartons = " + totalVolume + " cuft."
       ]);
 
-      renderDocumentLines('specialText', [
-        'Beds: ' + special.breakdown.beds.toFixed(2) + ' hrs extra after first ' + special.breakdown.includedBeds + ' included.',
-        'Dismantles: ' + special.breakdown.dismantle.toFixed(2) + ' hrs.',
-        'Bunk beds: ' + special.breakdown.bunk.toFixed(2) + ' hrs.',
-        (state.special.customNote || 'Custom item') + ': ' + special.breakdown.custom.toFixed(2) + ' hrs.',
-        'Upright pianos: ' + special.breakdown.upright.toFixed(2) + ' hrs.',
-        'Baby / grand pianos: ' + special.breakdown.grand.toFixed(2) + ' hrs.',
-        'Grandfather clocks: ' + special.breakdown.clock.toFixed(2) + ' hrs.',
-        'Appliances: ' + special.breakdown.appliance.toFixed(2) + ' hrs.',
-        'Crating: ' + special.breakdown.crate.toFixed(2) + ' hrs.',
-        'Loft effects: ' + special.breakdown.loft.toFixed(2) + ' hrs.',
-        'Export wrap: ' + special.breakdown.exportWrap.toFixed(2) + ' hrs extra after first ' + special.breakdown.includedExportWrapVol + ' cuft included.',
-        'Transit: ' + special.breakdown.transit.toFixed(2) + ' hrs beyond first 30 minutes included.'
+      renderLines("specialText", [
+        "Beds: " + special.breakdown.beds.toFixed(2) + " hrs extra after first " + special.breakdown.includedBeds + " included.",
+        "Dismantles: " + special.breakdown.dismantle.toFixed(2) + " hrs.",
+        "Bunk beds: " + special.breakdown.bunk.toFixed(2) + " hrs.",
+        (state.special.customNote || "Custom item") + ": " + special.breakdown.custom.toFixed(2) + " hrs.",
+        "Upright pianos: " + special.breakdown.upright.toFixed(2) + " hrs.",
+        "Baby / grand pianos: " + special.breakdown.grand.toFixed(2) + " hrs.",
+        "Grandfather clocks: " + special.breakdown.clock.toFixed(2) + " hrs.",
+        "Appliances: " + special.breakdown.appliance.toFixed(2) + " hrs.",
+        "Crating: " + special.breakdown.crate.toFixed(2) + " hrs.",
+        "Loft effects: " + special.breakdown.loft.toFixed(2) + " hrs.",
+        "Export wrap: " + special.breakdown.exportWrap.toFixed(2) + " hrs extra after first " + special.breakdown.includedExportWrapVol + " cuft included."
       ]);
 
-      renderDocumentLines('scenarioNotes', [
-        'Planner rows here are only for calculator testing.',
-        'Use them to check whether schedule capacity still matches the model after you adjust store logic.',
-        'When the rules feel right, move the final calculation functions back into Photon.'
+      renderLines("plannerCapacityText", [
+        "Pack capacity: " + capacity.pack.toFixed(2) + " man-hours.",
+        "Load capacity: " + capacity.load.toFixed(2) + " man-hours.",
+        "Unload capacity: " + capacity.unload.toFixed(2) + " man-hours.",
+        "Total day incl. travel and buffer: " + totalDay.totalHours.toFixed(2) + " hrs.",
+        "Normal day limit: " + Number(state.workingDayHours || 0).toFixed(2) + " hrs."
       ]);
 
-      renderValidation(validation);
-    }
-
-    function setInputValue(id, value){
-      const el = document.getElementById(id);
-      if (el) el.value = value;
+      renderValidation(results, assessment);
     }
 
     function loadPreset(name){
-      if (name === 'blank') {
-        setInputValue('scenarioLabel', 'Blank Test');
-        setInputValue('sequenceType', 'domestic');
-        setInputValue('packMode', 'none');
-        setInputValue('storeLoadVariant', 'standard');
-        setInputValue('furnitureVol', 0);
-        setInputValue('loftVol', 0);
-        setInputValue('loadRate', 125);
-        setInputValue('unloadRate', 132);
-        setInputValue('transitHours', 0);
-        setInputValue('transitMinutes', 30);
-        setInputValue('qty_ap', 0);
-        setInputValue('qty_cg', 0);
-        setInputValue('qty_books', 0);
-        setInputValue('qty_linen', 0);
-        setInputValue('qty_wr', 0);
-        setInputValue('svc_beds', 0);
-        setInputValue('svc_bunk', 0);
-        setInputValue('svc_custom_minutes', 0);
-        setInputValue('svc_custom_note', '');
-        setInputValue('svc_upright', 0);
-        setInputValue('svc_grand', 0);
-        setInputValue('svc_clock', 0);
-        setInputValue('svc_appliance', 0);
-        setInputValue('svc_crate', 0);
-        setInputValue('svc_dismantle', 0);
-        setInputValue('exportWrapVol', 0);
-        plannerRows = defaultPlannerRows();
+      if (name === "blank"){
+        setInputValue("scenarioLabel", "Blank Test");
+        setInputValue("sequenceType", "domestic");
+        setInputValue("loadingVariant", "standard");
+        setInputValue("workingDayHours", 10);
+        setInputValue("travelDepotToCollection", 0);
+        setInputValue("travelCollectionToDelivery", 0);
+        setInputValue("travelDeliveryToDepot", 0);
+        setInputValue("furnitureVol", 0);
+        setInputValue("loftVol", 0);
+        setInputValue("unloadRate", 132);
+        setInputValue("dayBufferMinutes", 30);
+        setInputValue("packMode", "none");
+        setInputValue("qty_ap", 0);
+        setInputValue("qty_cg", 0);
+        setInputValue("qty_books", 0);
+        setInputValue("qty_linen", 0);
+        setInputValue("qty_wr", 0);
+        setInputValue("svc_beds", 0);
+        setInputValue("svc_bunk", 0);
+        setInputValue("svc_custom_minutes", 0);
+        setInputValue("svc_custom_note", "");
+        setInputValue("svc_upright", 0);
+        setInputValue("svc_grand", 0);
+        setInputValue("svc_clock", 0);
+        setInputValue("svc_appliance", 0);
+        setInputValue("svc_crate", 0);
+        setInputValue("svc_dismantle", 0);
+        setInputValue("exportWrapVol", 0);
+        plannerRows = getDefaultPlannerRows();
         renderLab();
         return;
       }
 
-      if (name === 'domestic') {
-        setInputValue('scenarioLabel', 'Domestic Baseline');
-        setInputValue('sequenceType', 'domestic');
-        setInputValue('packMode', 'cg');
-        setInputValue('storeLoadVariant', 'standard');
-        setInputValue('furnitureVol', 600);
-        setInputValue('loftVol', 50);
-        setInputValue('loadRate', 125);
-        setInputValue('unloadRate', 132);
-        setInputValue('transitHours', 0);
-        setInputValue('transitMinutes', 30);
-        setInputValue('qty_ap', 20);
-        setInputValue('qty_cg', 6);
-        setInputValue('qty_books', 12);
-        setInputValue('qty_linen', 8);
-        setInputValue('qty_wr', 4);
-        setInputValue('svc_beds', 2);
-        setInputValue('svc_bunk', 0);
-        setInputValue('svc_custom_minutes', 0);
-        setInputValue('svc_custom_note', '');
-        setInputValue('svc_upright', 0);
-        setInputValue('svc_grand', 0);
-        setInputValue('svc_clock', 0);
-        setInputValue('svc_appliance', 2);
-        setInputValue('svc_crate', 0);
-        setInputValue('svc_dismantle', 1);
-        setInputValue('exportWrapVol', 0);
+      if (name === "domestic"){
+        setInputValue("scenarioLabel", "Domestic Baseline");
+        setInputValue("sequenceType", "domestic");
+        setInputValue("loadingVariant", "standard");
+        setInputValue("workingDayHours", 10);
+        setInputValue("travelDepotToCollection", 30);
+        setInputValue("travelCollectionToDelivery", 45);
+        setInputValue("travelDeliveryToDepot", 35);
+        setInputValue("furnitureVol", 600);
+        setInputValue("loftVol", 50);
+        setInputValue("unloadRate", 132);
+        setInputValue("dayBufferMinutes", 30);
+        setInputValue("packMode", "cg");
+        setInputValue("qty_ap", 20);
+        setInputValue("qty_cg", 6);
+        setInputValue("qty_books", 12);
+        setInputValue("qty_linen", 8);
+        setInputValue("qty_wr", 4);
+        setInputValue("svc_beds", 2);
+        setInputValue("svc_bunk", 0);
+        setInputValue("svc_custom_minutes", 0);
+        setInputValue("svc_custom_note", "");
+        setInputValue("svc_upright", 0);
+        setInputValue("svc_grand", 0);
+        setInputValue("svc_clock", 0);
+        setInputValue("svc_appliance", 2);
+        setInputValue("svc_crate", 0);
+        setInputValue("svc_dismantle", 1);
+        setInputValue("exportWrapVol", 0);
+
         plannerRows = [
-          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Pack', men: 2, vans: 0, hours: 8, nightsOut: false },
-          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Load', men: 3, vans: 1, hours: 8, nightsOut: false }
+          {
+            id: createId(),
+            groupId: createId(),
+            dayPart: "Full Day",
+            task: "Pack",
+            men: 2,
+            vans: 0,
+            hours: 8
+          },
+          {
+            id: createId(),
+            groupId: createId(),
+            dayPart: "Full Day",
+            task: "Load and Deliver",
+            men: 3,
+            vans: 1,
+            hours: 8
+          }
         ];
+
         renderLab();
         return;
       }
 
-      if (name === 'storein') {
-        setInputValue('scenarioLabel', 'Into Store Trial');
-        setInputValue('sequenceType', 'into-store');
-        setInputValue('packMode', 'none');
-        setInputValue('storeLoadVariant', 'slower');
-        setInputValue('furnitureVol', 850);
-        setInputValue('loftVol', 0);
-        setInputValue('loadRate', 125);
-        setInputValue('unloadRate', 132);
-        setInputValue('transitHours', 1);
-        setInputValue('transitMinutes', 15);
-        setInputValue('qty_ap', 0);
-        setInputValue('qty_cg', 0);
-        setInputValue('qty_books', 0);
-        setInputValue('qty_linen', 0);
-        setInputValue('qty_wr', 0);
-        setInputValue('svc_beds', 0);
-        setInputValue('svc_bunk', 0);
-        setInputValue('svc_custom_minutes', 0);
-        setInputValue('svc_custom_note', 'Store handling test');
-        setInputValue('svc_upright', 0);
-        setInputValue('svc_grand', 0);
-        setInputValue('svc_clock', 0);
-        setInputValue('svc_appliance', 0);
-        setInputValue('svc_crate', 0);
-        setInputValue('svc_dismantle', 0);
-        setInputValue('exportWrapVol', 0);
+      if (name === "intoStore"){
+        setInputValue("scenarioLabel", "Into Store Trial");
+        setInputValue("sequenceType", "into-store");
+        setInputValue("loadingVariant", "standard");
+        setInputValue("workingDayHours", 10);
+        setInputValue("travelDepotToCollection", 35);
+        setInputValue("travelCollectionToDelivery", 0);
+        setInputValue("travelDeliveryToDepot", 45);
+        setInputValue("furnitureVol", 700);
+        setInputValue("loftVol", 0);
+        setInputValue("unloadRate", 132);
+        setInputValue("dayBufferMinutes", 30);
+        setInputValue("packMode", "none");
+        setInputValue("qty_ap", 0);
+        setInputValue("qty_cg", 0);
+        setInputValue("qty_books", 0);
+        setInputValue("qty_linen", 0);
+        setInputValue("qty_wr", 0);
+        setInputValue("svc_beds", 0);
+        setInputValue("svc_bunk", 0);
+        setInputValue("svc_custom_minutes", 0);
+        setInputValue("svc_custom_note", "Container loading");
+        setInputValue("svc_upright", 0);
+        setInputValue("svc_grand", 0);
+        setInputValue("svc_clock", 0);
+        setInputValue("svc_appliance", 0);
+        setInputValue("svc_crate", 0);
+        setInputValue("svc_dismantle", 0);
+        setInputValue("exportWrapVol", 0);
+
         plannerRows = [
-          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Load and Travel', men: 3, vans: 1, hours: 8, nightsOut: true },
-          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Unload', men: 3, vans: 1, hours: 8, nightsOut: false }
+          {
+            id: createId(),
+            groupId: createId(),
+            dayPart: "Full Day",
+            task: "Load and Travel",
+            men: 3,
+            vans: 1,
+            hours: 8
+          }
         ];
+
         renderLab();
         return;
       }
 
-      if (name === 'storeout') {
-        setInputValue('scenarioLabel', 'Ex Store Trial');
-        setInputValue('sequenceType', 'ex-store');
-        setInputValue('packMode', 'none');
-        setInputValue('storeLoadVariant', 'standard');
-        setInputValue('furnitureVol', 700);
-        setInputValue('loftVol', 0);
-        setInputValue('loadRate', 125);
-        setInputValue('unloadRate', 132);
-        setInputValue('transitHours', 0);
-        setInputValue('transitMinutes', 45);
-        setInputValue('qty_ap', 0);
-        setInputValue('qty_cg', 0);
-        setInputValue('qty_books', 0);
-        setInputValue('qty_linen', 0);
-        setInputValue('qty_wr', 0);
-        setInputValue('svc_beds', 0);
-        setInputValue('svc_bunk', 0);
-        setInputValue('svc_custom_minutes', 0);
-        setInputValue('svc_custom_note', 'Ex store timing test');
-        setInputValue('svc_upright', 0);
-        setInputValue('svc_grand', 0);
-        setInputValue('svc_clock', 0);
-        setInputValue('svc_appliance', 0);
-        setInputValue('svc_crate', 0);
-        setInputValue('svc_dismantle', 0);
-        setInputValue('exportWrapVol', 0);
+      if (name === "exStore"){
+        setInputValue("scenarioLabel", "Ex Store Trial");
+        setInputValue("sequenceType", "ex-store");
+        setInputValue("loadingVariant", "standard");
+        setInputValue("workingDayHours", 10);
+        setInputValue("travelDepotToCollection", 25);
+        setInputValue("travelCollectionToDelivery", 40);
+        setInputValue("travelDeliveryToDepot", 35);
+        setInputValue("furnitureVol", 550);
+        setInputValue("loftVol", 0);
+        setInputValue("unloadRate", 132);
+        setInputValue("dayBufferMinutes", 30);
+        setInputValue("packMode", "none");
+        setInputValue("qty_ap", 0);
+        setInputValue("qty_cg", 0);
+        setInputValue("qty_books", 0);
+        setInputValue("qty_linen", 0);
+        setInputValue("qty_wr", 0);
+        setInputValue("svc_beds", 0);
+        setInputValue("svc_bunk", 0);
+        setInputValue("svc_custom_minutes", 0);
+        setInputValue("svc_custom_note", "Ex store test");
+        setInputValue("svc_upright", 0);
+        setInputValue("svc_grand", 0);
+        setInputValue("svc_clock", 0);
+        setInputValue("svc_appliance", 0);
+        setInputValue("svc_crate", 0);
+        setInputValue("svc_dismantle", 0);
+        setInputValue("exportWrapVol", 0);
+
+        const groupId = createId();
         plannerRows = [
-          { id: plannerId(), groupId: plannerId(), dayPart: 'AM', task: 'Load', men: 3, vans: 1, hours: 4, nightsOut: false },
-          { id: plannerId(), groupId: plannerId(), dayPart: 'PM', task: 'Load and Deliver', men: 3, vans: 1, hours: 4, nightsOut: false }
+          {
+            id: createId(),
+            groupId: groupId,
+            dayPart: "AM",
+            task: "Load",
+            men: 3,
+            vans: 1,
+            hours: 4
+          },
+          {
+            id: createId(),
+            groupId: groupId,
+            dayPart: "PM",
+            task: "Unload",
+            men: 3,
+            vans: 1,
+            hours: 4
+          }
         ];
+
         renderLab();
         return;
       }
 
-      if (name === 'fullpack') {
-        setInputValue('scenarioLabel', 'Full Pack Trial');
-        setInputValue('sequenceType', 'domestic');
-        setInputValue('packMode', 'full');
-        setInputValue('storeLoadVariant', 'standard');
-        setInputValue('furnitureVol', 950);
-        setInputValue('loftVol', 100);
-        setInputValue('loadRate', 125);
-        setInputValue('unloadRate', 132);
-        setInputValue('transitHours', 1);
-        setInputValue('transitMinutes', 0);
-        setInputValue('qty_ap', 40);
-        setInputValue('qty_cg', 12);
-        setInputValue('qty_books', 20);
-        setInputValue('qty_linen', 14);
-        setInputValue('qty_wr', 8);
-        setInputValue('svc_beds', 4);
-        setInputValue('svc_bunk', 1);
-        setInputValue('svc_custom_minutes', 20);
-        setInputValue('svc_custom_note', 'Large mirror item');
-        setInputValue('svc_upright', 1);
-        setInputValue('svc_grand', 0);
-        setInputValue('svc_clock', 1);
-        setInputValue('svc_appliance', 3);
-        setInputValue('svc_crate', 2);
-        setInputValue('svc_dismantle', 3);
-        setInputValue('exportWrapVol', 120);
+      if (name === "tightDomestic"){
+        setInputValue("scenarioLabel", "Tight Domestic Example");
+        setInputValue("sequenceType", "domestic");
+        setInputValue("loadingVariant", "slow");
+        setInputValue("workingDayHours", 10);
+        setInputValue("travelDepotToCollection", 45);
+        setInputValue("travelCollectionToDelivery", 70);
+        setInputValue("travelDeliveryToDepot", 50);
+        setInputValue("furnitureVol", 950);
+        setInputValue("loftVol", 100);
+        setInputValue("unloadRate", 132);
+        setInputValue("dayBufferMinutes", 30);
+        setInputValue("packMode", "full");
+        setInputValue("qty_ap", 40);
+        setInputValue("qty_cg", 12);
+        setInputValue("qty_books", 20);
+        setInputValue("qty_linen", 14);
+        setInputValue("qty_wr", 8);
+        setInputValue("svc_beds", 4);
+        setInputValue("svc_bunk", 1);
+        setInputValue("svc_custom_minutes", 20);
+        setInputValue("svc_custom_note", "Bitty / spread out job");
+        setInputValue("svc_upright", 1);
+        setInputValue("svc_grand", 0);
+        setInputValue("svc_clock", 1);
+        setInputValue("svc_appliance", 3);
+        setInputValue("svc_crate", 2);
+        setInputValue("svc_dismantle", 3);
+        setInputValue("exportWrapVol", 120);
+
         plannerRows = [
-          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Pack', men: 3, vans: 0, hours: 8, nightsOut: false },
-          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Pack and Load', men: 4, vans: 2, hours: 8, nightsOut: false },
-          { id: plannerId(), groupId: plannerId(), dayPart: 'Full Day', task: 'Unload', men: 4, vans: 2, hours: 8, nightsOut: false }
+          {
+            id: createId(),
+            groupId: createId(),
+            dayPart: "Full Day",
+            task: "Pack and Load",
+            men: 4,
+            vans: 2,
+            hours: 8
+          },
+          {
+            id: createId(),
+            groupId: createId(),
+            dayPart: "Full Day",
+            task: "Unload",
+            men: 4,
+            vans: 2,
+            hours: 8
+          }
         ];
+
         renderLab();
       }
     }
 
-    plannerRows = defaultPlannerRows();
-    loadPreset('domestic');
+    plannerRows = getDefaultPlannerRows();
+    setInputValue("scenarioLabel", "Domestic Baseline");
+    setInputValue("sequenceType", "domestic");
+    setInputValue("loadingVariant", "standard");
+    setInputValue("workingDayHours", 10);
+    setInputValue("travelDepotToCollection", 30);
+    setInputValue("travelCollectionToDelivery", 45);
+    setInputValue("travelDeliveryToDepot", 35);
+    setInputValue("furnitureVol", 600);
+    setInputValue("loftVol", 50);
+    setInputValue("unloadRate", 132);
+    setInputValue("dayBufferMinutes", 30);
+    setInputValue("packMode", "cg");
+    setInputValue("qty_ap", 20);
+    setInputValue("qty_cg", 6);
+    setInputValue("qty_books", 12);
+    setInputValue("qty_linen", 8);
+    setInputValue("qty_wr", 4);
+    setInputValue("svc_beds", 2);
+    setInputValue("svc_bunk", 0);
+    setInputValue("svc_custom_minutes", 0);
+    setInputValue("svc_custom_note", "");
+    setInputValue("svc_upright", 0);
+    setInputValue("svc_grand", 0);
+    setInputValue("svc_clock", 0);
+    setInputValue("svc_appliance", 2);
+    setInputValue("svc_crate", 0);
+    setInputValue("svc_dismantle", 1);
+    setInputValue("exportWrapVol", 0);
+
+    plannerRows = [
+      {
+        id: createId(),
+        groupId: createId(),
+        dayPart: "Full Day",
+        task: "Pack",
+        men: 2,
+        vans: 0,
+        hours: 8
+      },
+      {
+        id: createId(),
+        groupId: createId(),
+        dayPart: "Full Day",
+        task: "Load and Deliver",
+        men: 3,
+        vans: 1,
+        hours: 8
+      }
+    ];
+
+    renderLab();
   </script>
 </body>
 </html>
