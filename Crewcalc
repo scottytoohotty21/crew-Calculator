@@ -1855,6 +1855,13 @@ button {
 }
 /* SCHEDULE CALCULATOR LAYOUT */
 .layout{display:grid;grid-template-columns:430px 1fr;gap:16px;align-items:start;}
+.schedule-left-sticky{
+    position:sticky;
+    top:12px;
+    align-self:start;
+    max-height:calc(100vh - 24px);
+    overflow-y:auto;
+}
 .panel{
     background:var(--card);border:1px solid var(--slate-200);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;
 }
@@ -1870,6 +1877,39 @@ button {
     font-size:14px;font-weight:700;outline:none;background:#fff;color:var(--navy);
 }
 .field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.08);}
+.special-labour-label{
+    min-height:32px;
+    display:flex;
+    align-items:flex-end;
+}
+.field-editable-blue{
+    background:#eff6ff !important;
+    border:2px solid #60a5fa !important;
+    box-shadow:inset 0 0 0 1px rgba(59,130,246,0.12);
+    color:#0f172a;
+}
+
+.field-editable-blue:focus{
+    background:#ffffff !important;
+    border-color:#2563eb !important;
+    box-shadow:0 0 0 3px rgba(37,99,235,0.12), inset 0 0 0 1px rgba(37,99,235,0.18);
+}
+
+.field-readonly-soft{
+    background:#f8fafc !important;
+    color:#334155;
+}
+.field-fed-from-inventory{
+    background:#f0fdf4 !important;
+    border:2px solid #22c55e !important;
+    box-shadow:0 0 0 3px rgba(34,197,94,0.12);
+    color:#0f172a;
+}
+.special-labour-label{
+    min-height:32px;
+    display:flex;
+    align-items:flex-end;
+}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
 .summary-card{background:#fff;border:1px solid var(--slate-200);border-radius:16px;padding:16px;min-height:128px;}
@@ -1893,6 +1933,27 @@ button {
     box-shadow:0 10px 24px rgba(37,99,235,0.08);
 }
 .schedule-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.schedule-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.schedule-volume-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+}
 .schedule-title{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-400);}
 .schedule-btn{height:38px;border-radius:10px;border:1px solid var(--slate-300);background:#fff;color:var(--slate-700);padding:0 14px;font-size:11px;font-weight:900;text-transform:uppercase;cursor:pointer;}
 .schedule-list{display:grid;gap:12px;}
@@ -2145,6 +2206,12 @@ button {
 @media (max-width: 980px){
     .layout{grid-template-columns:1fr;}
     .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+
+    .schedule-left-sticky{
+        position:static;
+        max-height:none;
+        overflow:visible;
+    }
 }
 @media (max-width: 760px){
     .schedule-grid{grid-template-columns:1fr 1fr;}
@@ -2560,10 +2627,10 @@ Enter as: Surname, First Name
 </section>
    <section id="content-schedule" class="tab-content hidden bg-white p-6 rounded-2xl shadow-inner">
     <div class="layout">
-        <div class="panel">
+        <div class="panel schedule-left-sticky">
             <div class="panel-head">
                 <div class="panel-title">Inputs</div>
-                <div class="panel-subtitle">Manual for now, ready to be fed from the previous app tab later</div>
+                <div class="panel-subtitle">Sequence, volume and special labour inputs</div>
             </div>
             <div class="panel-body">
                              <div class="section-block">
@@ -2590,97 +2657,96 @@ Enter as: Surname, First Name
     </div>
 </div>
   
-<div class="section-block">
-                    <div class="section-title">Volume Inputs</div>
-                    <div class="grid-2">
-                        <div>
-                            <label class="mini-label">Furniture Volume (CUFT)</label>
-                            <div id="furnitureVolDisplay" class="field" style="background:#f8fafc;">0</div>
-                        </div>
-                        <div>
-                            <label class="mini-label">Loft Effects Volume (CUFT)</label>
-                            <input id="loftVol" type="number" min="0" class="field" value="0" oninput="handleScheduleInputChange()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Loading Rate (CUFT / Man-Hour)</label>
-                            <input id="loadRate" type="number" min="1" class="field" value="125" oninput="handleScheduleInputChange()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Unloading Rate (CUFT / Man-Hour)</label>
-                            <input id="unloadRate" type="number" min="1" class="field" value="132" oninput="handleScheduleInputChange()" />
-                        </div>
-                    </div>
-                </div>
-
+                                  
                 
-                <div class="section-block">
+    <div class="section-block">
                     <div class="section-title">Special Labour Inputs</div>
                     <div class="grid-2">
-                        <div>
-    <label class="mini-label">Frame Beds</label>
-    <input id="svc_frame" type="number" min="0" class="field" value="0" readonly />
+    <div>
+    <label class="mini-label special-labour-label">Custom Item<br>Note</label>
+    <input id="svc_custom_note" type="text" maxlength="40" class="field field-editable-blue" value="" oninput="handleScheduleInputChange()" />
 </div>
+
 <div>
-    <label class="mini-label">Ottoman Beds</label>
-    <input id="svc_ottoman" type="number" min="0" class="field" value="0" readonly />
+    <label class="mini-label special-labour-label">Custom Item Minutes<br>Each Side</label>
+    <input id="svc_custom_minutes" type="number" min="0" class="field field-editable-blue" value="0" oninput="handleScheduleInputChange()" />
 </div>
+
 <div>
-    <label class="mini-label">Divan Beds</label>
-    <input id="svc_divan" type="number" min="0" class="field" value="0" readonly />
+    <label class="mini-label special-labour-label">Export Wrap Volume<br>(CUFT)</label>
+    <input id="exportWrapVol" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
 </div>
+
 <div>
-    <label class="mini-label">Electric / TV Beds</label>
-    <input id="svc_electric" type="number" min="0" class="field" value="0" readonly />
+    <label class="mini-label special-labour-label">Loft Effects Volume<br>(CUFT)</label>
+    <input id="loftVol" type="number" min="0" class="field field-editable-blue" value="0" oninput="handleScheduleInputChange()" />
 </div>
+
 <div>
-    <label class="mini-label">Bunk Beds</label>
-    <input id="svc_bunk" type="number" min="0" class="field" value="0" readonly />
+    <label class="mini-label special-labour-label">Frame<br>Beds</label>
+    <input id="svc_frame" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
 </div>
+
 <div>
-    <label class="mini-label">Cots / Childs Beds</label>
-    <input id="svc_cot" type="number" min="0" class="field" value="0" readonly />
+    <label class="mini-label special-labour-label">Washing Machines /<br>Dishwashers</label>
+    <input id="svc_appliance" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
 </div>
-<div>
-    <label class="mini-label">Dining Tables</label>
-    <input id="svc_dining_table" type="number" min="0" class="field" value="0" readonly />
+
+    <div>
+        <label class="mini-label">Ottoman Beds</label>
+        <input id="svc_ottoman" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
+    </div>
+
+    <div>
+        <label class="mini-label">Dining Tables</label>
+        <input id="svc_dining_table" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
+    </div>
+    
+    <div>
+        <label class="mini-label">Divan Beds</label>
+        <input id="svc_divan" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
+    </div>
+
+    <div>
+        <label class="mini-label">Crating</label>
+        <input id="svc_crate" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
+    </div>
+
+    <div>
+        <label class="mini-label">Electric / TV Beds</label>
+        <input id="svc_electric" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
+    </div>
+
+     <div>
+        <label class="mini-label">Upright Pianos</label>
+        <input id="svc_upright" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
+    </div>
+    
+    <div>
+        <label class="mini-label">Bunk Beds</label>
+        <input id="svc_bunk" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
+    </div>
+
+    <div>
+        <label class="mini-label">Baby / Grand Pianos</label>
+        <input id="svc_grand" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
+    </div>
+   
+    <div>
+        <label class="mini-label">Cots / Childs Beds</label>
+        <input id="svc_cot" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
+    </div>
+
+        
+    <div>
+        <label class="mini-label">Grandfather Clocks</label>
+        <input id="svc_clock" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
+    </div>
 </div>
-                        <div>
-                            <label class="mini-label">Custom Item Minutes (each side)</label>
-                            <input id="svc_custom_minutes" type="number" min="0" class="field" value="0" oninput="handleScheduleInputChange()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Custom Item Note</label>
-                            <input id="svc_custom_note" type="text" maxlength="40" class="field" value="" oninput="handleScheduleInputChange()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Upright Pianos</label>
-                            <input id="svc_upright" type="number" min="0" class="field" value="0" oninput="handleScheduleInputChange()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Baby / Grand Pianos</label>
-                            <input id="svc_grand" type="number" min="0" class="field" value="0" oninput="handleScheduleInputChange()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Grandfather Clocks</label>
-                            <input id="svc_clock" type="number" min="0" class="field" value="0" oninput="handleScheduleInputChange()" />
-                        </div>
-                        <div>
-                            <label class="mini-label">Washing Machines / Dishwashers</label>
-                            <input id="svc_appliance" type="number" min="0" class="field" value="0" readonly />
-                        </div>
-                        <div>
-                            <label class="mini-label">Crating</label>
-                            <input id="svc_crate" type="number" min="0" class="field" value="0" readonly />
-                        </div>
-                        <div>
-                            <label class="mini-label">Export Wrap Volume (CUFT)</label>
-                            <input id="exportWrapVol" type="number" min="0" class="field" value="0" readonly />
-                        </div>
-                    </div>
                 </div>
 
                 <div class="note-card">
-                    Sequence, packing and inventory totals are now intended to be fed from Photon. Transit, labour assumptions and planner rows remain editable here.
+                    Add custom item labour in minutes per side, plus any manual specialist labour adjustments.
                 </div>
             </div>
         </div>
@@ -2693,13 +2759,17 @@ Enter as: Surname, First Name
             <div class="panel-body">
     <div class="schedule-shell">
         <div class="schedule-toolbar">
-            <div class="schedule-title">Manual Schedule Planner</div>
-            <div class="flex gap-2">
-    <button class="schedule-btn" onclick="autoBuildScheduleDays()">Auto Build</button>
-<button class="schedule-btn" onclick="addScheduleDay()">Add Day</button>
-<button class="schedule-btn" onclick="fetchMileageFromRoute()">Build Route</button>
+    <div class="schedule-title-row">
+        <div class="schedule-title">Manual Schedule Planner</div>
+        <div id="scheduleVolumeBadge" class="schedule-volume-badge">Volume: 0 cuft</div>
+    </div>
+
+    <div class="flex gap-2">
+        <button class="schedule-btn" onclick="autoBuildScheduleDays()">Auto Build</button>
+        <button class="schedule-btn" onclick="addScheduleDay()">Add Day</button>
+        <button class="schedule-btn" onclick="fetchMileageFromRoute()">Build Route</button>
+    </div>
 </div>
-        </div>
         <div class="schedule-list" id="scheduleList"></div>
         <div class="validation-list" id="validationList"></div>
     </div>
@@ -10934,6 +11004,9 @@ function renderScheduleLegs(day) {
             }
 
             <div class="schedule-legs-list">
+                <div class="text-[10px] font-bold text-slate-400" style="text-transform:none; margin-bottom:4px;">
+    Use Get Route to check Google Maps, then enter the mileage for this travel leg.
+</div>
                 ${
                     day.legs.length
                         ? day.legs.map(function(leg) {
@@ -11157,6 +11230,19 @@ function handleScheduleSequenceChange(sequenceId) {
     loadSequence(sequenceId);
     switchTab('schedule');
 }
+function setInventoryFedField(el, value) {
+    if (!el) return;
+
+    const cleanValue = Number(value || 0);
+
+    el.value = cleanValue;
+
+    if (cleanValue > 0) {
+        el.classList.add("field-fed-from-inventory");
+    } else {
+        el.classList.remove("field-fed-from-inventory");
+    }
+}
 function loadScheduleInputsFromActiveSequence() {
     const seq = getActiveSequenceRecord();
     if (!seq) return;
@@ -11200,22 +11286,22 @@ if (operatingBranchEl) {
 
 if (loadingVariantEl) loadingVariantEl.value = schedule.loadingVariant || "Standard";
 
-    if (svcFrameEl) svcFrameEl.value = photonFeed.special?.frameBeds || 0;
-    if (svcOttomanEl) svcOttomanEl.value = photonFeed.special?.ottomanBeds || 0;
-    if (svcDivanEl) svcDivanEl.value = photonFeed.special?.divanBeds || 0;
-    if (svcElectricEl) svcElectricEl.value = photonFeed.special?.electricBeds || 0;
-    if (svcBunkEl) svcBunkEl.value = photonFeed.special?.bunkBeds || 0;
-    if (svcCotEl) svcCotEl.value = photonFeed.special?.cots || 0;
-    if (svcDiningTableEl) svcDiningTableEl.value = photonFeed.special?.diningTables || 0;
+    setInventoryFedField(svcFrameEl, photonFeed.special?.frameBeds || 0);
+setInventoryFedField(svcOttomanEl, photonFeed.special?.ottomanBeds || 0);
+setInventoryFedField(svcDivanEl, photonFeed.special?.divanBeds || 0);
+setInventoryFedField(svcElectricEl, photonFeed.special?.electricBeds || 0);
+setInventoryFedField(svcBunkEl, photonFeed.special?.bunkBeds || 0);
+setInventoryFedField(svcCotEl, photonFeed.special?.cots || 0);
+setInventoryFedField(svcDiningTableEl, photonFeed.special?.diningTables || 0);
 
     if (svcCustomMinutesEl) svcCustomMinutesEl.value = schedule.special.customItemMinutes;
     if (svcCustomNoteEl) svcCustomNoteEl.value = schedule.special.customItemNote;
-    if (svcUprightEl) svcUprightEl.value = schedule.special.uprightPianos;
-    if (svcGrandEl) svcGrandEl.value = schedule.special.grandPianos;
-    if (svcClockEl) svcClockEl.value = schedule.special.grandfatherClocks;
-    if (svcApplianceEl) svcApplianceEl.value = photonFeed.disconnectApplianceCount || 0;
-    if (svcCrateEl) svcCrateEl.value = photonFeed.special?.cratingItems || 0;
-    if (exportWrapVolEl) exportWrapVolEl.value = photonFeed.special?.exportWrapVol || 0;
+    setInventoryFedField(svcUprightEl, schedule.special.uprightPianos);
+setInventoryFedField(svcGrandEl, schedule.special.grandPianos);
+setInventoryFedField(svcClockEl, schedule.special.grandfatherClocks);
+    setInventoryFedField(svcApplianceEl, photonFeed.disconnectApplianceCount || 0);
+setInventoryFedField(svcCrateEl, photonFeed.special?.cratingItems || 0);
+setInventoryFedField(exportWrapVolEl, photonFeed.special?.exportWrapVol || 0);
 }
 
 function saveScheduleInputsToActiveSequence() {
@@ -12653,7 +12739,12 @@ function renderScheduleCalculator(){
     const totalVolume = round2(state.furnitureVol + boxVolume);
 
     const furnitureDisplay = document.getElementById("furnitureVolDisplay");
-    if (furnitureDisplay) furnitureDisplay.textContent = state.furnitureVol;
+if (furnitureDisplay) furnitureDisplay.textContent = state.furnitureVol;
+
+const scheduleVolumeBadge = document.getElementById("scheduleVolumeBadge");
+if (scheduleVolumeBadge) {
+    scheduleVolumeBadge.textContent = "Volume: " + totalVolume + " cuft";
+}
 
     const apDisplay = document.getElementById("qty_ap_display");
     if (apDisplay) apDisplay.textContent = state.qty.ap;
@@ -12680,15 +12771,18 @@ function renderScheduleCalculator(){
     const svcCrateEl = document.getElementById("svc_crate");
     const exportWrapVolEl = document.getElementById("exportWrapVol");
 
-    if (svcFrameEl) svcFrameEl.value = state.special.frameBeds;
-    if (svcOttomanEl) svcOttomanEl.value = state.special.ottomanBeds;
-    if (svcDivanEl) svcDivanEl.value = state.special.divanBeds;
-    if (svcElectricEl) svcElectricEl.value = state.special.electricBeds;
-    if (svcBunkEl) svcBunkEl.value = state.special.bunkBeds;
-    if (svcCotEl) svcCotEl.value = state.special.cots;
-    if (svcDiningTableEl) svcDiningTableEl.value = state.special.diningTables;
-    if (svcCrateEl) svcCrateEl.value = state.special.crate;
-    if (exportWrapVolEl) exportWrapVolEl.value = state.exportWrapVol;
+  setInventoryFedField(svcFrameEl, state.special.frameBeds);
+setInventoryFedField(svcOttomanEl, state.special.ottomanBeds);
+setInventoryFedField(svcDivanEl, state.special.divanBeds);
+setInventoryFedField(svcElectricEl, state.special.electricBeds);
+setInventoryFedField(svcBunkEl, state.special.bunkBeds);
+setInventoryFedField(svcCotEl, state.special.cots);
+setInventoryFedField(svcDiningTableEl, state.special.diningTables);
+setInventoryFedField(svcCrateEl, state.special.crate);
+setInventoryFedField(exportWrapVolEl, state.exportWrapVol);
+setInventoryFedField(document.getElementById("svc_upright"), state.special.upright);
+setInventoryFedField(document.getElementById("svc_grand"), state.special.grand);
+setInventoryFedField(document.getElementById("svc_clock"), state.special.clock);
 
     const special = calcSpecialLabour(state);
     const loading = calcLoading(totalVolume, state.loadRate, special.loadSideHours, state.loadingScenario);
