@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -949,6 +949,101 @@ button {
             font-weight: 900;
             text-transform: uppercase;
         }
+        /* --- WARDROBE MODAL --- */
+.wardrobe-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(2px);
+    align-items: center;
+    justify-content: center;
+    z-index: 2160;
+}
+
+.wardrobe-panel {
+    width: 92%;
+    max-width: 420px;
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+}
+
+.wardrobe-title {
+    font-size: 16px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #0f172a;
+    text-align: center;
+    letter-spacing: 0.02em;
+}
+
+.wardrobe-subtitle {
+    font-size: 12px;
+    font-weight: 700;
+    color: #64748b;
+    text-align: center;
+    margin-top: 6px;
+    margin-bottom: 18px;
+    line-height: 1.45;
+}
+
+.wardrobe-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.wardrobe-option-btn {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    min-height: 52px;
+    padding: 10px 8px;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #475569;
+    text-align: center;
+}
+
+.wardrobe-option-btn.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #2563eb;
+}
+
+.wardrobe-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.wardrobe-cancel-btn {
+    flex: 1;
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.wardrobe-save-btn {
+    flex: 1;
+    background: #3b82f6;
+    color: white;
+    border: 1px solid #2563eb;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
 
                 /* --- BED MODAL --- */
         .bed-overlay {
@@ -1923,6 +2018,78 @@ button {
 .info-card{background:#fff;border:1px solid var(--slate-200);border-radius:16px;padding:14px;}
 .info-head{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--slate-400);margin-bottom:8px;}
 .info-body{font-size:12px;font-weight:700;color:var(--slate-700);line-height:1.55;}
+.special-rhs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.special-rhs-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.special-rhs-title {
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.special-rhs-subtitle {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #64748b;
+    line-height: 1.35;
+    margin-bottom: 10px;
+}
+
+.special-rhs-group-title {
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #2563eb;
+    margin-top: 10px;
+    margin-bottom: 4px;
+}
+
+.special-rhs-line {
+    font-size: 11px;
+    font-weight: 800;
+    color: #334155;
+    line-height: 1.45;
+    margin-top: 4px;
+}
+
+.special-rhs-empty {
+    font-size: 10px;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.special-rhs-total {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #e2e8f0;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #0f172a;
+}
+
+@media (max-width: 760px) {
+    .special-rhs-grid {
+        grid-template-columns: 1fr;
+    }
+}
 .footer-note{margin-top:12px;font-size:10px;font-weight:800;text-transform:uppercase;color:var(--slate-400);line-height:1.45;}
 .schedule-shell{
     margin-top:0;
@@ -1959,8 +2126,61 @@ button {
 .schedule-list{display:grid;gap:12px;}
 .schedule-row{border:1px solid var(--slate-200);border-radius:14px;background:#fff;padding:12px;}
 .schedule-row-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;}
+.schedule-row-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+
+.schedule-overtime-btn{
+    height:32px;
+    border-radius:8px;
+    border:1px solid #bfdbfe;
+    background:#eff6ff;
+    color:#1d4ed8;
+    padding:0 10px;
+    font-size:10px;
+    font-weight:900;
+    text-transform:uppercase;
+    cursor:pointer;
+}
+
+.schedule-overtime-clear-btn{
+    height:32px;
+    border-radius:8px;
+    border:1px solid var(--red-200);
+    background:var(--red-50);
+    color:var(--red-800);
+    padding:0 10px;
+    font-size:10px;
+    font-weight:900;
+    text-transform:uppercase;
+    cursor:pointer;
+}
 .schedule-row-title{font-size:11px;font-weight:900;text-transform:uppercase;color:var(--navy);}
 .schedule-remove{height:32px;border-radius:8px;border:1px solid var(--red-200);background:var(--red-50);color:var(--red-800);padding:0 10px;font-size:10px;font-weight:900;text-transform:uppercase;cursor:pointer;}
+.schedule-leg-delete-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+}
+
+.schedule-leg-delete-btn:active {
+    transform: scale(0.96);
+}
 .schedule-value-btn{
     width:100%;
     height:44px;
@@ -2104,6 +2324,103 @@ button {
 .validation-ok{background:var(--green-50);border:1px solid var(--green-200);color:var(--green-800);}
 .validation-warn{background:var(--amber-50);border:1px solid var(--amber-200);color:var(--amber-800);}
 .validation-error{background:var(--red-50);border:1px solid var(--red-200);color:var(--red-800);}
+/* AVAILABILITY PRICING */
+.availability-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 14px;
+}
+
+.availability-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 42px;
+    gap: 8px;
+    align-items: end;
+    margin-bottom: 10px;
+}
+
+.availability-band-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 28px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    border: 1px solid #e2e8f0;
+}
+
+.availability-band-green {
+    background: #f0fdf4;
+    color: #166534;
+    border-color: #bbf7d0;
+}
+
+.availability-band-blue {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+.availability-band-yellow {
+    background: #fefce8;
+    color: #854d0e;
+    border-color: #fde68a;
+}
+
+.availability-band-red {
+    background: #fef2f2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+.availability-band-grey {
+    background: #f8fafc;
+    color: #64748b;
+    border-color: #e2e8f0;
+}
+
+.availability-slider {
+    width: 100%;
+    accent-color: #2563eb;
+}
+
+.availability-result-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 12px;
+}
+
+.availability-result-label {
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 6px;
+}
+
+.availability-result-value {
+    font-size: 20px;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1;
+}
+
+.availability-delete-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1;
+}
 /* COSTING & QUOTING */
 .quote-shell{display:block;}
 .quote-topbar{display:none;}
@@ -2269,7 +2586,150 @@ button {
     text-align: right;
     font-weight: 900;
 }
+.quote-cost-needs-entry {
+    background: #f0fdf4 !important;
+    border: 2px solid #22c55e !important;
+    box-shadow: 0 0 0 3px rgba(34,197,94,0.12);
+}
+/* --- QUOTE AVAILABILITY BANDS --- */
+.quote-availability-list {
+    display: grid;
+    gap: 10px;
+}
 
+.quote-availability-row {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 10px;
+}
+
+.quote-availability-date {
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.quote-availability-select {
+    width: 100%;
+    height: 40px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #0f172a;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    padding: 0 10px;
+    outline: none;
+}
+
+.quote-availability-summary {
+    margin-top: 12px;
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1.4;
+}
+
+.quote-availability-summary.none {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+}
+
+.quote-availability-summary.green {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+}
+
+.quote-availability-summary.blue {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+}
+
+.quote-availability-summary.yellow {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #c2410c;
+}
+
+.quote-availability-summary.red {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
+
+/* --- AVAILABILITY PRICING ASSISTANT --- */
+.availability-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    background: #ffffff;
+    padding: 12px;
+}
+
+.availability-band-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 28px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #334155;
+}
+
+.availability-band-pill.green {
+    background: #f0fdf4;
+    border-color: #86efac;
+    color: #166534;
+}
+
+.availability-band-pill.blue {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    color: #1d4ed8;
+}
+
+.availability-band-pill.yellow {
+    background: #fefce8;
+    border-color: #fde68a;
+    color: #854d0e;
+}
+
+.availability-suggested-price {
+    font-size: 24px;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1;
+}
+
+.availability-range {
+    width: 100%;
+    accent-color: #2563eb;
+}
+
+.availability-apply-btn {
+    width: 100%;
+    height: 42px;
+    border-radius: 10px;
+    border: 1px solid #16a34a;
+    background: #ffffff;
+    color: #16a34a;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
 .quote-del-wrap .action-btn{
     width:100%;
     height:44px;
@@ -2333,6 +2793,30 @@ button {
     background:#ffffff;
     color:#334155;
     border:1.5px solid #cbd5e1;
+}
+.availability-refresh-status {
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.35;
+}
+
+.availability-refresh-btn {
+    width: 100%;
+    height: 38px;
+    border-radius: 10px;
+    border: 1.5px solid #2563eb;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
 }
     </style>
 </head>
@@ -2682,71 +3166,12 @@ Enter as: Surname, First Name
     <input id="loftVol" type="number" min="0" class="field field-editable-blue" value="0" oninput="handleScheduleInputChange()" />
 </div>
 
-<div>
-    <label class="mini-label special-labour-label">Frame<br>Beds</label>
-    <input id="svc_frame" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
-</div>
-
-<div>
-    <label class="mini-label special-labour-label">Washing Machines /<br>Dishwashers</label>
-    <input id="svc_appliance" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
-</div>
-
-    <div>
-        <label class="mini-label">Ottoman Beds</label>
-        <input id="svc_ottoman" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
+  
     </div>
-
-    <div>
-        <label class="mini-label">Dining Tables</label>
-        <input id="svc_dining_table" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
-    </div>
-    
-    <div>
-        <label class="mini-label">Divan Beds</label>
-        <input id="svc_divan" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
-    </div>
-
-    <div>
-        <label class="mini-label">Crating</label>
-        <input id="svc_crate" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
-    </div>
-
-    <div>
-        <label class="mini-label">Electric / TV Beds</label>
-        <input id="svc_electric" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
-    </div>
-
-     <div>
-        <label class="mini-label">Upright Pianos</label>
-        <input id="svc_upright" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
-    </div>
-    
-    <div>
-        <label class="mini-label">Bunk Beds</label>
-        <input id="svc_bunk" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
-    </div>
-
-    <div>
-        <label class="mini-label">Baby / Grand Pianos</label>
-        <input id="svc_grand" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
-    </div>
-   
-    <div>
-        <label class="mini-label">Cots / Childs Beds</label>
-        <input id="svc_cot" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
-    </div>
-
-        
-    <div>
-        <label class="mini-label">Grandfather Clocks</label>
-        <input id="svc_clock" type="number" min="0" class="field field-readonly-soft" value="0" readonly />
-    </div>
-</div>
                 </div>
 
                 <div class="note-card">
-                    Add custom item labour in minutes per side, plus any manual specialist labour adjustments.
+                    Add custom item labour in minutes per side. Other specialist labour is now fed from inventory and shown in the breakdown..
                 </div>
             </div>
         </div>
@@ -2870,56 +3295,55 @@ Enter as: Surname, First Name
     <div class="quote-shell">
         <div class="quote-bottom-layout">
             <div class="quote-stack quote-left-rail quote-summary-strip">
-                <div class="panel">
-                    <div class="panel-head">
-                        <div class="panel-title">Commercial Summary</div>
-                        <div class="panel-subtitle">Cost base, sell price and gross margin</div>
-                    </div>
-                    <div class="panel-body">
-                        <div id="quote-commercialSummaryCard"></div>
+    <div class="panel">
+        <div class="panel-head">
+            <div class="panel-title">Commercial Summary</div>
+            <div class="panel-subtitle">Cost base, sell price and gross margin</div>
+        </div>
+        <div class="panel-body">
+            <div id="quote-commercialSummaryCard"></div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-head">
+            <div class="panel-title">Availability Pricing</div>
+            <div class="panel-subtitle">Schedule date, availability band and suggested price</div>
+        </div>
+        <div class="panel-body">
+            <div id="quote-availabilityPricingCard"></div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-head">
+            <div class="panel-title">Controls</div>
+            <div class="panel-subtitle">Sequence and pricing save</div>
+        </div>
+        <div class="panel-body">
+            <div class="space-y-3">
+                <div>
+                    <label class="mini-label">Selected Sequence</label>
+                    <select id="quote-sequenceSelect" class="field"></select>
+                </div>
+
+                <div>
+                    <label class="mini-label">Enter Quote Price</label>
+                    <input id="quote-customerPriceInput" type="number" min="0" step="0.01" class="field" value="0" />
+                    <div style="height:6px"></div>
+                    <div class="listed-stat-card">
+                        <div class="listed-stat-label">Quote Price</div>
+                        <div class="listed-stat-value" id="quote-customerPriceDisplay">0.00</div>
                     </div>
                 </div>
 
-                <div class="panel">
-                    <div class="panel-head">
-                        <div class="panel-title">Additional Costs Breakdown</div>
-                        <div class="panel-subtitle">Optional services added</div>
-                    </div>
-                    <div class="panel-body">
-                        <div id="quote-additionalCostsBreakdownCard"></div>
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <div class="panel-head">
-                        <div class="panel-title">Controls</div>
-                        <div class="panel-subtitle">Sequence and pricing save</div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="space-y-3">
-                            <div>
-                                <label class="mini-label">Selected Sequence</label>
-                                <select id="quote-sequenceSelect" class="field"></select>
-                            </div>
-
-                            <div>
-                                <label class="mini-label">Enter Quote Price</label>
-                                <input id="quote-customerPriceInput" type="number" min="0" step="0.01" class="field" value="0" />
-                                <div style="height:6px"></div>
-                                <div class="listed-stat-card">
-                                    <div class="listed-stat-label">Quote Price</div>
-                                    <div class="listed-stat-value" id="quote-customerPriceDisplay">0.00</div>
-                                </div>
-                            </div>
-
-                            <button type="button" class="action-btn quote-save-compact btn-save" id="quote-savePricingBtn">
-                                Save Pricing
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <button type="button" class="action-btn quote-save-compact btn-save" id="quote-savePricingBtn">
+                    Save Pricing
+                </button>
             </div>
-
+        </div>
+    </div>
+</div>
             <div class="quote-stack">
                 <div class="panel">
                     <div class="panel-head">
@@ -2929,7 +3353,14 @@ Enter as: Surname, First Name
                     <div class="panel-body">
                         <div class="pricing-grid" id="quote-pricingGrid"></div>
                         <div class="toolbar">
-                            <button type="button" class="action-btn" id="quote-addPricingLineBtn">Add Core Cost Row</button>
+                            <button
+    type="button"
+    class="action-btn"
+    id="quote-addPricingLineBtn"
+    onclick="addQuotePricingLine()"
+>
+    Add Core Cost Row
+</button>
                         </div>
                         <div class="footer-note">Core costing should stay focused on move cost base.</div>
                     </div>
@@ -2943,10 +3374,26 @@ Enter as: Surname, First Name
                     <div class="panel-body">
                         <div class="pricing-grid" id="quote-additionalCostsGrid"></div>
                         <div class="toolbar">
-                            <button type="button" class="action-btn" id="quote-addAdditionalCostLineBtn">Add Optional Service</button>
+                            <button
+    type="button"
+    class="action-btn"
+    id="quote-addAdditionalCostLineBtn"
+    onclick="addQuoteAdditionalCostLine()"
+>
+    Add Optional Service
+</button>
                         </div>
                     </div>
                 </div>
+                <div class="panel">
+    <div class="panel-head">
+        <div class="panel-title">Additional Costs Breakdown</div>
+        <div class="panel-subtitle">Optional services added</div>
+    </div>
+    <div class="panel-body">
+        <div id="quote-additionalCostsBreakdownCard"></div>
+    </div>
+</div>
             </div>
         </div>
     </div>
@@ -3033,10 +3480,18 @@ const furnitureDB = [
     {item:"Fridge", volume:25},
     {item:"Garden Bench", volume:15},
     {item:"Chest Drawers", volume:45},
+    {item:"Wardrobe (2-door)", volume:45},
+    {item:"Wardrobe (3-door)", volume:60},
+    {item:"Wardrobe (4-door)", volume:75},
     {item:"Dining Table", volume:40},
     {item:"Desk", volume:20},
     {item:"Bookcase", volume:40},
 
+    {item:"Piano (Upright)", volume:45},
+    {item:"Piano (Electric)", volume:45},
+    {item:"Piano (Baby Grand)", volume:150},
+    {item:"Piano (Grand)", volume:150},
+    {item:"Clock (Grandfather)", volume:35},
     {item:"Barstool", volume:10},
     {item:"Kitchen Bin", volume:10},
     {item:"Butchers Block", volume:10},
@@ -3079,9 +3534,17 @@ const inventoryCategories = {
         "Fridge",
         "Garden Bench",
         "Chest Drawers",
+        "Wardrobe (2-door)",
+        "Wardrobe (3-door)",
+        "Wardrobe (4-door)",
         "Dining Table",
         "Desk",
         "Bookcase",
+        "Piano (Upright)",
+        "Piano (Electric)",
+        "Piano (Baby Grand)",
+        "Piano (Grand)",
+        "Clock (Grandfather)",
         "Barstool",
         "Kitchen Bin",
         "Butchers Block",
@@ -3116,6 +3579,9 @@ const inventoryCategories = {
         "Bunk Bed",
         "Cot / Childs Bed",
         "Chest Drawers",
+        "Wardrobe (2-door)",
+        "Wardrobe (3-door)",
+        "Wardrobe (4-door)",
         "Desk",
         "Bookcase",
         "Clothes Rail",
@@ -3134,6 +3600,11 @@ const inventoryCategories = {
         "Dining Chair",
         "Desk",
         "Bookcase",
+        "Piano (Upright)",
+        "Piano (Electric)",
+        "Piano (Baby Grand)",
+        "Piano (Grand)",
+        "Clock (Grandfather)",
         "Dog Bed",
         "Barstool"
     ],
@@ -3182,6 +3653,8 @@ function createEmptySequenceSchedule() {
             bunkBeds: 0,
             cots: 0,
             diningTables: 0,
+            wardrobes: 0,
+            wardrobeItems: [],
             uprightPianos: 0,
             grandPianos: 0,
             grandfatherClocks: 0,
@@ -3331,6 +3804,7 @@ let qtyResetTimer = null;
 let selectedCrateUnit = "IN";
 let selectedDamageOption = "";
 let selectedBedOption = "";
+let selectedWardrobeOptions = [];
 let listedCrateEditEntryKey = "";
 let listedSequenceFilter = "__all__";
 let listedDeliveryFilter = "__all__";
@@ -3426,6 +3900,10 @@ if (seq.schedule.special.electricBeds === undefined) seq.schedule.special.electr
 if (seq.schedule.special.bunkBeds === undefined) seq.schedule.special.bunkBeds = defaults.special.bunkBeds;
 if (seq.schedule.special.cots === undefined) seq.schedule.special.cots = defaults.special.cots;
 if (seq.schedule.special.diningTables === undefined) seq.schedule.special.diningTables = defaults.special.diningTables;
+if (seq.schedule.special.wardrobes === undefined) seq.schedule.special.wardrobes = defaults.special.wardrobes;
+if (!Array.isArray(seq.schedule.special.wardrobeItems)) {
+    seq.schedule.special.wardrobeItems = defaults.special.wardrobeItems;
+}
 if (seq.schedule.special.uprightPianos === undefined) seq.schedule.special.uprightPianos = defaults.special.uprightPianos;
 if (seq.schedule.special.grandPianos === undefined) seq.schedule.special.grandPianos = defaults.special.grandPianos;
 if (seq.schedule.special.grandfatherClocks === undefined) seq.schedule.special.grandfatherClocks = defaults.special.grandfatherClocks;
@@ -3827,7 +4305,8 @@ function buildRawInventoryEntry(entryData) {
     crated: !!entryData.crated,
     crateDims: entryData.crateDims || null,
     damage: entryData.damage || "",
-    bedType: entryData.bedType || ""
+    bedType: entryData.bedType || "",
+    wardrobeTypes: Array.isArray(entryData.wardrobeTypes) ? entryData.wardrobeTypes : []
 };
 }
 
@@ -4063,6 +4542,9 @@ function syncInventoryDisplayFromSequence(sequenceId) {
 
     const tags = [];
 if (lastRaw.bedType) tags.push("[BED: " + String(lastRaw.bedType).toUpperCase() + "]");
+if (Array.isArray(lastRaw.wardrobeTypes) && lastRaw.wardrobeTypes.length) {
+    tags.push("[WARDROBE: " + lastRaw.wardrobeTypes.join(", ").toUpperCase() + "]");
+}
 if (lastRaw.dismantle) tags.push("[DISMANTLE]");
 if (lastRaw.expWrap) tags.push("[EXP WRAP]");
 if (lastRaw.disconnect) tags.push("[DISCONNECT]");
@@ -4161,6 +4643,12 @@ function buildCalculatorFeedForSequence(sequenceId) {
     let bunkBedCount = 0;
     let cotCount = 0;
     let diningTableCount = 0;
+let wardrobeCount = 0;
+let uprightPianoCount = 0;
+let grandPianoCount = 0;
+let grandfatherClockCount = 0;
+
+const wardrobeItems = [];
 
     const qty = {
         ap: 0,
@@ -4222,6 +4710,23 @@ function buildCalculatorFeedForSequence(sequenceId) {
             exportWrapVol += totalVolume || (unitVolume * entryQty);
         }
 
+        if (
+    itemName === "PIANO (UPRIGHT)" ||
+    itemName === "PIANO (ELECTRIC)"
+) {
+    uprightPianoCount += entryQty;
+}
+
+if (
+    itemName === "PIANO (BABY GRAND)" ||
+    itemName === "PIANO (GRAND)"
+) {
+    grandPianoCount += entryQty;
+}
+
+if (itemName === "CLOCK (GRANDFATHER)") {
+    grandfatherClockCount += entryQty;
+}
         if (entry.dismantle) {
             if (
                 itemName === "BED (SINGLE)" ||
@@ -4251,6 +4756,19 @@ function buildCalculatorFeedForSequence(sequenceId) {
             if (itemName === "DINING TABLE") {
                 diningTableCount += entryQty;
             }
+            if (
+    itemName === "WARDROBE (2-DOOR)" ||
+    itemName === "WARDROBE (3-DOOR)" ||
+    itemName === "WARDROBE (4-DOOR)"
+) {
+    wardrobeCount += entryQty;
+
+    wardrobeItems.push({
+        itemName: entry.itemName || "",
+        qty: entryQty,
+        wardrobeTypes: Array.isArray(entry.wardrobeTypes) ? entry.wardrobeTypes : []
+    });
+}
         }
 
         furnitureVol += totalVolume || (unitVolume * entryQty);
@@ -4271,16 +4789,21 @@ function buildCalculatorFeedForSequence(sequenceId) {
         cratingItems: cratingItems,
         exportWrapVol: Math.round(exportWrapVol * 100) / 100,
         special: {
-            frameBeds: frameBedCount,
-            ottomanBeds: ottomanBedCount,
-            divanBeds: divanBedCount,
-            electricBeds: electricBedCount,
-            bunkBeds: bunkBedCount,
-            cots: cotCount,
-            diningTables: diningTableCount,
-            cratingItems: cratingItems,
-            exportWrapVol: Math.round(exportWrapVol * 100) / 100
-        },
+    frameBeds: frameBedCount,
+    ottomanBeds: ottomanBedCount,
+    divanBeds: divanBedCount,
+    electricBeds: electricBedCount,
+    bunkBeds: bunkBedCount,
+    cots: cotCount,
+    diningTables: diningTableCount,
+    wardrobes: wardrobeCount,
+    wardrobeItems: wardrobeItems,
+    uprightPianos: uprightPianoCount,
+    grandPianos: grandPianoCount,
+    grandfatherClocks: grandfatherClockCount,
+    cratingItems: cratingItems,
+    exportWrapVol: Math.round(exportWrapVol * 100) / 100
+},
         createdAt: new Date().toISOString()
     };
 }
@@ -4319,6 +4842,7 @@ function buildLiveInventoryKeyFromValues(data) {
         String(data.note || ""),
 String(data.damage || ""),
 String(data.bedType || ""),
+Array.isArray(data.wardrobeTypes) ? data.wardrobeTypes.join("|") : "",
 !!data.crated,
         data.crateDims
             ? [
@@ -4345,6 +4869,7 @@ function getLiveInventoryGroupKey(entry) {
         String(entry.note || ""),
 String(entry.damage || ""),
 String(entry.bedType || ""),
+Array.isArray(entry.wardrobeTypes) ? entry.wardrobeTypes.join("|") : "",
 !!entry.crated,
         entry.crateDims
             ? [
@@ -4403,6 +4928,7 @@ function rebuildLiveInventoryFromSequence(sequenceId) {
     note: entry.note || "",
     damage: entry.damage || "",
     bedType: entry.bedType || "",
+    wardrobeTypes: Array.isArray(entry.wardrobeTypes) ? entry.wardrobeTypes : [],
     crated: !!entry.crated,
     crateDims: entry.crateDims || null
 });
@@ -6169,6 +6695,11 @@ function addVolume(amount) {
     updateUndoButtonState();
     saveCalculatorFeedForActiveSequence();
 }
+
+function isWardrobeRawEntry(rawEntry) {
+    if (!rawEntry) return false;
+    return isWardrobeInventoryItem(rawEntry.itemName);
+}
 function isBedInventoryItem(itemName) {
     const name = String(itemName || "").trim();
     return [
@@ -6281,6 +6812,9 @@ saveCalculatorFeedForActiveSequence();
 
 if (isBedInventoryItem(item.item)) {
     addOrEditBedType();
+}
+if (isWardrobeInventoryItem(item.item)) {
+    addOrEditWardrobeType();
 }
 }
 function addMiscItem() {
@@ -6899,6 +7433,84 @@ function saveDamageModal() {
     saveCalculatorFeedForActiveSequence();
 
     closeDamageModal();
+}
+function addOrEditWardrobeType() {
+    const rawEntry = getLastRawInventoryEntry();
+    if (!rawEntry) return;
+    if (!isWardrobeRawEntry(rawEntry)) return;
+
+    selectedWardrobeOptions = Array.isArray(rawEntry.wardrobeTypes)
+        ? rawEntry.wardrobeTypes.slice()
+        : [];
+
+    const overlay = document.getElementById("wardrobe-overlay");
+    if (!overlay) return;
+
+    updateWardrobeOptionButtons();
+    setModalErrorText("wardrobe-error-text", "");
+    overlay.style.display = "flex";
+}
+
+function closeWardrobeModal() {
+    const overlay = document.getElementById("wardrobe-overlay");
+    if (overlay) overlay.style.display = "none";
+
+    selectedWardrobeOptions = [];
+    updateWardrobeOptionButtons();
+    setModalErrorText("wardrobe-error-text", "");
+}
+
+function toggleWardrobeOption(option) {
+    const exists = selectedWardrobeOptions.includes(option);
+
+    if (exists) {
+        selectedWardrobeOptions = selectedWardrobeOptions.filter(function(item) {
+            return item !== option;
+        });
+    } else {
+        selectedWardrobeOptions.push(option);
+    }
+
+    updateWardrobeOptionButtons();
+    setModalErrorText("wardrobe-error-text", "");
+}
+
+function updateWardrobeOptionButtons() {
+    const map = {
+        "Drawer-combi": "wardrobe-option-drawer",
+        "Sliding door": "wardrobe-option-sliding",
+        "Mirrored": "wardrobe-option-mirrored",
+        "Hinged": "wardrobe-option-hinged"
+    };
+
+    Object.keys(map).forEach(function(option) {
+        const btn = document.getElementById(map[option]);
+        if (!btn) return;
+
+        btn.classList.toggle("active", selectedWardrobeOptions.includes(option));
+    });
+}
+
+function saveWardrobeModal() {
+    const rawEntry = getLastRawInventoryEntry();
+    if (!rawEntry) return;
+    if (!isWardrobeRawEntry(rawEntry)) return;
+
+    if (!selectedWardrobeOptions.length) {
+        setModalErrorText("wardrobe-error-text", "Select at least one wardrobe type");
+        return;
+    }
+
+   rawEntry.wardrobeTypes = selectedWardrobeOptions.slice();
+
+    saveToDevice();
+    syncLiveInventoryFromRawForActiveSequence();
+    recalculateTotalVolume();
+    refreshCurrentInventorySelectionDisplay();
+    renderActionButtonStates();
+    saveCalculatorFeedForActiveSequence();
+
+    closeWardrobeModal();
 }
 function addOrEditBedType() {
     const rawEntry = getLastRawInventoryEntry();
@@ -7717,6 +8329,7 @@ function getRawEntriesForListedEntry(entry) {
 String(raw.note || "") === String(entry.note || "") &&
 String(raw.damage || "") === String(entry.damage || "") &&
 String(raw.bedType || "") === String(entry.bedType || "") &&
+String(Array.isArray(raw.wardrobeTypes) ? raw.wardrobeTypes.join("|") : "") === String(Array.isArray(entry.wardrobeTypes) ? entry.wardrobeTypes.join("|") : "") &&
 !!raw.crated === !!entry.crated &&
             rawCrateText === crateText
         );
@@ -7933,6 +8546,7 @@ function getListedEntryMergeKey(entry) {
        entry.note || "",
 entry.damage || "",
 entry.bedType || "",
+Array.isArray(entry.wardrobeTypes) ? entry.wardrobeTypes.join("|") : "",
 !!entry.crated,
         crateText
     ].join("||");
@@ -8069,7 +8683,8 @@ function buildCrewInstructionsSummary(items) {
     handyman: [],
     damage: [],
     notes: [],
-    beds: []
+    beds: [],
+    wardrobes: []
 };
 
     if (!Array.isArray(items)) return summary;
@@ -8085,6 +8700,11 @@ const baseLine = `${qty} x ${itemName}${bedSuffix}`;
 
 if (entry.bedType) {
     summary.beds.push(baseLine);
+}
+if (Array.isArray(entry.wardrobeTypes) && entry.wardrobeTypes.length) {
+    summary.wardrobes.push(
+        baseLine + " — " + entry.wardrobeTypes.join(", ").toUpperCase()
+    );
 }
 
 
@@ -8271,6 +8891,16 @@ function renderListedSummary(summary, materials, crewInstructions) {
             <div class="listed-stat-label">Crew Instructions / Responsibilities</div>
 
             <div class="space-y-3 text-[10px] font-black text-slate-900 uppercase leading-5">
+                <div>
+    <div class="text-slate-400 pb-1">Wardrobes</div>
+    ${
+        crew.wardrobes.length
+            ? crew.wardrobes.map(function(item) {
+                return `<div>${escapeHtml(item)}</div>`;
+            }).join("")
+            : `<div class="text-slate-400 italic">None</div>`
+    }
+</div>
                 <div>
     <div class="text-slate-400 pb-1">Beds</div>
     ${
@@ -8507,6 +9137,9 @@ renderListedSummary(listedSummary, materialsSummary, filteredItems);
                 const tags = [];
 
 if (entry.bedType) tags.push("BED: " + String(entry.bedType).toUpperCase());
+if (Array.isArray(entry.wardrobeTypes) && entry.wardrobeTypes.length) {
+    tags.push("WARDROBE: " + entry.wardrobeTypes.join(", ").toUpperCase());
+}
 if (entry.dismantle) tags.push("DISMANTLE");
 if (entry.expWrap) tags.push("EXP WRAP");
 if (entry.disconnect) tags.push("DISCONNECT");
@@ -8648,6 +9281,9 @@ function refreshCurrentInventorySelectionDisplay() {
 
     const tags = [];
 if (rawEntry.bedType) tags.push("[BED: " + String(rawEntry.bedType).toUpperCase() + "]");
+if (Array.isArray(rawEntry.wardrobeTypes) && rawEntry.wardrobeTypes.length) {
+    tags.push("[WARDROBE: " + rawEntry.wardrobeTypes.join(", ").toUpperCase() + "]");
+}
 if (rawEntry.dismantle) tags.push("[DISMANTLE]");
 if (rawEntry.expWrap) tags.push("[EXP WRAP]");
 if (rawEntry.disconnect) tags.push("[DISCONNECT]");
@@ -9454,14 +10090,128 @@ function printListedInventoryPdf() {
    COSTING & QUOTING STATE
 ========================= */
 
+/* =========================
+   AVAILABILITY CACHE
+========================= */
+
+const PHOTON_AVAILABILITY_CACHE_KEY = "photon_availability_cache";
+
+function getDefaultAvailabilityCache() {
+    return {
+        refreshedAt: "",
+        source: "Local fallback",
+        dates: {
+            "2026-05-01": "green",
+            "2026-05-02": "blue",
+            "2026-05-03": "yellow"
+        }
+    };
+}
+
+function getAvailabilityCache() {
+    const raw = localStorage.getItem(PHOTON_AVAILABILITY_CACHE_KEY);
+
+    if (!raw) {
+        return getDefaultAvailabilityCache();
+    }
+
+    try {
+        const parsed = JSON.parse(raw);
+
+        if (!parsed || typeof parsed !== "object") {
+            return getDefaultAvailabilityCache();
+        }
+
+        if (!parsed.dates || typeof parsed.dates !== "object") {
+            parsed.dates = {};
+        }
+
+        if (!parsed.source) {
+            parsed.source = "Cached availability";
+        }
+
+        if (!parsed.refreshedAt) {
+            parsed.refreshedAt = "";
+        }
+
+        return parsed;
+    } catch (err) {
+        return getDefaultAvailabilityCache();
+    }
+}
+
+function saveAvailabilityCache(cache) {
+    localStorage.setItem(PHOTON_AVAILABILITY_CACHE_KEY, JSON.stringify(cache));
+}
+
+function getAvailabilityBandForDate(dateValue) {
+    const cleanDate = String(dateValue || "").trim();
+
+    if (!cleanDate) {
+        return "green";
+    }
+
+    const cache = getAvailabilityCache();
+    const band = cache.dates && cache.dates[cleanDate];
+
+    return band || "green";
+}
+
+function getAvailabilityRefreshText() {
+    const cache = getAvailabilityCache();
+
+    if (!cache.refreshedAt) {
+        return "Using local fallback availability";
+    }
+
+    return "Last refreshed: " + new Date(cache.refreshedAt).toLocaleString("en-GB") + " · " + cache.source;
+}
+
+function buildSampleAvailabilityRefreshData() {
+    return {
+        refreshedAt: new Date().toISOString(),
+        source: "Sample refreshed availability",
+        dates: {
+            "2026-05-01": "green",
+            "2026-05-02": "green",
+            "2026-05-03": "blue",
+            "2026-05-04": "yellow",
+            "2026-05-05": "blue",
+            "2026-05-06": "green",
+            "2026-05-07": "yellow",
+            "2026-05-08": "green",
+            "2026-05-09": "blue",
+            "2026-05-10": "yellow"
+        }
+    };
+}
+
+function refreshAvailabilityCacheSample() {
+    const sampleData = buildSampleAvailabilityRefreshData();
+
+    saveAvailabilityCache(sampleData);
+
+    const statusEl = document.getElementById("quote-availabilityRefreshStatus");
+    if (statusEl) {
+        statusEl.innerText = getAvailabilityRefreshText();
+    }
+
+    const seq = getQuoteSelectedSequence();
+    if (seq) {
+        updateQuoteCommercialDisplays(String(seq.id));
+    }
+
+    alert("Sample availability refreshed.");
+}
 const QUOTE_MANDATORY_LABELS = ["Vans", "Crew", "Mileage", "Consumables", "Cartons", "Export Wrap", "Nights Out"];
 const QUOTE_PRICING_DEFAULTS = [
     { label: "Vans", qty: 0, unitCost: 120 },
     { label: "Crew", qty: 0, unitCost: 200 },
     { label: "Mileage", qty: 0, unitCost: 0.45 },
-    { label: "Consumables", qty: 0, unitCost: 0 },
+    { label: "Consumables", qty: 1, unitCost: 60 },
     { label: "Cartons", qty: 0, unitCost: 2.5 },
     { label: "Export Wrap", qty: 0, unitCost: 0.3 },
+    { label: "Overtime", qty: 0, unitCost: 20 },
     { label: "Nights Out", qty: 0, unitCost: 40 }
 ];
 
@@ -9481,7 +10231,9 @@ const QUOTE_CORE_COST_CHOICES = [
     "Consumables",
     "Cartons",
     "Export Wrap",
+    "Overtime",
     "Nights Out",
+    "Crates",
     "Custom"
 ];
 
@@ -9499,6 +10251,89 @@ const QUOTE_ADDITIONAL_SERVICE_CHOICES = [
     "Decorator",
     "Specialist Contractor"
 ];
+
+const AVAILABILITY_MARGIN_BANDS = {
+    green: {
+        label: "Green Availability",
+        baseMargin: 10,
+        className: "green"
+    },
+    blue: {
+        label: "Blue Availability",
+        baseMargin: 20,
+        className: "blue"
+    },
+    yellow: {
+        label: "Yellow Availability",
+        baseMargin: 30,
+        className: "yellow"
+    }
+};
+
+/*
+    Phase 2 local placeholder availability map.
+    Later, this can be refreshed from CRM/server.
+    Format:
+    "YYYY-MM-DD": "green" / "blue" / "yellow"
+*/
+const LOCAL_AVAILABILITY_BY_DATE = {
+    "2026-05-01": "green",
+    "2026-05-02": "blue",
+    "2026-05-03": "yellow"
+};
+
+const QUOTE_AVAILABILITY_BANDS = [
+    {
+        id: "",
+        label: "Select Band",
+        cssClass: "availability-band-grey",
+        minMargin: 0,
+        maxMargin: 0
+    },
+    {
+        id: "green",
+        label: "Green",
+        cssClass: "availability-band-green",
+        minMargin: 10,
+        maxMargin: 20
+    },
+    {
+        id: "blue",
+        label: "Blue",
+        cssClass: "availability-band-blue",
+        minMargin: 20,
+        maxMargin: 30
+    },
+    {
+        id: "yellow",
+        label: "Yellow",
+        cssClass: "availability-band-yellow",
+        minMargin: 30,
+        maxMargin: 40
+    },
+    {
+        id: "red",
+        label: "Red",
+        cssClass: "availability-band-red",
+        minMargin: 40,
+        maxMargin: 50
+    }
+];
+
+/*
+    Later, the server/CRM refresh can fill this table.
+
+    Format:
+    "Branch|YYYY-MM-DD": "green"
+    "Branch|YYYY-MM-DD": "blue"
+    "Branch|YYYY-MM-DD": "yellow"
+    "Branch|YYYY-MM-DD": "red"
+*/
+const AVAILABILITY_RATE_TABLE = {
+    // Example:
+    // "Guildford|2026-05-14": "yellow",
+    // "London|2026-05-15": "green"
+};
 
 let quotePricingSaved = false;
 
@@ -9522,7 +10357,13 @@ function createEmptyQuoteSequenceState() {
         customerPrice: 0,
         quoteNotes: "",
         pricingLines: [],
-        additionalCostLines: []
+        additionalCostLines: [],
+        availabilityPricing: {
+            moveDate: "",
+            band: "",
+            uplift: 0,
+            appliedSuggestedPrice: 0
+        }
     };
 }
 
@@ -9540,6 +10381,59 @@ function ensureQuoteSequenceState(sequenceId) {
     if (!Array.isArray(state.additionalCostLines)) state.additionalCostLines = [];
     if (typeof state.quoteNotes !== "string") state.quoteNotes = "";
     if (typeof state.customerPrice !== "number") state.customerPrice = Number(state.customerPrice || 0);
+   if (!state.availabilityPricing || typeof state.availabilityPricing !== "object") {
+    state.availabilityPricing = {
+        moveDate: "",
+        band: "",
+        uplift: 0,
+        appliedSuggestedPrice: 0
+    };
+}
+
+if (state.availabilityPricing.band === "green" && !state.availabilityPricing.moveDate) {
+    state.availabilityPricing.band = "";
+}
+
+if (typeof state.availabilityPricing.moveDate !== "string") {
+    state.availabilityPricing.moveDate = "";
+}
+
+if (!AVAILABILITY_MARGIN_BANDS[state.availabilityPricing.band]) {
+    state.availabilityPricing.band = "green";
+}
+
+state.availabilityPricing.uplift = Math.max(
+    0,
+    Math.min(10, Number(state.availabilityPricing.uplift || 0))
+);
+
+state.availabilityPricing.appliedSuggestedPrice = Number(
+    state.availabilityPricing.appliedSuggestedPrice || 0
+);
+
+    if (!state.availabilityPricing || typeof state.availabilityPricing !== "object") {
+        state.availabilityPricing = createEmptyQuoteSequenceState().availabilityPricing;
+    }
+
+    if (!Array.isArray(state.availabilityPricing.dates)) {
+        state.availabilityPricing.dates = [];
+    }
+
+    if (state.availabilityPricing.faderValue === undefined) {
+        state.availabilityPricing.faderValue = 5;
+    }
+
+    if (state.availabilityPricing.lastSuggestedMarginPct === undefined) {
+        state.availabilityPricing.lastSuggestedMarginPct = 0;
+    }
+
+    if (state.availabilityPricing.lastSuggestedSellPrice === undefined) {
+        state.availabilityPricing.lastSuggestedSellPrice = 0;
+    }
+
+    if (typeof state.availabilityPricing.lastAppliedAt !== "string") {
+        state.availabilityPricing.lastAppliedAt = "";
+    }
 
     return state;
 }
@@ -9570,6 +10464,125 @@ function setQuoteSelectedSequenceId(sequenceId) {
     saveToDevice();
 }
 
+function getScheduleRowDateValue(row) {
+    if (!row || typeof row !== "object") return "";
+
+    return String(
+        row.moveDate ||
+        row.scheduleDate ||
+        row.date ||
+        ""
+    ).trim();
+}
+
+function getPricingDateFromSchedule(sequenceId) {
+    if (!currentJob || !Array.isArray(currentJob.sequences)) {
+        return {
+            date: "",
+            source: "none",
+            label: "No schedule found"
+        };
+    }
+
+    const seq = currentJob.sequences.find(function(sequence) {
+        return String(sequence.id) === String(sequenceId);
+    });
+
+    if (!seq || !seq.schedule || !Array.isArray(seq.schedule.manualDays)) {
+        return {
+            date: "",
+            source: "none",
+            label: "No schedule rows found"
+        };
+    }
+
+    const rowsWithDates = seq.schedule.manualDays.filter(function(row) {
+        return !!getScheduleRowDateValue(row);
+    });
+
+    if (!rowsWithDates.length) {
+        return {
+            date: "",
+            source: "none",
+            label: "No schedule row date entered"
+        };
+    }
+
+    const completionDayRow = rowsWithDates.find(function(row) {
+        return String(row.completionWindow || "") === "Completion Day";
+    });
+
+    if (completionDayRow) {
+        return {
+            date: getScheduleRowDateValue(completionDayRow),
+            source: "completion",
+            label: "Using Completion Day date"
+        };
+    }
+
+    return {
+        date: getScheduleRowDateValue(rowsWithDates[0]),
+        source: "first",
+        label: "No Completion Day set — using first schedule date"
+    };
+}
+
+function getAvailabilityBandForScheduleDate(sequenceId, dateValue) {
+    if (!dateValue) return "";
+
+    const seq = currentJob && Array.isArray(currentJob.sequences)
+        ? currentJob.sequences.find(function(sequence) {
+            return String(sequence.id) === String(sequenceId);
+        })
+        : null;
+
+    const schedule = seq ? ensureSequenceScheduleShape(seq) : null;
+    const branch = schedule && schedule.operatingBranch
+        ? schedule.operatingBranch
+        : "London";
+
+    const branchKey = branch + "|" + dateValue;
+
+    if (AVAILABILITY_RATE_TABLE && AVAILABILITY_RATE_TABLE[branchKey]) {
+        return AVAILABILITY_RATE_TABLE[branchKey];
+    }
+
+    if (LOCAL_AVAILABILITY_BY_DATE && LOCAL_AVAILABILITY_BY_DATE[dateValue]) {
+        return LOCAL_AVAILABILITY_BY_DATE[dateValue];
+    }
+
+    return "";
+}
+
+function syncQuoteAvailabilityDateFromSchedule(sequenceId) {
+    const state = ensureQuoteSequenceState(sequenceId);
+    if (!state) return;
+
+    if (!state.availabilityPricing || typeof state.availabilityPricing !== "object") {
+        state.availabilityPricing = {
+            moveDate: "",
+            band: "",
+            uplift: 0,
+            appliedSuggestedPrice: 0
+        };
+    }
+
+    const scheduleDateInfo = getPricingDateFromSchedule(sequenceId);
+    const scheduleDate = scheduleDateInfo.date || "";
+    const availabilityBand = getAvailabilityBandForScheduleDate(sequenceId, scheduleDate);
+
+    state.availabilityPricing.moveDate = scheduleDate;
+    state.availabilityPricing.dateSource = scheduleDateInfo.source;
+    state.availabilityPricing.dateSourceLabel = scheduleDateInfo.label;
+
+    if (availabilityBand) {
+        state.availabilityPricing.band = availabilityBand;
+    }
+
+    if (!state.availabilityPricing.band) {
+        state.availabilityPricing.band = "";
+    }
+}
 function getQuoteSelectedSequence() {
     if (!currentJob || !Array.isArray(currentJob.sequences)) return null;
 
@@ -9578,6 +10591,15 @@ function getQuoteSelectedSequence() {
     return currentJob.sequences.find(function(seq) {
         return String(seq.id) === String(selectedId);
     }) || currentJob.sequences[0] || null;
+}
+
+function formatDateForDisplay(dateValue) {
+    if (!dateValue) return "";
+
+    const parts = String(dateValue).split("-");
+    if (parts.length !== 3) return dateValue;
+
+    return parts[2] + "/" + parts[1] + "/" + parts[0];
 }
 
 function quoteMoney(value) {
@@ -9618,11 +10640,12 @@ function calcQuoteScheduleTotals(sequenceId) {
 
         if (!grouped[groupKey]) {
             grouped[groupKey] = {
-                vans: 0,
-                crew: 0,
-                nightsOut: 0,
-                hasNightOut: false
-            };
+    vans: 0,
+    crew: 0,
+    nightsOut: 0,
+    overtime: 0,
+    hasNightOut: false
+};
         }
 
         const men = Number(row.men || 0);
@@ -9640,18 +10663,20 @@ function calcQuoteScheduleTotals(sequenceId) {
         if (isNightOutTask || isNightOutSelected) {
             grouped[groupKey].hasNightOut = true;
         }
+        grouped[groupKey].overtime += Math.max(0, Number(row.overtimeHours || 0)) * men;
     });
 
     return Object.values(grouped).reduce(function(acc, day) {
-        acc.vans += Number(day.vans || 0);
-        acc.crew += Number(day.crew || 0);
+    acc.vans += Number(day.vans || 0);
+    acc.crew += Number(day.crew || 0);
+    acc.overtime += Number(day.overtime || 0);
 
-        if (day.hasNightOut) {
-            acc.nightsOut += Number(day.crew || 0);
-        }
+    if (day.hasNightOut) {
+        acc.nightsOut += Number(day.crew || 0);
+    }
 
-        return acc;
-    }, { vans: 0, crew: 0, nightsOut: 0 });
+    return acc;
+}, { vans: 0, crew: 0, nightsOut: 0, overtime: 0 });
 }
 
 function buildDefaultQuotePricingLines(sequenceId) {
@@ -9681,6 +10706,7 @@ function buildDefaultQuotePricingLines(sequenceId) {
         if (item.label === "Crew") qty = scheduleTotals.crew;
         if (item.label === "Cartons") qty = cartonQty;
         if (item.label === "Export Wrap") qty = exportWrapQty;
+        if (item.label === "Overtime") qty = scheduleTotals.overtime;
         if (item.label === "Nights Out") qty = scheduleTotals.nightsOut;
 
         return {
@@ -9716,9 +10742,61 @@ function getQuoteAdditionalCostLines(sequenceId) {
     return state.additionalCostLines;
 }
 
+function syncQuoteTriggeredCostRows(sequenceId) {
+    const state = ensureQuoteSequenceState(sequenceId);
+    if (!state) return;
+
+    if (!Array.isArray(state.pricingLines)) state.pricingLines = [];
+    if (!Array.isArray(state.additionalCostLines)) state.additionalCostLines = [];
+
+    const rawItems = getRawInventoryItemsForSequence(sequenceId).filter(function(entry) {
+        return !entry.excluded;
+    });
+
+    const hasCrates = rawItems.some(function(entry) {
+        return !!entry.crated;
+    });
+
+    const hasHandyman = rawItems.some(function(entry) {
+        return !!entry.handyman;
+    });
+
+    const existingCratesLine = state.pricingLines.find(function(line) {
+        return line.label === "Crates";
+    });
+
+    if (hasCrates && !existingCratesLine) {
+        state.pricingLines.push({
+            id: createQuoteLineId(),
+            label: "Crates",
+            customLabel: "",
+            qty: 1,
+            unitCost: 0,
+            autoFromInventory: true,
+            needsCostEntry: true
+        });
+    }
+
+    const existingHandymanLine = state.additionalCostLines.find(function(line) {
+        return line.label === "Handyman";
+    });
+
+    if (hasHandyman && !existingHandymanLine) {
+        state.additionalCostLines.push({
+            id: createQuoteLineId(),
+            label: "Handyman",
+            customLabel: "",
+            qty: 1,
+            unitCost: 0,
+            autoFromInventory: true,
+            needsCostEntry: true
+        });
+    }
+}
 function syncQuotePricingFromSchedule(sequenceId) {
     const state = ensureQuoteSequenceState(sequenceId);
     if (!state || !Array.isArray(state.pricingLines)) return;
+    syncQuoteTriggeredCostRows(sequenceId);
 
     const scheduleTotals = calcQuoteScheduleTotals(sequenceId);
     const feed = getQuoteSequenceFeed(sequenceId);
@@ -9744,6 +10822,7 @@ function syncQuotePricingFromSchedule(sequenceId) {
         if (line.label === "Crew") return { ...line, qty: scheduleTotals.crew };
         if (line.label === "Cartons") return { ...line, qty: cartonQty };
         if (line.label === "Export Wrap") return { ...line, qty: exportWrapQty };
+        if (line.label === "Overtime") return { ...line, qty: scheduleTotals.overtime };
         if (line.label === "Nights Out") return { ...line, qty: scheduleTotals.nightsOut };
         return line;
     });
@@ -9794,6 +10873,302 @@ function getQuoteCommercialTotals(sequenceId) {
         grossMargin: grossMargin,
         grossMarginPct: grossMarginPct
     };
+}
+
+function createAvailabilityDateId() {
+    return "avail_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7);
+}
+
+function getAvailabilityBandById(bandId) {
+    return QUOTE_AVAILABILITY_BANDS.find(function(band) {
+        return band.id === bandId;
+    }) || QUOTE_AVAILABILITY_BANDS[0];
+}
+
+function getAvailabilityPricingState(sequenceId) {
+    const state = ensureQuoteSequenceState(sequenceId);
+    if (!state) return null;
+
+    if (!state.availabilityPricing) {
+        state.availabilityPricing = createEmptyQuoteSequenceState().availabilityPricing;
+    }
+
+    return state.availabilityPricing;
+}
+
+function getQuoteAvailabilityBranch(sequenceId) {
+    const seq = currentJob && currentJob.sequences
+        ? currentJob.sequences.find(function(item) {
+            return String(item.id) === String(sequenceId);
+        })
+        : null;
+
+    if (!seq) return "London";
+
+    const schedule = ensureSequenceScheduleShape(seq);
+    return schedule && schedule.operatingBranch ? schedule.operatingBranch : "London";
+}
+
+function getAvailabilityBandFromLocalTable(branch, dateValue) {
+    const key = String(branch || "") + "|" + String(dateValue || "");
+    return AVAILABILITY_RATE_TABLE[key] || "";
+}
+
+function addQuoteAvailabilityDate(sequenceId) {
+    const pricing = getAvailabilityPricingState(sequenceId);
+    if (!pricing) return;
+
+    pricing.dates.push({
+        id: createAvailabilityDateId(),
+        date: "",
+        branch: getQuoteAvailabilityBranch(sequenceId),
+        band: ""
+    });
+
+    quotePricingSaved = false;
+    saveToDevice();
+    renderQuoteTab();
+}
+
+function deleteQuoteAvailabilityDate(sequenceId, dateId) {
+    const pricing = getAvailabilityPricingState(sequenceId);
+    if (!pricing) return;
+
+    pricing.dates = pricing.dates.filter(function(row) {
+        return row.id !== dateId;
+    });
+
+    quotePricingSaved = false;
+    saveToDevice();
+    renderQuoteTab();
+}
+
+function updateQuoteAvailabilityDate(sequenceId, dateId, field, value) {
+    const pricing = getAvailabilityPricingState(sequenceId);
+    if (!pricing) return;
+
+    const row = pricing.dates.find(function(item) {
+        return item.id === dateId;
+    });
+
+    if (!row) return;
+
+    row[field] = value;
+
+    if (field === "date") {
+        const suggestedBand = getAvailabilityBandFromLocalTable(row.branch, value);
+        if (suggestedBand) {
+            row.band = suggestedBand;
+        }
+    }
+
+    quotePricingSaved = false;
+    saveToDevice();
+    renderQuoteAvailabilityPricingPanel(sequenceId);
+    updateQuoteCommercialDisplays(sequenceId);
+}
+
+function refreshQuoteAvailabilityFromLocalTable(sequenceId) {
+    const pricing = getAvailabilityPricingState(sequenceId);
+    if (!pricing) return;
+
+    let matchedCount = 0;
+
+    pricing.dates.forEach(function(row) {
+        const band = getAvailabilityBandFromLocalTable(row.branch, row.date);
+
+        if (band) {
+            row.band = band;
+            matchedCount += 1;
+        }
+    });
+
+    quotePricingSaved = false;
+    saveToDevice();
+    renderQuoteTab();
+
+    if (matchedCount === 0) {
+        alert("No availability matches found in the local table yet. You can still select the bands manually.");
+    } else {
+        alert("Availability refreshed for " + matchedCount + " date row(s).");
+    }
+}
+
+function getHighestAvailabilityBand(dates) {
+    const validBands = dates
+        .map(function(row) {
+            return getAvailabilityBandById(row.band);
+        })
+        .filter(function(band) {
+            return !!band.id;
+        });
+
+    if (!validBands.length) {
+        return getAvailabilityBandById("");
+    }
+
+    return validBands.sort(function(a, b) {
+        return b.maxMargin - a.maxMargin;
+    })[0];
+}
+
+function calculateAvailabilityMargin(band, faderValue) {
+    if (!band || !band.id) return 0;
+
+    const cleanFader = Math.max(0, Math.min(10, Number(faderValue || 0)));
+    const range = Number(band.maxMargin || 0) - Number(band.minMargin || 0);
+
+    return Math.round((Number(band.minMargin || 0) + ((range * cleanFader) / 10)) * 100) / 100;
+}
+
+function calculateSellPriceFromMargin(costBase, marginPct) {
+    const cost = Number(costBase || 0);
+    const margin = Number(marginPct || 0);
+
+    if (cost <= 0 || margin <= 0 || margin >= 95) {
+        return 0;
+    }
+
+    return Math.round((cost / (1 - (margin / 100))) * 100) / 100;
+}
+
+function updateQuoteAvailabilityFader(sequenceId, value) {
+    const pricing = getAvailabilityPricingState(sequenceId);
+    if (!pricing) return;
+
+    pricing.faderValue = Number(value || 0);
+
+    quotePricingSaved = false;
+    saveToDevice();
+    renderQuoteAvailabilityPricingPanel(sequenceId);
+    updateQuoteCommercialDisplays(sequenceId);
+}
+
+
+function renderAvailabilityBandOptions(selectedBand) {
+    return QUOTE_AVAILABILITY_BANDS.map(function(band) {
+        const selected = band.id === selectedBand ? "selected" : "";
+        return `<option value="${band.id}" ${selected}>${band.label}</option>`;
+    }).join("");
+}
+
+function renderQuoteAvailabilityPricingPanel(sequenceId) {
+    const target = document.getElementById("quote-availabilityPricingCard");
+    if (!target) return;
+
+    const pricing = getAvailabilityPricingState(sequenceId);
+    const totals = getQuoteCommercialTotals(sequenceId);
+
+    if (!pricing) {
+        target.innerHTML = `
+            <div class="quote-date-confirm-line warn">
+                No availability pricing state found
+            </div>
+        `;
+        return;
+    }
+
+    const dateUsed = getAvailabilityDateUsedForSequence(sequenceId);
+    const dateLabel = dateUsed
+        ? new Date(dateUsed + "T00:00:00").toLocaleDateString("en-GB")
+        : "";
+
+    const pricingDates = Array.isArray(pricing.dates)
+        ? pricing.dates
+        : (dateUsed ? [dateUsed] : []);
+
+    let band = null;
+
+    if (typeof getHighestAvailabilityBand === "function") {
+        band = getHighestAvailabilityBand(pricingDates);
+    }
+
+    if (!band && pricing.band && AVAILABILITY_MARGIN_BANDS && AVAILABILITY_MARGIN_BANDS[pricing.band]) {
+        const oldBand = AVAILABILITY_MARGIN_BANDS[pricing.band];
+
+        band = {
+            id: pricing.band,
+            label: oldBand.label || pricing.band,
+            minMargin: Number(oldBand.baseMargin || 0),
+            maxMargin: Number(oldBand.baseMargin || 0) + 10
+        };
+    }
+
+    if (!band) {
+        band = {
+            id: "",
+            label: "No Band",
+            minMargin: 0,
+            maxMargin: 0
+        };
+    }
+
+    const faderValue = pricing.faderValue !== undefined
+        ? Number(pricing.faderValue || 0)
+        : Number(pricing.uplift || 0);
+
+    const marginPct = calculateAvailabilityMargin(band, faderValue);
+    const suggestedSellPrice = calculateSellPriceFromMargin(totals.totalCostBase, marginPct);
+
+    const bandLabel = band && band.label ? band.label : "No Band";
+    const bandClass = band && band.id ? band.id : "";
+
+    target.innerHTML = `
+        <div class="availability-pricing-card">
+            ${
+                dateUsed
+                    ? `
+                        <div class="quote-date-confirm-line">
+                            Using schedule date: ${dateLabel}
+                        </div>
+                    `
+                    : `
+                        <div class="quote-date-confirm-line warn">
+                            No schedule date entered yet
+                        </div>
+                    `
+            }
+
+            <div>
+                <label class="mini-label">Availability Band</label>
+                <div class="availability-band-pill ${bandClass}">
+                    ${escapeHtml(bandLabel)}
+                </div>
+            </div>
+
+            <div class="availability-slider-row">
+                <label class="mini-label">Margin Uplift</label>
+                <input
+                    type="range"
+                    min="0"
+                    max="10"
+                    step="1"
+                    value="${Number(faderValue || 0)}"
+                    class="availability-slider"
+                    oninput="updateAvailabilityFader('${sequenceId}', this.value)"
+                >
+                <div class="text-[10px] font-bold text-slate-500 uppercase">
+                    Suggested margin: ${quoteMoney(marginPct)}%
+                </div>
+            </div>
+
+            <div class="availability-suggested-price">
+                <div class="listed-stat-label">Suggested Price</div>
+                <div class="listed-stat-value">${quoteMoney(suggestedSellPrice)}</div>
+                <div class="listed-stat-sub">
+                    Based on current core cost base and schedule availability
+                </div>
+            </div>
+
+            <button
+                type="button"
+                class="availability-apply-btn"
+                onclick="applyAvailabilitySuggestedPrice('${sequenceId}', ${Number(suggestedSellPrice || 0)})"
+            >
+                Apply Suggested Price
+            </button>
+        </div>
+    `;
 }
 
 function buildQuoteScopeSnapshot(sequenceId) {
@@ -9929,7 +11304,8 @@ function updateQuoteCommercialDisplays(sequenceId) {
     }
 
     renderQuoteCommercialSummary(sequenceId);
-    renderQuoteAdditionalBreakdown(sequenceId);
+renderQuoteAdditionalBreakdown(sequenceId);
+renderAvailabilityPricingPanel(sequenceId);
 }
 
 function renderQuoteTabShellOnly() {
@@ -9942,10 +11318,18 @@ function renderQuoteTabShellOnly() {
     renderQuoteSequenceSelect();
 
     const customerInput = document.getElementById("quote-customerPriceInput");
-    const notesInput = document.getElementById("quote-quoteNotesInput");
+const notesInput = document.getElementById("quote-quoteNotesInput");
+const availabilityStatus = document.getElementById("quote-availabilityRefreshStatus");
 
     if (customerInput) customerInput.value = Number(state.customerPrice || 0);
-    if (notesInput) notesInput.value = state.quoteNotes || "";
+if (notesInput) notesInput.value = state.quoteNotes || "";
+
+if (availabilityStatus) {
+    availabilityStatus.innerText = getAvailabilityRefreshText();
+}
+
+renderAvailabilityPricingPanel(sequenceId);
+updateQuoteCommercialDisplays(sequenceId);
 
     updateQuoteCommercialDisplays(sequenceId);
 }
@@ -9956,6 +11340,26 @@ function handleQuoteSequenceChange(value) {
     renderQuoteTab();
 }
 
+function handleQuoteAvailabilityUpliftChange(sequenceId, value) {
+    const state = ensureQuoteSequenceState(sequenceId);
+    if (!state) return;
+
+    if (!state.availabilityPricing || typeof state.availabilityPricing !== "object") {
+        state.availabilityPricing = {
+            moveDate: "",
+            band: "",
+            uplift: 0,
+            appliedSuggestedPrice: 0
+        };
+    }
+
+    state.availabilityPricing.uplift = Number(value || 0);
+
+    quotePricingSaved = false;
+    saveToDevice();
+
+    renderQuoteAvailabilityPricingPanel(sequenceId);
+}
 function handleQuoteCustomerPriceChange(value) {
     const seq = getQuoteSelectedSequence();
     if (!seq) return;
@@ -9985,17 +11389,7 @@ function handleQuoteCreateQuote() {
     const state = ensureQuoteSequenceState(sequenceId);
     const totals = getQuoteCommercialTotals(sequenceId);
     const scope = buildQuoteScopeSnapshot(sequenceId);
-    const QUOTE_CORE_COST_CHOICES = [
-    "Vans",
-    "Crew",
-    "Mileage",
-    "Consumables",
-    "Cartons",
-    "Export Wrap",
-    "Nights Out",
-    "Custom"
-];
-
+    
     const coreLines = getQuotePricingLines(sequenceId)
         .map(function(line) {
             const label = getQuoteLineLabel(line) || line.label || "Line";
@@ -10049,6 +11443,60 @@ ${state.quoteNotes || "None"}
 `;
 
     alert(quoteText);
+}
+function applyAvailabilitySuggestedPrice(sequenceId) {
+    const state = ensureQuoteSequenceState(sequenceId);
+    if (!state) return;
+
+    syncQuoteAvailabilityDateFromSchedule(sequenceId);
+
+    const availability = state.availabilityPricing || {};
+    const pricingDate = availability.moveDate || "";
+    const selectedBandId = availability.band || "";
+
+    if (!pricingDate) {
+        alert("Add a date to the Schedule planner first.");
+        return;
+    }
+
+    if (!selectedBandId) {
+        alert("No availability band found for this schedule date.");
+        return;
+    }
+
+    const band = QUOTE_AVAILABILITY_BANDS.find(function(item) {
+        return item.id === selectedBandId;
+    });
+
+    if (!band) {
+        alert("Availability band could not be found.");
+        return;
+    }
+
+    const uplift = Number(availability.uplift || 0);
+    const minMargin = Number(band.minMargin || 0);
+    const maxMargin = Number(band.maxMargin || 0);
+    const targetMargin = Math.min(maxMargin, Math.max(minMargin, minMargin + uplift));
+
+    const totals = getQuoteCommercialTotals(sequenceId);
+    const costBase = Number(totals.totalCostBase || 0);
+
+    if (costBase <= 0) {
+        alert("Core cost base is zero, so a suggested price cannot be calculated yet.");
+        return;
+    }
+
+    const suggestedPrice = targetMargin >= 100
+        ? 0
+        : costBase / (1 - (targetMargin / 100));
+
+    state.customerPrice = Math.round(suggestedPrice * 100) / 100;
+    state.availabilityPricing.appliedSuggestedPrice = state.customerPrice;
+
+    quotePricingSaved = false;
+    saveToDevice();
+
+    renderQuoteTab();
 }
 
 function handleQuoteSavePricing() {
@@ -10121,6 +11569,84 @@ function renderQuoteCommercialSummary(sequenceId) {
     `;
 }
 
+
+function getAvailabilityPricingState(sequenceId) {
+    const state = ensureQuoteSequenceState(sequenceId);
+    if (!state) return null;
+
+    if (!state.availabilityPricing) {
+        state.availabilityPricing = {
+            moveDate: "",
+            band: "green",
+            uplift: 0,
+            appliedSuggestedPrice: 0
+        };
+    }
+
+    return state.availabilityPricing;
+}
+
+function calculateSuggestedSellPriceFromMargin(costBase, marginPercent) {
+    const cleanCost = Number(costBase || 0);
+    const cleanMargin = Number(marginPercent || 0);
+
+    if (cleanCost <= 0) return 0;
+    if (cleanMargin <= 0) return cleanCost;
+    if (cleanMargin >= 95) return cleanCost;
+
+    return cleanCost / (1 - (cleanMargin / 100));
+}
+
+function roundSuggestedQuotePrice(value) {
+    const cleanValue = Number(value || 0);
+    if (cleanValue <= 0) return 0;
+
+    return Math.ceil(cleanValue / 10) * 10;
+}
+
+function renderAvailabilityPricingPanel(sequenceId) {
+    if (typeof renderQuoteAvailabilityPricingPanel === "function") {
+        renderQuoteAvailabilityPricingPanel(sequenceId);
+    }
+}
+
+function handleAvailabilityMoveDateChange(sequenceId, value) {
+    const availability = getAvailabilityPricingState(sequenceId);
+    if (!availability) return;
+
+    availability.moveDate = String(value || "");
+
+    const matchedBand = getAvailabilityBandForDate(availability.moveDate);
+    availability.band = matchedBand;
+
+    quotePricingSaved = false;
+    saveToDevice();
+    renderQuoteTab();
+}
+
+function handleAvailabilityBandChange(sequenceId, value) {
+    const availability = getAvailabilityPricingState(sequenceId);
+    if (!availability) return;
+
+    availability.band = AVAILABILITY_MARGIN_BANDS[value] ? value : "green";
+
+    quotePricingSaved = false;
+    saveToDevice();
+    renderQuoteTab();
+}
+
+function handleAvailabilityUpliftChange(sequenceId, value) {
+    const availability = getAvailabilityPricingState(sequenceId);
+    if (!availability) return;
+
+    availability.uplift = Math.max(0, Math.min(10, Number(value || 0)));
+
+    quotePricingSaved = false;
+    saveToDevice();
+    renderQuoteTab();
+}
+
+
 function renderQuoteAdditionalBreakdown(sequenceId) {
     const target = document.getElementById("quote-additionalCostsBreakdownCard");
     if (!target) return;
@@ -10152,7 +11678,192 @@ function renderQuoteAdditionalBreakdown(sequenceId) {
     `;
 }
 
+function getQuoteAvailabilityBandById(bandId) {
+    return QUOTE_AVAILABILITY_BANDS.find(function(band) {
+        return band.id === bandId;
+    }) || QUOTE_AVAILABILITY_BANDS[0];
+}
+
+function getScheduleRowDateValue(row) {
+    if (!row) return "";
+
+    return String(
+        row.date ||
+        row.scheduleDate ||
+        row.moveDate ||
+        row.rowDate ||
+        ""
+    ).trim();
+}
+
+function formatQuoteAvailabilityDate(dateValue) {
+    if (!dateValue) return "No Date";
+
+    const parsed = new Date(dateValue + "T00:00:00");
+
+    if (isNaN(parsed.getTime())) {
+        return dateValue;
+    }
+
+    return parsed.toLocaleDateString("en-GB", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
+}
+
+function getQuoteScheduleDates(sequenceId) {
+    const rows = getQuoteScheduleRows(sequenceId);
+    const seen = {};
+    const dates = [];
+
+    rows.forEach(function(row) {
+        const dateValue = getScheduleRowDateValue(row);
+
+        if (!dateValue) return;
+
+        if (!seen[dateValue]) {
+            seen[dateValue] = true;
+            dates.push(dateValue);
+        }
+    });
+
+    return dates.sort();
+}
+
+function getHighestAvailabilityBand(dateBands) {
+    const selectedBands = Object.values(dateBands || {})
+        .map(function(bandId) {
+            return getQuoteAvailabilityBandById(bandId);
+        })
+        .filter(function(band) {
+            return band.id !== "none";
+        });
+
+    if (!selectedBands.length) {
+        return getQuoteAvailabilityBandById("none");
+    }
+
+    return selectedBands.reduce(function(highest, band) {
+        return Number(band.marginPct || 0) > Number(highest.marginPct || 0)
+            ? band
+            : highest;
+    }, selectedBands[0]);
+}
+
+function updateQuoteAvailabilityBand(sequenceId, dateValue, bandId) {
+    const state = ensureQuoteSequenceState(sequenceId);
+    if (!state) return;
+
+    if (!state.availabilityByDate || typeof state.availabilityByDate !== "object") {
+        state.availabilityByDate = {};
+    }
+
+    state.availabilityByDate[dateValue] = bandId || "none";
+
+    quotePricingSaved = false;
+    saveToDevice();
+
+    renderQuoteAvailabilityPanel(sequenceId);
+}
+
+function renderQuoteAvailabilityPanel(sequenceId) {
+    const target = document.getElementById("quote-availabilityCard");
+    if (!target) return;
+
+    const state = ensureQuoteSequenceState(sequenceId);
+    if (!state) return;
+
+    if (!state.availabilityByDate || typeof state.availabilityByDate !== "object") {
+        state.availabilityByDate = {};
+    }
+
+    const scheduleDates = getQuoteScheduleDates(sequenceId);
+
+    if (!scheduleDates.length) {
+        target.innerHTML = `
+            <div class="document-block">
+                <div class="document-heading">Schedule Dates</div>
+                <div class="document-empty">No dated schedule rows found yet</div>
+                <div class="footer-note">
+                    Add dates on the Schedule tab first. Those dates will appear here for availability banding.
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    const activeDateBands = {};
+
+    scheduleDates.forEach(function(dateValue) {
+        activeDateBands[dateValue] = state.availabilityByDate[dateValue] || "none";
+    });
+
+    const highestBand = getHighestAvailabilityBand(activeDateBands);
+
+    target.innerHTML = `
+        <div class="quote-availability-list">
+            ${
+                scheduleDates.map(function(dateValue) {
+                    const selectedBandId = state.availabilityByDate[dateValue] || "none";
+
+                    return `
+                        <div class="quote-availability-row">
+                            <div class="quote-availability-date">
+                                ${escapeHtml(formatQuoteAvailabilityDate(dateValue))}
+                            </div>
+
+                            <select
+                                class="quote-availability-select"
+                                onchange="updateQuoteAvailabilityBand('${sequenceId}', '${escapeHtml(dateValue)}', this.value)"
+                            >
+                                ${
+                                    QUOTE_AVAILABILITY_BANDS.map(function(band) {
+                                        const selected = band.id === selectedBandId ? "selected" : "";
+                                        const label = band.id === "none"
+                                            ? band.label
+                                            : band.label + " — " + band.marginPct + "%";
+
+                                        return `<option value="${band.id}" ${selected}>${label}</option>`;
+                                    }).join("")
+                                }
+                            </select>
+                        </div>
+                    `;
+                }).join("")
+            }
+        </div>
+
+        <div class="quote-availability-summary ${highestBand.id}">
+            Availability pricing basis:
+            ${
+                highestBand.id === "none"
+                    ? "Not set yet"
+                    : highestBand.label + " / " + highestBand.marginPct + "% margin"
+            }
+            <br>
+            ${escapeHtml(highestBand.note)}
+        </div>
+
+        <div class="footer-note">
+            Phase 4A only stores the availability bands. It does not change the quote price yet.
+        </div>
+    `;
+}
+function renderQuoteDateMarginPricingPanel(sequenceId) {
+    if (typeof renderQuoteAvailabilityPricingPanel === "function") {
+        renderQuoteAvailabilityPricingPanel(sequenceId);
+        return;
+    }
+
+    const target = document.getElementById("quote-availabilityPricingCard");
+    if (target) {
+        target.innerHTML = "";
+    }
+}
 function renderQuoteTab() {
+console.log("QUOTE TEST 1: renderQuoteTab started");
     renderQuoteTabShellOnly();
     bindQuoteShellEvents();
 
@@ -10163,8 +11874,33 @@ function renderQuoteTab() {
 
 syncQuotePricingFromSchedule(sequenceId);
 
+if (typeof syncQuoteAvailabilityDateFromSchedule === "function") {
+    syncQuoteAvailabilityDateFromSchedule(sequenceId);
+}
+console.log("QUOTE TEST 2: about to render grids", {
+    commercialSummary: !!document.getElementById("quote-commercialSummaryCard"),
+    availabilityCard: !!document.getElementById("quote-availabilityPricingCard"),
+    coreGrid: !!document.getElementById("quote-pricingGrid"),
+    additionalGrid: !!document.getElementById("quote-additionalCostsGrid"),
+    additionalBreakdown: !!document.getElementById("quote-additionalCostsBreakdownCard")
+});
 renderQuotePricingGrid(sequenceId);
 renderQuoteAdditionalCostsGrid(sequenceId);
+
+try {
+    renderQuoteAvailabilityPricingPanel(sequenceId);
+} catch (err) {
+    console.error("Availability pricing render failed:", err);
+
+    const availabilityTarget = document.getElementById("quote-availabilityPricingCard");
+    if (availabilityTarget) {
+        availabilityTarget.innerHTML = `
+            <div class="quote-date-confirm-line warn">
+                Availability pricing could not load. Costing rows are still available.
+            </div>
+        `;
+    }
+}
 
     const addPricingBtn = document.getElementById("quote-addPricingLineBtn");
     const addAdditionalBtn = document.getElementById("quote-addAdditionalCostLineBtn");
@@ -10294,8 +12030,14 @@ function updateQuoteLine(sequenceId, lineId, field, value, lineType, shouldReren
     } else if (field === "qty") {
         line.qty = Number(value || 0);
     } else if (field === "unitCost") {
-        line.unitCost = Number(value || 0);
+    line.unitCost = Number(value || 0);
+
+    if (line.unitCost > 0) {
+        line.needsCostEntry = false;
+    } else if (line.autoFromInventory) {
+        line.needsCostEntry = true;
     }
+}
 
     quotePricingSaved = false;
     saveToDevice();
@@ -10375,6 +12117,7 @@ function renderQuotePricingGrid(sequenceId) {
             ${lines.map(function(line) {
                 const total = calcQuoteLineTotal(line);
                 const isCustom = line.label === "Custom";
+                const needsCostEntry = !!line.needsCostEntry && Number(line.unitCost || 0) <= 0;
 
                 return `
                     <div class="pricing-row ${isCustom ? "pricing-row-custom" : ""}">
@@ -10418,7 +12161,7 @@ function renderQuotePricingGrid(sequenceId) {
                                     type="number"
                                     min="0"
                                     step="0.01"
-                                    class="field"
+                                    class="field ${needsCostEntry ? 'quote-cost-needs-entry' : ''}"
                                     value="${Number(line.unitCost || 0)}"
                                     oninput="updateQuoteLine('${sequenceId}','${line.id}','unitCost',this.value,'core',false)"
                                 >
@@ -10470,6 +12213,7 @@ function renderQuoteAdditionalCostsGrid(sequenceId) {
             ${lines.map(function(line) {
                 const total = calcQuoteLineTotal(line);
                 const isCustom = line.label === "Custom";
+                const needsCostEntry = !!line.needsCostEntry && Number(line.unitCost || 0) <= 0;
 
                 return `
                     <div class="pricing-row ${isCustom ? "pricing-row-custom" : ""}">
@@ -10513,7 +12257,7 @@ function renderQuoteAdditionalCostsGrid(sequenceId) {
                                     type="number"
                                     min="0"
                                     step="0.01"
-                                    class="field"
+                                    class="field ${needsCostEntry ? 'quote-cost-needs-entry' : ''}"
                                     value="${Number(line.unitCost || 0)}"
                                     oninput="updateQuoteLine('${sequenceId}','${line.id}','unitCost',this.value,'additional',false)"
                                 >
@@ -10593,6 +12337,11 @@ delete seq.schedule.deliveryToDepotHours;
     if (seq.schedule.special.bunkBeds === undefined) seq.schedule.special.bunkBeds = defaults.special.bunkBeds;
     if (seq.schedule.special.cots === undefined) seq.schedule.special.cots = defaults.special.cots;
     if (seq.schedule.special.diningTables === undefined) seq.schedule.special.diningTables = defaults.special.diningTables;
+    if (seq.schedule.special.wardrobes === undefined) seq.schedule.special.wardrobes = defaults.special.wardrobes;
+
+    if (!Array.isArray(seq.schedule.special.wardrobeItems)) {
+    seq.schedule.special.wardrobeItems = defaults.special.wardrobeItems;
+}
     if (seq.schedule.special.uprightPianos === undefined) seq.schedule.special.uprightPianos = defaults.special.uprightPianos;
     if (seq.schedule.special.grandPianos === undefined) seq.schedule.special.grandPianos = defaults.special.grandPianos;
     if (seq.schedule.special.grandfatherClocks === undefined) seq.schedule.special.grandfatherClocks = defaults.special.grandfatherClocks;
@@ -10612,10 +12361,12 @@ function getDefaultManualScheduleRows() {
             dayPart: "Full Day",
             task: "Load and Deliver",
             completionWindow: "None",
+            date: "",
             vans: 1,
             men: 2,
             hours: 8,
             nightsOut: false,
+            overtimeHours: 0,
             legs: []
         }
     ];
@@ -10954,7 +12705,7 @@ function getScheduleLegAddressOptions() {
     return options;
 }
 
-function renderScheduleLegs(day) {
+function renderScheduleLegs(day, state, totals) {
     ensureScheduleRowShape(day);
 
     const addressOptions = getScheduleLegLocationOptions();
@@ -10966,22 +12717,13 @@ function renderScheduleLegs(day) {
         return match ? match.label : value;
     };
 
-    const routeMiles = getScheduleLegMiles(day);
-    const vanMiles = getScheduleLegVanMiles(day);
-    const travelHours = getRowLegHours(day);
-    const vans = Math.max(1, Number(day.vans || 1));
+        const vans = Math.max(1, Number(day.vans || 1));
 
     return `
         <div class="schedule-legs-shell">
             <div class="schedule-legs-head">
-    <div>
+       <div>
         <div class="mini-label">Travel Legs</div>
-        <div class="text-[10px] font-bold uppercase text-slate-400">
-            Route miles: ${routeMiles.toFixed(1)} · Vans: ${vans} · Costed mileage: ${vanMiles.toFixed(1)} · Travel: ${travelHours.toFixed(2)} hrs
-        </div>
-        <div class="text-[10px] font-bold text-slate-400" style="margin-top:4px; text-transform:none;">
-            Use Get Route to check Google Maps, then enter the mileage for this travel leg.
-        </div>
     </div>
 
                 <button
@@ -11002,6 +12744,8 @@ function renderScheduleLegs(day) {
                     `
                     : ""
             }
+
+                        ${buildScheduleRowCompactTimeSummary(day, state, totals)}
 
             <div class="schedule-legs-list">
                 <div class="text-[10px] font-bold text-slate-400" style="text-transform:none; margin-bottom:4px;">
@@ -11085,10 +12829,12 @@ function renderScheduleLegs(day) {
     <label class="mini-label">Remove</label>
     <button
         type="button"
-        class="schedule-remove"
+        class="schedule-leg-delete-btn"
+        title="Remove this travel leg"
+        aria-label="Remove this travel leg"
         onclick="removeScheduleLeg('${day.id}','${leg.id}')"
     >
-        Del
+        ×
     </button>
 </div>
                                 </div>
@@ -11135,10 +12881,12 @@ function loadManualScheduleFromActiveSequence() {
             task: day.task || "Load and Deliver",
             travelPattern: day.travelPattern || "None",
             completionWindow: day.completionWindow || "None",
+            date: day.date || "",
             men: Math.max(0, Number(day.men) || 0),
             vans: Math.max(0, Number(day.vans) || 0),
             hours: safeDayPart === "Full Day" ? 8 : 4,
             nightsOut: !!day.nightsOut,
+            overtimeHours: Math.max(0, Number(day.overtimeHours || 0)),
             legs: safeLegs.map(function(leg) {
                 const roadType = leg.roadType || "Road";
                 const miles = Math.max(0, Number(leg.miles || 0));
@@ -11179,10 +12927,12 @@ function saveManualScheduleToActiveSequence() {
             task: day.task || "Load and Deliver",
             travelPattern: day.travelPattern || "None",
             completionWindow: day.completionWindow || "None",
+            date: day.date || "",
             men: Math.max(0, Number(day.men) || 0),
             vans: Math.max(0, Number(day.vans) || 0),
             hours: safeDayPart === "Full Day" ? 8 : 4,
             nightsOut: !!day.nightsOut,
+            overtimeHours: Math.max(0, Number(day.overtimeHours || 0)),
             legs: (Array.isArray(day.legs) ? day.legs : []).map(function(leg) {
                 const roadType = leg.roadType || "Road";
                 const miles = Math.max(0, Number(leg.miles || 0));
@@ -11256,22 +13006,9 @@ const unloadRateEl = document.getElementById("unloadRate");
 const loadingVariantEl = document.getElementById("loadingVariant");
 const operatingBranchEl = document.getElementById("operatingBranch");
 
-    const svcFrameEl = document.getElementById("svc_frame");
-    const svcOttomanEl = document.getElementById("svc_ottoman");
-    const svcDivanEl = document.getElementById("svc_divan");
-    const svcElectricEl = document.getElementById("svc_electric");
-    const svcBunkEl = document.getElementById("svc_bunk");
-    const svcCotEl = document.getElementById("svc_cot");
-    const svcDiningTableEl = document.getElementById("svc_dining_table");
-
-    const svcCustomMinutesEl = document.getElementById("svc_custom_minutes");
-    const svcCustomNoteEl = document.getElementById("svc_custom_note");
-    const svcUprightEl = document.getElementById("svc_upright");
-    const svcGrandEl = document.getElementById("svc_grand");
-    const svcClockEl = document.getElementById("svc_clock");
-    const svcApplianceEl = document.getElementById("svc_appliance");
-    const svcCrateEl = document.getElementById("svc_crate");
-    const exportWrapVolEl = document.getElementById("exportWrapVol");
+const svcCustomMinutesEl = document.getElementById("svc_custom_minutes");
+const svcCustomNoteEl = document.getElementById("svc_custom_note");
+const exportWrapVolEl = document.getElementById("exportWrapVol");
 
     if (loftVolEl) loftVolEl.value = schedule.loftVol;
 if (loadRateEl) loadRateEl.value = schedule.loadRate;
@@ -11286,21 +13023,9 @@ if (operatingBranchEl) {
 
 if (loadingVariantEl) loadingVariantEl.value = schedule.loadingVariant || "Standard";
 
-    setInventoryFedField(svcFrameEl, photonFeed.special?.frameBeds || 0);
-setInventoryFedField(svcOttomanEl, photonFeed.special?.ottomanBeds || 0);
-setInventoryFedField(svcDivanEl, photonFeed.special?.divanBeds || 0);
-setInventoryFedField(svcElectricEl, photonFeed.special?.electricBeds || 0);
-setInventoryFedField(svcBunkEl, photonFeed.special?.bunkBeds || 0);
-setInventoryFedField(svcCotEl, photonFeed.special?.cots || 0);
-setInventoryFedField(svcDiningTableEl, photonFeed.special?.diningTables || 0);
+if (svcCustomMinutesEl) svcCustomMinutesEl.value = schedule.special.customItemMinutes;
+if (svcCustomNoteEl) svcCustomNoteEl.value = schedule.special.customItemNote;
 
-    if (svcCustomMinutesEl) svcCustomMinutesEl.value = schedule.special.customItemMinutes;
-    if (svcCustomNoteEl) svcCustomNoteEl.value = schedule.special.customItemNote;
-    setInventoryFedField(svcUprightEl, schedule.special.uprightPianos);
-setInventoryFedField(svcGrandEl, schedule.special.grandPianos);
-setInventoryFedField(svcClockEl, schedule.special.grandfatherClocks);
-    setInventoryFedField(svcApplianceEl, photonFeed.disconnectApplianceCount || 0);
-setInventoryFedField(svcCrateEl, photonFeed.special?.cratingItems || 0);
 setInventoryFedField(exportWrapVolEl, photonFeed.special?.exportWrapVol || 0);
 }
 
@@ -11371,8 +13096,14 @@ function getLoadingProfile(loadingVariant, loadingScenario) {
         return {
             label: "Ex Store",
             loadingApplies: false,
+            unloadingApplies: true,
+
+            // Loading not applicable
             morningEquivalentRate: 0,
-            pmAfterAmEquivalentRate: 0
+            pmAfterAmEquivalentRate: 0,
+
+            // Unloading rate for ex-store delivery
+            unloadRate: 115
         };
     }
 
@@ -11381,16 +13112,28 @@ function getLoadingProfile(loadingVariant, loadingScenario) {
             return {
                 label: "Slow / Into Store",
                 loadingApplies: true,
-                morningEquivalentRate: 85,
-                pmAfterAmEquivalentRate: 35
+                unloadingApplies: false,
+
+                // Into-store loading rates
+                morningEquivalentRate: 50,
+                pmAfterAmEquivalentRate: 50,
+
+                // Unloading not applicable
+                unloadRate: 0
             };
         }
 
         return {
             label: "Standard / Into Store",
             loadingApplies: true,
-            morningEquivalentRate: 100,
-            pmAfterAmEquivalentRate: 45
+            unloadingApplies: false,
+
+            // Into-store loading rates
+            morningEquivalentRate: 66,
+            pmAfterAmEquivalentRate: 66,
+
+            // Unloading not applicable
+            unloadRate: 0
         };
     }
 
@@ -11398,16 +13141,28 @@ function getLoadingProfile(loadingVariant, loadingScenario) {
         return {
             label: "Slow / Direct",
             loadingApplies: true,
+            unloadingApplies: true,
+
+            // Keep existing direct slow logic
             morningEquivalentRate: 100,
-            pmAfterAmEquivalentRate: 45
+            pmAfterAmEquivalentRate: 45,
+
+            // Keep existing direct unload rate
+            unloadRate: 132
         };
     }
 
     return {
         label: "Standard / Direct",
         loadingApplies: true,
+        unloadingApplies: true,
+
+        // Keep existing direct standard logic
         morningEquivalentRate: 125,
-        pmAfterAmEquivalentRate: 55
+        pmAfterAmEquivalentRate: 55,
+
+        // Keep existing direct unload rate
+        unloadRate: 132
     };
 }
 function getPhotonFeed() {
@@ -11439,6 +13194,16 @@ function getPhotonFeed() {
     bunkBeds: Number(directFeed.special?.bunkBeds || 0),
     cots: Number(directFeed.special?.cots || 0),
     diningTables: Number(directFeed.special?.diningTables || 0),
+
+    wardrobes: Number(directFeed.special?.wardrobes || 0),
+    wardrobeItems: Array.isArray(directFeed.special?.wardrobeItems)
+        ? directFeed.special.wardrobeItems
+        : [],
+
+    uprightPianos: Number(directFeed.special?.uprightPianos || 0),
+    grandPianos: Number(directFeed.special?.grandPianos || 0),
+    grandfatherClocks: Number(directFeed.special?.grandfatherClocks || 0),
+
     cratingItems: Number(directFeed.special?.cratingItems || 0),
     exportWrapVol: Number(directFeed.special?.exportWrapVol || 0)
 }
@@ -11470,6 +13235,14 @@ special: {
     bunkBeds: 0,
     cots: 0,
     diningTables: 0,
+
+    wardrobes: 0,
+    wardrobeItems: [],
+
+    uprightPianos: 0,
+    grandPianos: 0,
+    grandfatherClocks: 0,
+
     cratingItems: 0,
     exportWrapVol: 0
 }
@@ -11500,6 +13273,16 @@ special: {
     bunkBeds: Number(parsed.special?.bunkBeds || 0),
     cots: Number(parsed.special?.cots || 0),
     diningTables: Number(parsed.special?.diningTables || 0),
+
+    wardrobes: Number(parsed.special?.wardrobes || 0),
+    wardrobeItems: Array.isArray(parsed.special?.wardrobeItems)
+        ? parsed.special.wardrobeItems
+        : [],
+
+    uprightPianos: Number(parsed.special?.uprightPianos || 0),
+    grandPianos: Number(parsed.special?.grandPianos || 0),
+    grandfatherClocks: Number(parsed.special?.grandfatherClocks || 0),
+
     cratingItems: Number(parsed.special?.cratingItems || 0),
     exportWrapVol: Number(parsed.special?.exportWrapVol || 0)
 }
@@ -11526,6 +13309,14 @@ special: {
     bunkBeds: 0,
     cots: 0,
     diningTables: 0,
+
+    wardrobes: 0,
+    wardrobeItems: [],
+
+    uprightPianos: 0,
+    grandPianos: 0,
+    grandfatherClocks: 0,
+
     cratingItems: 0,
     exportWrapVol: 0
 }
@@ -11563,7 +13354,13 @@ function getIncludedKeys(packOption){
 function getState() {
     const photonFeed = getPhotonFeed();
     const seq = getActiveSequenceRecord();
-const loadingScenario = getLoadingScenarioFromMoveType(seq ? seq.moveType : "");
+    const loadingScenario = getLoadingScenarioFromMoveType(seq ? seq.moveType : "");
+
+    const loadingVariant = document.getElementById("loadingVariant")
+        ? document.getElementById("loadingVariant").value
+        : "Standard";
+
+    const loadingProfile = getLoadingProfile(loadingVariant, loadingScenario);
 
     const disconnectApplianceCount = Number(photonFeed.disconnectApplianceCount || 0);
     const totalApplianceCount = disconnectApplianceCount;
@@ -11572,11 +13369,15 @@ const loadingScenario = getLoadingScenarioFromMoveType(seq ? seq.moveType : "");
     packOption: photonFeed.packOption || "none",
     furnitureVol: photonFeed.furnitureVol || 0,
     loftVol: num("loftVol"),
-    loadRate: num("loadRate") || 125,
-    unloadRate: num("unloadRate") || 132,
-    loadingVariant: document.getElementById("loadingVariant")
-        ? document.getElementById("loadingVariant").value
-        : "Standard",
+
+    // These are now driven by the loading profile rather than loose manual values
+    loadRate: loadingProfile.morningEquivalentRate,
+    unloadRate: loadingProfile.unloadRate,
+
+    // Keep the detailed loading profile available for planner logic
+    loadingProfile: loadingProfile,
+
+    loadingVariant: loadingVariant,
     loadingScenario: loadingScenario,
     depotToCollectionMinutes: num("depotToCollectionMinutes"),
 collectionToDeliveryMinutes: num("collectionToDeliveryMinutes"),
@@ -11593,25 +13394,33 @@ deliveryToDepotMinutes: num("deliveryToDepotMinutes"),
         boxVolumes: BOX_VOLUMES,
 
         special: {
-            frameBeds: num("svc_frame"),
-            ottomanBeds: num("svc_ottoman"),
-            divanBeds: num("svc_divan"),
-            electricBeds: num("svc_electric"),
-            bunkBeds: num("svc_bunk"),
-            cots: num("svc_cot"),
-            diningTables: num("svc_dining_table"),
-            customMinutes: num("svc_custom_minutes"),
-            customNote: document.getElementById("svc_custom_note")
-                ? document.getElementById("svc_custom_note").value.trim()
-                : "",
-            upright: num("svc_upright"),
-            grand: num("svc_grand"),
-            clock: num("svc_clock"),
-            appliance: totalApplianceCount,
-            manualApplianceCount: 0,
-            disconnectApplianceCount: disconnectApplianceCount,
-            crate: num("svc_crate")
-        },
+    frameBeds: Number(photonFeed.special?.frameBeds || 0),
+    ottomanBeds: Number(photonFeed.special?.ottomanBeds || 0),
+    divanBeds: Number(photonFeed.special?.divanBeds || 0),
+    electricBeds: Number(photonFeed.special?.electricBeds || 0),
+    bunkBeds: Number(photonFeed.special?.bunkBeds || 0),
+    cots: Number(photonFeed.special?.cots || 0),
+    diningTables: Number(photonFeed.special?.diningTables || 0),
+
+    wardrobes: Number(photonFeed.special?.wardrobes || 0),
+    wardrobeItems: Array.isArray(photonFeed.special?.wardrobeItems)
+        ? photonFeed.special.wardrobeItems
+        : [],
+
+    customMinutes: num("svc_custom_minutes"),
+    customNote: document.getElementById("svc_custom_note")
+        ? document.getElementById("svc_custom_note").value.trim()
+        : "",
+
+    upright: Number(photonFeed.special?.uprightPianos || 0),
+    grand: Number(photonFeed.special?.grandPianos || 0),
+    clock: Number(photonFeed.special?.grandfatherClocks || 0),
+
+    appliance: totalApplianceCount,
+    manualApplianceCount: 0,
+    disconnectApplianceCount: disconnectApplianceCount,
+    crate: Number(photonFeed.special?.cratingItems || 0)
+},
 
         exportWrapVol: num("exportWrapVol")
     };
@@ -11649,7 +13458,8 @@ function calcSpecialLabour(state) {
         (state.special.bunkBeds * 30) +
         (state.special.cots * 15) +
         (state.special.diningTables * 15) +
-        (state.special.customMinutes > 0 ? state.special.customMinutes : 0) +
+(state.special.wardrobes * 30) +
+(state.special.customMinutes > 0 ? state.special.customMinutes : 0) +
         (state.special.upright * 25) +
         (state.special.grand * 60) +
         (state.special.clock * 30) +
@@ -11664,7 +13474,8 @@ function calcSpecialLabour(state) {
         (state.special.bunkBeds * 30) +
         (state.special.cots * 15) +
         (state.special.diningTables * 15) +
-        (state.special.customMinutes > 0 ? state.special.customMinutes : 0) +
+(state.special.wardrobes * 30) +
+(state.special.customMinutes > 0 ? state.special.customMinutes : 0) +
         (state.special.upright * 25) +
         (state.special.grand * 60) +
         (state.special.clock * 30) +
@@ -11688,7 +13499,8 @@ function calcSpecialLabour(state) {
             bunkBeds: round2((state.special.bunkBeds * 60) / 60),
             cots: round2((state.special.cots * 30) / 60),
             diningTables: round2((state.special.diningTables * 30) / 60),
-            custom: round2(((state.special.customMinutes > 0 ? state.special.customMinutes * 2 : 0)) / 60),
+wardrobes: round2((state.special.wardrobes * 60) / 60),
+custom: round2(((state.special.customMinutes > 0 ? state.special.customMinutes * 2 : 0)) / 60),
             upright: round2((state.special.upright * 50) / 60),
             grand: round2((state.special.grand * 120) / 60),
             clock: round2((state.special.clock * 60) / 60),
@@ -11701,8 +13513,52 @@ function calcSpecialLabour(state) {
         }
     };
 }
-function calcLoading(totalVolume, loadRate, loadSideSpecialHours, loadingScenario){
+function calcLoading(totalVolume, loadRate, loadSideSpecialHours, loadingScenario, loadingProfile){
     if (loadingScenario === "exStore") {
+        return {
+            hours: 0,
+            days: 0,
+            completionCrew: 0,
+            volumeHours: 0,
+            morningVolumeHours: 0,
+            pmAfterAmVolumeHours: 0
+        };
+    }
+
+    const profile = loadingProfile || {};
+    const morningRate = Number(profile.morningEquivalentRate || loadRate || 0);
+    const pmAfterAmRate = Number(profile.pmAfterAmEquivalentRate || morningRate || 0);
+
+    if (!morningRate || morningRate <= 0) {
+        return {
+            hours: 0,
+            days: 0,
+            completionCrew: 0,
+            volumeHours: 0,
+            morningVolumeHours: 0,
+            pmAfterAmVolumeHours: 0
+        };
+    }
+
+    const morningVolumeHours = totalVolume / morningRate;
+    const pmAfterAmVolumeHours = pmAfterAmRate > 0 ? totalVolume / pmAfterAmRate : morningVolumeHours;
+
+    // Main loading calculation remains based on morning-equivalent rate
+    const volumeHours = morningVolumeHours;
+    const totalHours = volumeHours + loadSideSpecialHours;
+
+    return {
+        hours: round2(totalHours),
+        days: round1(totalHours / 8),
+        completionCrew: round1(totalHours / 4),
+        volumeHours: round2(volumeHours),
+        morningVolumeHours: round2(morningVolumeHours),
+        pmAfterAmVolumeHours: round2(pmAfterAmVolumeHours)
+    };
+}
+
+function calcUnloading(totalVolume, unloadRate, unloadSideSpecialHours, loadingScenario){
+    if (loadingScenario === "intoStore") {
         return {
             hours: 0,
             days: 0,
@@ -11711,20 +13567,18 @@ function calcLoading(totalVolume, loadRate, loadSideSpecialHours, loadingScenari
         };
     }
 
-    const volumeHours = totalVolume / loadRate;
-    const totalHours = volumeHours + loadSideSpecialHours;
+    if (!unloadRate || unloadRate <= 0) {
+        return {
+            hours: 0,
+            days: 0,
+            completionCrew: 0,
+            volumeHours: 0
+        };
+    }
 
-    return {
-        hours: round2(totalHours),
-        days: round1(totalHours / 8),
-        completionCrew: round1(totalHours / 4),
-        volumeHours: round2(volumeHours)
-    };
-}
-
-function calcUnloading(totalVolume, unloadRate, unloadSideSpecialHours){
     const volumeHours = totalVolume / unloadRate;
     const totalHours = volumeHours + unloadSideSpecialHours;
+
     return {
         hours: round2(totalHours),
         days: round1(totalHours / 8),
@@ -11802,12 +13656,13 @@ function getNormalWindowHours(dayPart) {
 
 function getWindowHoursForRow(day) {
     const completionWindow = String(day.completionWindow || "None");
+    const baseHours = completionWindow === "Completion Day"
+        ? getCompletionWindowHours(day.dayPart)
+        : getNormalWindowHours(day.dayPart);
 
-    if (completionWindow === "Completion Day") {
-        return getCompletionWindowHours(day.dayPart);
-    }
+    const overtimeHours = Math.max(0, Number(day.overtimeHours || 0));
 
-    return getNormalWindowHours(day.dayPart);
+    return baseHours + overtimeHours;
 }
 function getCompletionAdjustedCapacity(day, mode, taskHours) {
     const completionWindow = String(day.completionWindow || "None");
@@ -11866,22 +13721,24 @@ function autoBuildScheduleDays() {
         packMode === "full";
 
     if (hasPacking) {
-        newRows.push({
-            id: createId(),
-            groupId: createId(),
-            dayPart: "Full Day",
-            task: packMode === "cg" ? "Pack fragiles & breakables" : "Pack & Prepare",
-            completionWindow: "None",
-            men: 2,
-            vans: 1,
-            hours: 8,
-            nightsOut: false,
-            legs: [
-                createEmptyScheduleLeg("Depot", collectionId, 30),
-                createEmptyScheduleLeg(collectionId, "Depot", 30)
-            ]
-        });
-    }
+    newRows.push({
+        id: createId(),
+        groupId: createId(),
+        dayPart: "Full Day",
+        task: packMode === "cg" ? "Pack fragiles & breakables" : "Pack & Prepare",
+        completionWindow: "None",
+        date: "",
+        men: 2,
+        vans: 1,
+        hours: 8,
+        nightsOut: false,
+        overtimeHours: 0,
+        legs: [
+            createEmptyScheduleLeg("Depot", collectionId, 30),
+            createEmptyScheduleLeg(collectionId, "Depot", 30)
+        ]
+    });
+}
 
     if (moveMode === "intoStore") {
         newRows.push({
@@ -11890,11 +13747,13 @@ function autoBuildScheduleDays() {
             dayPart: "Full Day",
             task: "Load",
             completionWindow: "None",
+            date: "",
             men: 2,
             vans: 1,
             hours: 8,
             nightsOut: false,
-            legs: [
+overtimeHours: 0,
+legs: [
                 createEmptyScheduleLeg("Depot", collectionId, 30),
                 createEmptyScheduleLeg(collectionId, deliveryId, 30)
             ]
@@ -11906,11 +13765,13 @@ function autoBuildScheduleDays() {
             dayPart: "Full Day",
             task: "Deliver",
             completionWindow: "None",
+            date: "",
             men: 2,
             vans: 1,
             hours: 8,
             nightsOut: false,
-            legs: [
+overtimeHours: 0,
+legs: [
                 createEmptyScheduleLeg(collectionId, deliveryId, 30),
                 createEmptyScheduleLeg(deliveryId, "Depot", 30)
             ]
@@ -11922,11 +13783,13 @@ function autoBuildScheduleDays() {
             dayPart: "Full Day",
             task: "Load and Deliver",
             completionWindow: "None",
+            date: "",
             men: 2,
             vans: 1,
             hours: 8,
             nightsOut: false,
-            legs: [
+overtimeHours: 0,
+legs: [
                 createEmptyScheduleLeg("Depot", collectionId, 30),
                 createEmptyScheduleLeg(collectionId, deliveryId, 30),
                 createEmptyScheduleLeg(deliveryId, "Depot", 30)
@@ -11948,10 +13811,12 @@ function addScheduleDay() {
         dayPart: "Full Day",
         task: "Load and Deliver",
         completionWindow: "None",
+        date: "",
         men: 2,
         vans: 1,
         hours: 8,
         nightsOut: false,
+        overtimeHours: 0,
         legs: [
             createEmptyScheduleLeg("Depot", "", 0)
         ]
@@ -11989,14 +13854,16 @@ manualSchedule.push({
     dayPart: "PM",
     task: "Deliver",
     completionWindow: "None",
+    date: row.date || "",
     men: row.men,
     vans: row.vans,
     hours: 4,
     nightsOut: false,
+    overtimeHours: 0,
     legs: [
-    createEmptyScheduleLeg("Collection Address", "Delivery Address", 0),
-    createEmptyScheduleLeg("Delivery Address", "Depot", 0)
-]
+        createEmptyScheduleLeg("Collection Address", "Delivery Address", 0),
+        createEmptyScheduleLeg("Delivery Address", "Depot", 0)
+    ]
 });
     }
 }
@@ -12077,23 +13944,27 @@ function splitCompletionRowIntoAmPm(row) {
         dayPart: "AM",
         task: amTask,
         completionWindow: "Completion Day",
+        date: row.date || "",
         men: row.men,
         vans: row.vans,
         hours: 4,
         nightsOut: false,
+        overtimeHours: 0,
         legs: amLegs
     };
 
-    const pmRow = {
+   const pmRow = {
         id: createId(),
         groupId: row.groupId,
         dayPart: "PM",
         task: pmTask,
         completionWindow: "Completion Day",
+        date: row.date || "",
         men: row.men,
         vans: row.vans,
         hours: 4,
         nightsOut: false,
+        overtimeHours: 0,
         legs: pmLegs
     };
 
@@ -12157,13 +14028,15 @@ if (value === "AM"){
             dayPart: "AM",
             task: "Commence loading",
             completionWindow: "None",
+            date: updated.date || "",
             men: updated.men,
             vans: updated.vans,
             hours: 4,
             nightsOut: false,
+            overtimeHours: 0,
             legs: [
-    createEmptyScheduleLeg("Depot", "Collection Address", 0)
-]
+                createEmptyScheduleLeg("Depot", "Collection Address", 0)
+            ]
         });
     }
 }
@@ -12207,16 +14080,18 @@ function minutesToClock(totalMinutes) {
     return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
 }
 
-function getRowWindowBounds(dayPart) {
+function getRowWindowBounds(dayPart, overtimeHours = 0) {
+    const extraMinutes = Math.max(0, Number(overtimeHours || 0)) * 60;
+
     if (dayPart === "AM") {
-        return { start: 8 * 60, end: 13 * 60 };       // 08:00–13:00
+        return { start: 8 * 60, end: (13 * 60) + extraMinutes };
     }
 
     if (dayPart === "PM") {
-        return { start: 13 * 60, end: 17 * 60 + 30 }; // 13:00–17:30
+        return { start: 13 * 60, end: (17 * 60 + 30) + extraMinutes };
     }
 
-    return { start: 8 * 60, end: 17 * 60 + 30 };      // Full Day 08:00–17:30
+    return { start: 8 * 60, end: (17 * 60 + 30) + extraMinutes };
 }
 
 function getScheduleLocationLabel(value) {
@@ -12308,7 +14183,7 @@ function getPlannerTaskBlocks(day, state, totals) {
 function buildScheduleRowTimeBreakdown(day, state, totals) {
     ensureScheduleRowShape(day);
 
-    const bounds = getRowWindowBounds(day.dayPart);
+    const bounds = getRowWindowBounds(day.dayPart, day.overtimeHours || 0);
     const windowStart = bounds.start;
     const windowEnd = bounds.end;
     const completionCutoff = 13 * 60; // 13:00
@@ -12434,6 +14309,130 @@ function buildScheduleRowTimeBreakdown(day, state, totals) {
         </div>
     `;
 }
+function buildScheduleRowCompactTimeSummary(day, state, totals) {
+    ensureScheduleRowShape(day);
+
+    const bounds = getRowWindowBounds(day.dayPart, day.overtimeHours || 0);
+    const windowStart = bounds.start;
+    const windowEnd = bounds.end;
+    const completionCutoff = 13 * 60;
+    const isCompletionDay = String(day.completionWindow || "None") === "Completion Day";
+
+    const legs = Array.isArray(day.legs) ? day.legs : [];
+    const taskBlocks = getPlannerTaskBlocks(day, state, totals);
+
+    let cursor = windowStart;
+    const parts = [];
+
+    parts.push(
+        "Travel applied: " + getRowLegHours(day).toFixed(2) + " hrs."
+    );
+
+    parts.push(
+        "Net task time: " + getNetTaskHoursForPlannerRow(day, state).toFixed(2) + " hrs."
+    );
+
+    parts.push(
+        "Net man-hours: " +
+        (Number(day.men || 0) * getNetTaskHoursForPlannerRow(day, state)).toFixed(2) +
+        "."
+    );
+
+    parts.push(
+        "Window " + minutesToClock(windowStart) + "–" + minutesToClock(windowEnd) + "."
+    );
+
+    const maxSteps = Math.max(legs.length, taskBlocks.length);
+
+    for (let i = 0; i < maxSteps; i++) {
+        const leg = legs[i];
+
+        if (leg) {
+            const legStart = cursor;
+            const legEnd = cursor + Math.max(0, Number(leg.minutes || 0));
+
+            parts.push(
+                "Leg " + (i + 1) + " " +
+                getScheduleLocationLabel(leg.from) + " → " +
+                getScheduleLocationLabel(leg.to) + " " +
+                minutesToClock(legStart) + "–" + minutesToClock(legEnd) + "."
+            );
+
+            cursor = legEnd;
+        }
+
+        const taskBlock = taskBlocks[i];
+
+        if (taskBlock && taskBlock.minutes > 0) {
+            const isUnloadBlock = String(taskBlock.label || "").toLowerCase().includes("unload");
+
+            if (isCompletionDay && isUnloadBlock && cursor < completionCutoff) {
+                parts.push(
+                    "Wait " +
+                    minutesToClock(cursor) + "–" + minutesToClock(completionCutoff) + "."
+                );
+
+                cursor = completionCutoff;
+            }
+
+            const taskStart = cursor;
+            const taskEnd = cursor + taskBlock.minutes;
+
+            parts.push(
+                taskBlock.label.replace("Task: ", "Task ").toLowerCase() +
+                " " +
+                minutesToClock(taskStart) + "–" + minutesToClock(taskEnd) + "."
+            );
+
+            cursor = taskEnd;
+        }
+    }
+
+    parts.push("Finish " + minutesToClock(cursor) + ".");
+
+    const overrun = cursor - windowEnd;
+
+    if (overrun > 0) {
+        parts.push("Overruns by " + overrun + " mins.");
+    } else {
+        parts.push("Fits within row window.");
+    }
+
+    return `
+        <div class="schedule-time-breakdown">
+            <div class="schedule-time-line ${overrun > 0 ? "status-bad" : "status-ok"}">
+                ${escapeHtml(parts.join(" "))}
+            </div>
+        </div>
+    `;
+}
+function addOneHourOvertimeToScheduleDay(dayId) {
+    manualSchedule = manualSchedule.map(function(day) {
+        if (String(day.id) !== String(dayId)) return day;
+
+        return {
+            ...day,
+            overtimeHours: Math.max(0, Number(day.overtimeHours || 0)) + 1
+        };
+    });
+
+    saveManualScheduleToActiveSequence();
+    renderScheduleCalculator();
+}
+
+function clearOvertimeFromScheduleDay(dayId) {
+    manualSchedule = manualSchedule.map(function(day) {
+        if (String(day.id) !== String(dayId)) return day;
+
+        return {
+            ...day,
+            overtimeHours: 0
+        };
+    });
+
+    saveManualScheduleToActiveSequence();
+    renderScheduleCalculator();
+}
 function renderSchedulePlanner(){
     const list = document.getElementById("scheduleList");
     if (!list) return;
@@ -12443,16 +14442,15 @@ function renderSchedulePlanner(){
     const boxVolume = round2(calcBoxVolume(state));
     const totalVolume = round2(state.furnitureVol + boxVolume);
     const special = calcSpecialLabour(state);
-    const loading = calcLoading(totalVolume, state.loadRate, special.loadSideHours, state.loadingScenario);
-    const unloading = calcUnloading(totalVolume, state.unloadRate, special.unloadSideHours);
+    const loading = calcLoading(totalVolume, state.loadRate, special.loadSideHours, state.loadingScenario, state.loadingProfile);
+    const unloading = calcUnloading(totalVolume, state.unloadRate, special.unloadSideHours, state.loadingScenario);
 
     const plannerTotals = {
         packingHours: packing.packHours,
         loadingHours: loading.hours,
         unloadingHours: unloading.hours
     };
-    const mileageSummary = getPlannerMileageSummary();
-
+   
     const groups = [];
     const seen = new Set();
     manualSchedule.forEach(day => {
@@ -12462,32 +14460,7 @@ function renderSchedulePlanner(){
         }
     });
 
-    list.innerHTML = `
-    <div class="listed-stat-card">
-        <div class="listed-stat-label">Planner Mileage Summary</div>
-
-        <div class="grid grid-cols-3 gap-3">
-            <div>
-                <div class="listed-stat-sub">Costed Mileage</div>
-                <div class="listed-stat-value">${mileageSummary.costedMileage.toFixed(1)}</div>
-            </div>
-
-            <div>
-                <div class="listed-stat-sub">Rows with Mileage</div>
-                <div class="listed-stat-value">${mileageSummary.rowsWithMileage}</div>
-            </div>
-
-            <div>
-                <div class="listed-stat-sub">Extra Van Rows</div>
-                <div class="listed-stat-value">${mileageSummary.extraVanRows}</div>
-            </div>
-        </div>
-
-        <div class="footer-note">
-            Costed mileage includes the van count on each planner row.
-        </div>
-    </div>
-` + groups.map((groupId, groupIndex) => {
+        list.innerHTML = groups.map((groupId, groupIndex) => {
         const rows = manualSchedule.filter(day => day.groupId === groupId).sort((a,b) => {
             const order = { "Full Day": 0, "AM": 1, "PM": 2 };
             return order[a.dayPart] - order[b.dayPart];
@@ -12497,7 +14470,30 @@ function renderSchedulePlanner(){
             <div class="schedule-row">
                 <div class="schedule-row-head">
                     <div class="schedule-row-title">Day ${groupIndex + 1}${rows.length > 1 ? ` · ${day.dayPart}` : ""}</div>
-                    ${rowIndex === 0 && manualSchedule.length > 1 ? `<button class="schedule-remove" onclick="removeScheduleDay('${day.id}')">Delete</button>` : ""}
+
+                    <div class="schedule-row-actions">
+                        <button
+                            type="button"
+                            class="schedule-overtime-btn"
+                            onclick="addOneHourOvertimeToScheduleDay('${day.id}')"
+                        >
+                            +1 HR${Number(day.overtimeHours || 0) > 0 ? ' · ' + Number(day.overtimeHours || 0) + ' HR' : ''}
+                        </button>
+
+                        ${
+                            Number(day.overtimeHours || 0) > 0
+                                ? `<button
+                                    type="button"
+                                    class="schedule-overtime-clear-btn"
+                                    onclick="clearOvertimeFromScheduleDay('${day.id}')"
+                                >
+                                    Clear OT
+                                </button>`
+                                : ""
+                        }
+
+                        ${rowIndex === 0 && manualSchedule.length > 1 ? `<button class="schedule-remove" onclick="removeScheduleDay('${day.id}')">Delete Day</button>` : ""}
+                    </div>
                 </div>
 
                 <div class="schedule-grid">
@@ -12557,17 +14553,20 @@ function renderSchedulePlanner(){
                             </label>
                         </div>
                     </div>
+                    <div>
+    <label class="mini-label">Date</label>
+    <input
+        type="date"
+        class="field"
+        value="${escapeHtml(day.date || "")}"
+        onchange="updateScheduleDay('${day.id}','date',this.value)"
+    >
+</div>
                 </div>
 
-                ${renderScheduleLegs(day)}
+                                ${renderScheduleLegs(day, state, plannerTotals)}
 
-                <div class="schedule-debug-line">
-                    Travel applied: ${getRowLegHours(day).toFixed(2)} hrs ·
-                    Net task time: ${getNetTaskHoursForPlannerRow(day, state).toFixed(2)} hrs ·
-                    Net man-hours: ${(Number(day.men || 0) * getNetTaskHoursForPlannerRow(day, state)).toFixed(2)}
-                </div>
-
-                ${buildScheduleRowTimeBreakdown(day, state, plannerTotals)}
+            
             </div>
         `).join("");
     }).join("");
@@ -12728,6 +14727,213 @@ function renderValidation(packing, loading, unloading, special, state){
     el.innerHTML = items.map(item => `<div class="validation-item validation-${item.type}">${item.text}</div>`).join("");
 }
 
+function isWardrobeInventoryItem(itemName) {
+    const name = String(itemName || "").trim().toUpperCase();
+
+    return (
+        name === "WARDROBE (2-DOOR)" ||
+        name === "WARDROBE (3-DOOR)" ||
+        name === "WARDROBE (4-DOOR)"
+    );
+}
+
+function formatWardrobeTypes(entry) {
+    if (!entry) return "";
+
+    if (Array.isArray(entry.wardrobeTypes) && entry.wardrobeTypes.length) {
+        return entry.wardrobeTypes.join(", ");
+    }
+
+    if (entry.wardrobeType) {
+        return String(entry.wardrobeType);
+    }
+
+    return "Type not set";
+}
+function isBunkBedItem(itemName) {
+    const clean = String(itemName || "").trim().toUpperCase();
+    return clean === "BUNK BED";
+}
+
+function isCotBedItem(itemName) {
+    const clean = String(itemName || "").trim().toUpperCase();
+
+    return (
+        clean === "COT / CHILDS BED" ||
+        clean === "COT / CHILD'S BED" ||
+        clean === "COT"
+    );
+}
+
+function isScheduleBedGroupItem(itemName) {
+    return (
+        isBedInventoryItem(itemName) ||
+        isBunkBedItem(itemName) ||
+        isCotBedItem(itemName)
+    );
+}
+
+function getActiveSequenceRawInventoryItems() {
+    if (!currentJob || !activeSeqId) return [];
+
+    return getRawInventoryItemsForSequence(activeSeqId).filter(function(entry) {
+        return !entry.excluded;
+    });
+}
+
+function buildScheduleSpecialRhsHtml(state, special) {
+    const rawItems = getActiveSequenceRawInventoryItems();
+
+    const bedRows = [];
+const wardrobeRows = [];
+const otherDismantleRows = [];
+const serviceRows = [];
+const specialRows = [];
+
+
+rawItems.forEach(function(entry) {
+        const qty = Number(entry.qty || 0);
+        const itemName = String(entry.itemName || "").trim();
+        const itemUpper = itemName.toUpperCase();
+
+        if (!qty || !itemName) return;
+
+       if (entry.dismantle && isScheduleBedGroupItem(itemName)) {
+    const bedType = entry.bedType ? String(entry.bedType) : "";
+
+    bedRows.push(
+        qty + " x " + itemName + (bedType ? " — " + bedType : "")
+    );
+}
+
+if (entry.dismantle && isWardrobeInventoryItem(itemName)) {
+    wardrobeRows.push(
+        qty + " x " + itemName + " — " + formatWardrobeTypes(entry)
+    );
+}
+
+if (
+    entry.dismantle &&
+    !isScheduleBedGroupItem(itemName) &&
+    !isWardrobeInventoryItem(itemName)
+) {
+    otherDismantleRows.push(
+        qty + " x " + itemName
+    );
+}
+
+        if (entry.expWrap) {
+            serviceRows.push(qty + " x " + itemName + " — Export wrap");
+        }
+
+        if (entry.disconnect) {
+            serviceRows.push(qty + " x " + itemName + " — Disconnect");
+        }
+
+        if (entry.handyman) {
+            serviceRows.push(qty + " x " + itemName + " — Handyman");
+        }
+
+        if (entry.crated) {
+            serviceRows.push(qty + " x " + itemName + " — Crating");
+        }
+
+        if (
+            itemUpper === "PIANO (UPRIGHT)" ||
+            itemUpper === "PIANO (ELECTRIC)" ||
+            itemUpper === "PIANO (BABY GRAND)" ||
+            itemUpper === "PIANO (GRAND)" ||
+            itemUpper === "CLOCK (GRANDFATHER)"
+        ) {
+            specialRows.push(qty + " x " + itemName);
+        }
+    });
+
+    const hasDismantle =
+        bedRows.length ||
+        wardrobeRows.length ||
+        otherDismantleRows.length;
+
+    const hasSpecial =
+    specialRows.length ||
+    state.special.diningTables;
+
+    const hasServices =
+        serviceRows.length ||
+        state.exportWrapVol ||
+        state.loftVol ||
+        state.special.appliance ||
+        state.special.crate;
+
+   
+    const renderList = function(items, emptyText) {
+        if (!items.length) {
+            return '<div class="special-rhs-empty">' + emptyText + '</div>';
+        }
+
+        return items.map(function(item) {
+            return '<div class="special-rhs-line">• ' + escapeHtml(item) + '</div>';
+        }).join("");
+    };
+
+    return `
+        <div class="special-rhs-grid">
+            <div class="special-rhs-card">
+                <div class="special-rhs-title">Dismantle & Reassemble</div>
+                <div class="special-rhs-subtitle">${special.breakdown.wardrobes.toFixed(2)} wardrobe hrs included in this section</div>
+
+                <div class="special-rhs-group-title">Beds</div>
+                ${renderList(bedRows, "No bed items recorded")}
+
+                <div class="special-rhs-group-title">Wardrobes</div>
+                ${renderList(wardrobeRows, "No wardrobe types recorded")}
+
+                <div class="special-rhs-group-title">Other dismantle items</div>
+                ${renderList(otherDismantleRows, "No other dismantle items recorded")}
+            </div>
+
+            <div class="special-rhs-card">
+                <div class="special-rhs-title">Special Items</div>
+                <div class="special-rhs-subtitle">Items needing extra handling time</div>
+
+                ${renderList(specialRows, "No piano / grandfather clock items recorded")}
+
+                <div class="special-rhs-line">Dining tables: ${state.special.diningTables}</div>
+            </div>
+
+            <div class="special-rhs-card">
+                <div class="special-rhs-title">Services</div>
+                <div class="special-rhs-subtitle">Wrap, disconnect, crating and specialist help</div>
+
+                ${renderList(serviceRows, "No item-level services recorded")}
+
+                <div class="special-rhs-line">Export wrap volume: ${state.exportWrapVol} cuft</div>
+                <div class="special-rhs-line">Loft effects volume: ${state.loftVol} cuft</div>
+                <div class="special-rhs-line">Disconnect appliances: ${state.special.appliance}</div>
+                <div class="special-rhs-line">Crating items: ${state.special.crate}</div>
+            </div>
+
+            <div class="special-rhs-card">
+                <div class="special-rhs-title">Time Breakdown</div>
+                <div class="special-rhs-subtitle">Calculated from inventory and manual extras</div>
+
+                <div class="special-rhs-line">Beds: ${(special.breakdown.frameBeds + special.breakdown.ottomanBeds + special.breakdown.divanBeds + special.breakdown.bunkBeds + special.breakdown.cots).toFixed(2)} hrs</div>
+                <div class="special-rhs-line">Wardrobes: ${special.breakdown.wardrobes.toFixed(2)} hrs</div>
+                <div class="special-rhs-line">Pianos: ${(special.breakdown.upright + special.breakdown.grand).toFixed(2)} hrs</div>
+                <div class="special-rhs-line">Grandfather clocks: ${special.breakdown.clock.toFixed(2)} hrs</div>
+                <div class="special-rhs-line">Appliances: ${special.breakdown.appliance.toFixed(2)} hrs</div>
+                <div class="special-rhs-line">Crating: ${special.breakdown.crate.toFixed(2)} hrs</div>
+                <div class="special-rhs-line">Loft effects: ${special.breakdown.loft.toFixed(2)} hrs</div>
+                <div class="special-rhs-line">Export wrap: ${special.breakdown.exportWrap.toFixed(2)} hrs</div>
+                <div class="special-rhs-line">Custom: ${special.breakdown.custom.toFixed(2)} hrs</div>
+
+                <div class="special-rhs-total">
+                    Total special labour: ${special.specialHours.toFixed(2)} hrs
+                </div>
+            </div>
+        </div>
+    `;
+}
 function renderScheduleCalculator(){
     const state = getState();
 
@@ -12761,33 +14967,12 @@ if (scheduleVolumeBadge) {
     const wrDisplay = document.getElementById("qty_wr_display");
     if (wrDisplay) wrDisplay.textContent = state.qty.wr;
 
-    const svcFrameEl = document.getElementById("svc_frame");
-    const svcOttomanEl = document.getElementById("svc_ottoman");
-    const svcDivanEl = document.getElementById("svc_divan");
-    const svcElectricEl = document.getElementById("svc_electric");
-    const svcBunkEl = document.getElementById("svc_bunk");
-    const svcCotEl = document.getElementById("svc_cot");
-    const svcDiningTableEl = document.getElementById("svc_dining_table");
-    const svcCrateEl = document.getElementById("svc_crate");
     const exportWrapVolEl = document.getElementById("exportWrapVol");
-
-  setInventoryFedField(svcFrameEl, state.special.frameBeds);
-setInventoryFedField(svcOttomanEl, state.special.ottomanBeds);
-setInventoryFedField(svcDivanEl, state.special.divanBeds);
-setInventoryFedField(svcElectricEl, state.special.electricBeds);
-setInventoryFedField(svcBunkEl, state.special.bunkBeds);
-setInventoryFedField(svcCotEl, state.special.cots);
-setInventoryFedField(svcDiningTableEl, state.special.diningTables);
-setInventoryFedField(svcCrateEl, state.special.crate);
 setInventoryFedField(exportWrapVolEl, state.exportWrapVol);
-setInventoryFedField(document.getElementById("svc_upright"), state.special.upright);
-setInventoryFedField(document.getElementById("svc_grand"), state.special.grand);
-setInventoryFedField(document.getElementById("svc_clock"), state.special.clock);
 
     const special = calcSpecialLabour(state);
-    const loading = calcLoading(totalVolume, state.loadRate, special.loadSideHours, state.loadingScenario);
-    const unloading = calcUnloading(totalVolume, state.unloadRate, special.unloadSideHours);
-
+    const loading = calcLoading(totalVolume, state.loadRate, special.loadSideHours, state.loadingScenario, state.loadingProfile);
+    const unloading = calcUnloading(totalVolume, state.unloadRate, special.unloadSideHours, state.loadingScenario);
     document.getElementById("summaryMode").textContent = getPackModeLabel(state.packOption);
     document.getElementById("summaryTotalVolume").textContent = totalVolume;
     document.getElementById("summaryPackHours").textContent = packing.packHours.toFixed(2);
@@ -12796,7 +14981,10 @@ setInventoryFedField(document.getElementById("svc_clock"), state.special.clock);
     document.getElementById("summaryLoadHours").textContent = loading.hours.toFixed(2);
     document.getElementById("summaryLoadDays").textContent = loading.days.toFixed(1);
     document.getElementById("summaryLoadCompletion").textContent = loading.completionCrew.toFixed(1);
-    document.getElementById("summaryLoadRate").textContent = state.loadRate;
+    document.getElementById("summaryLoadRate").textContent =
+    state.loadingProfile && state.loadingProfile.pmAfterAmEquivalentRate !== state.loadingProfile.morningEquivalentRate
+        ? state.loadingProfile.morningEquivalentRate + " / " + state.loadingProfile.pmAfterAmEquivalentRate
+        : state.loadRate;
 
     document.getElementById("summaryUnloadHours").textContent = unloading.hours.toFixed(2);
     document.getElementById("summaryUnloadDays").textContent = unloading.days.toFixed(1);
@@ -12823,26 +15011,10 @@ setInventoryFedField(document.getElementById("svc_clock"), state.special.clock);
         `Travel is taken from the travel legs added to each planner row, and is deducted before net working time is validated. ` +
         `Two standard beds and 50 cuft of export wrap are treated as already included before extra special time is added.`;
 
-    document.getElementById("specialText").textContent =
-        `Frame beds: ${special.breakdown.frameBeds.toFixed(2)} hrs · ` +
-        `Ottoman beds: ${special.breakdown.ottomanBeds.toFixed(2)} hrs · ` +
-        `Divan beds: ${special.breakdown.divanBeds.toFixed(2)} hrs · ` +
-        `Electric / TV beds: ${special.breakdown.electricBeds.toFixed(2)} hrs (handyman only) · ` +
-        `Bunk beds: ${special.breakdown.bunkBeds.toFixed(2)} hrs · ` +
-        `Cots / Childs beds: ${special.breakdown.cots.toFixed(2)} hrs (tracked only for now) · ` +
-        `Dining tables: ${special.breakdown.diningTables.toFixed(2)} hrs · ` +
-        `${state.special.customNote ? state.special.customNote : "Custom item"}: ${special.breakdown.custom.toFixed(2)} hrs · ` +
-        `Upright pianos: ${special.breakdown.upright.toFixed(2)} hrs · ` +
-        `Baby / grand pianos: ${special.breakdown.grand.toFixed(2)} hrs · ` +
-        `Grandfather clocks: ${special.breakdown.clock.toFixed(2)} hrs · ` +
-        `Appliances: ${special.breakdown.appliance.toFixed(2)} hrs (${state.special.manualApplianceCount} manual + ${state.special.disconnectApplianceCount} from Disconnect) · ` +
-        `Crating: ${special.breakdown.crate.toFixed(2)} hrs · ` +
-        `Loft effects: ${special.breakdown.loft.toFixed(2)} hrs · ` +
-        `Export wrapping: ${special.breakdown.exportWrap.toFixed(2)} hrs extra after first ${special.breakdown.includedExportWrapVol} cuft included · ` +
-        `Depot to collection: ${special.depotToCollectionHours.toFixed(2)} hrs · ` +
-`Collection to delivery: ${special.collectionToDeliveryHours.toFixed(2)} hrs · ` +
-`Delivery to depot: ${special.deliveryToDepotHours.toFixed(2)} hrs · ` +
-`Load side specials: ${special.loadSideHours.toFixed(2)} hrs · Unload side specials: ${special.unloadSideHours.toFixed(2)} hrs.`;
+    const specialTextEl = document.getElementById("specialText");
+if (specialTextEl) {
+    specialTextEl.innerHTML = buildScheduleSpecialRhsHtml(state, special);
+}
 
     renderSchedulePlanner();
 renderValidation(packing, loading, unloading, special, state);
@@ -12914,6 +15086,28 @@ document.addEventListener('DOMContentLoaded', function () {
     renderDashboard();
 });
 </script>
+<!-- WARDROBE MODAL -->
+<div id="wardrobe-overlay" class="wardrobe-overlay" onclick="closeWardrobeModal()">
+    <div class="wardrobe-panel" onclick="event.stopPropagation()">
+        <div class="wardrobe-title">Wardrobe Type</div>
+        <div class="wardrobe-subtitle">Select all wardrobe features that apply</div>
+
+        <div class="wardrobe-grid">
+            <button type="button" id="wardrobe-option-drawer" class="wardrobe-option-btn" onclick="toggleWardrobeOption('Drawer-combi')">Drawer-combi</button>
+            <button type="button" id="wardrobe-option-sliding" class="wardrobe-option-btn" onclick="toggleWardrobeOption('Sliding door')">Sliding door</button>
+            <button type="button" id="wardrobe-option-mirrored" class="wardrobe-option-btn" onclick="toggleWardrobeOption('Mirrored')">Mirrored</button>
+            <button type="button" id="wardrobe-option-hinged" class="wardrobe-option-btn" onclick="toggleWardrobeOption('Hinged')">Hinged</button>
+        </div>
+
+        <div id="wardrobe-error-text" class="modal-error-text"></div>
+
+        <div class="wardrobe-actions">
+            <button type="button" class="wardrobe-cancel-btn" onclick="closeWardrobeModal()">Cancel</button>
+            <button type="button" class="wardrobe-save-btn" onclick="saveWardrobeModal()">Save Wardrobe Type</button>
+        </div>
+    </div>
+</div>
+
 <!-- BED MODAL -->
 <div id="bed-overlay" class="bed-overlay" onclick="closeBedModal()">
     <div class="bed-panel" onclick="event.stopPropagation()">
@@ -13131,4 +15325,3 @@ document.addEventListener('DOMContentLoaded', function () {
 </div>
 </body>
 </html>
->
